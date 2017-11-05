@@ -1,0 +1,48 @@
+{
+  "name": "bbbbbb",
+  "version": "0.1.0",
+  "private": true,
+  "devDependencies": {
+    "@storybook/addon-actions": "^3.2.13",
+    "@storybook/addon-links": "^3.2.13",
+    "@storybook/react-native": "^3.2.13",
+    "babel-eslint": "^8.0.1",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^6.0.2",
+    "eslint-plugin-react": "^7.4.0",
+    "jest-expo": "^21.0.2",
+    "react-native-config": "^0.9.0",
+    "react-native-scripts": "1.5.0",
+    "react-test-renderer": "16.0.0-alpha.12"
+  },
+  "main": "./node_modules/react-native-scripts/build/bin/crna-entry.js",
+  "scripts": {
+    "start": "SET ENVFILE='.env.dev' && react-native-scripts start",
+    "start:storybook": "SET ENVFILE='.env.storybook' && react-native-scripts start",
+    "android": "react-native-scripts android",
+    "ios": "react-native-scripts ios",
+    "eject": "react-native-scripts eject",
+    "test": "node node_modules/jest/bin/jest.js --watch",
+    "storybook": "storybook start -p 7007"
+  },
+  "jest": {
+    "preset": "jest-expo"
+  },
+  "dependencies": {
+    "autobind-decorator": "^2.1.0",
+    "axios": "^0.17.0",
+    "expo": "^21.0.0",
+    "lodash": "^4.17.4",
+    "prop-types": "^15.6.0",
+    "react": "16.0.0-alpha.12",
+    "react-dom": "^16.0.0-alpha.12",
+    "react-native": "^0.48.4",
+    "react-native-elements": "^0.17.0",
+    "react-navigation": "^1.0.0-beta.15",
+    "react-redux": "^5.0.6",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6"
+  }
+}
