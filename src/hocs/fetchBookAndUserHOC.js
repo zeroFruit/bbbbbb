@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import agent from '../Agent';
 
-export const fetchBookAndUserHOC = WrappedComponent => {
+export const fetchBookAndUserHOC = (WrappedComponent) => {
   return class WithBookAndUser extends Component {
     static navigationOptions = WrappedComponent.navigationOptions;
-    
+
     state = {
       bookInfo: {},
       userInfo: {}

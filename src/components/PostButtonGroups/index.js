@@ -1,9 +1,8 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { Icon } from 'react-native-elements';
-import autobind from 'autobind-decorator';
 
 import { requestBookmarkHOC } from '../../hocs/requestBookmarkHOC';
 
@@ -11,13 +10,13 @@ const { bool, func } = PropTypes;
 
 const propTypes = {
   isBookmarked: bool,
-  onClickBookmarkAdd: func.isRequired,
-  onClickBookmarkRemove: func.isRequired,
-  AddBookmarkRequestAction: func.isRequired,
-  RemoveBookmarkRequestAction: func.isRequired
+  isMyBook: bool,
+  AsyncAddBookmarkRequestAction: func.isRequired,
+  AsyncRemoveBookmarkRequestAction: func.isRequired
 };
 const defaultProps = {
-  isBookmarked: false
+  isBookmarked: false,
+  isMyBook: false
 };
 
 class PostButtonGroups extends PureComponent {
@@ -40,13 +39,17 @@ class PostButtonGroups extends PureComponent {
   }
 
   _onClickBookmarkAdd = async () => {
-    await this.props.onClickBookmarkAdd();
-    await this.props.AddBookmarkRequestAction();
+    const { bookId } = this.props;
+    await this.props.AsyncAddBookmarkRequestAction(bookId);
   }
 
   _onClickBookmarkRemove = async () => {
-    await this.props.onClickBookmarkRemove();
-    await this.props.RemoveBookmarkRequestAction();
+    if (this.props.isMyBook) {
+      return Alert.alert('내가 등록한 책입니다.');
+    } else {
+      const { bookId } = this.props;
+      await this.props.AsyncRemoveBookmarkRequestAction(bookId);
+    }
   }
 }
 
@@ -69,6 +72,4 @@ const styles = StyleSheet.create({
 PostButtonGroups.propTypes = propTypes;
 PostButtonGroups.defaultProps = defaultProps;
 
-export default compose(
-  requestBookmarkHOC
-)(PostButtonGroups);
+export default PostButtonGroups;

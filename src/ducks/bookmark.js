@@ -1,12 +1,18 @@
 import { List } from 'immutable';
 import { createReducer } from './helper';
-import agent from '../Agent';
 
 export const types = {
+  ADD_BOOKMARK_READY: 'bookmark/add_bookmark_ready',
+  ADD_BOOKMARK_FETCHING: 'bookmark/add_bookmark_fetching',
   ADD_BOOKMARK_REQUEST: 'bookmark/add_bookmark_request',
   ADD_BOOKMARK_SUCCESS: 'bookmark/add_bookmark_success',
+
+  REMOVE_BOOKMARK_READY: 'bookmark/remove_bookmark_ready',
+  REMOVE_BOOKMARK_FETCHING: 'bookmark/remove_bookmark_fetching',
   REMOVE_BOOKMARK_REQUEST: 'bookmark/remove_bookmark_request',
   REMOVE_BOOKMARK_SUCCESS: 'bookmark/remove_bookmark_success',
+
+  FETCH_BOOKMARK_READY: 'bookmark/fetch_bookmark_ready',
   FETCH_BOOKMARK_REQEUST: 'bookmark/fetch_bookmark_request',
   FETCH_BOOKMARK_SUCCESS: 'bookmark/fetch_bookmark_success'
 };
@@ -19,22 +25,35 @@ export const initialState = {
 };
 
 const add = {
-  [types.ADD_BOOKMARK_REQUEST]: (state, action) => {
+  [types.ADD_BOOKMARK_READY]: (state, action) => {
     return {
       ...state,
       isBookmarkAdded_: true
-    }
+    };
+  },
+  [types.ADD_BOOKMARK_FETCHING]: (state, action) => {
+    return {
+      ...state,
+      myBookmarks_: List(state.myBookmarks_).push(action.payload).sort().toJS()
+    };
   },
   [types.ADD_BOOKMARK_SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBookmarkAdded_: false
+      isBookmarkAdded_: false,
     };
   },
-  [types.REMOVE_BOOKMARK_REQUEST]: (state, action) => {
+  [types.REMOVE_BOOKMARK_READY]: (state, action) => {
     return {
       ...state,
       isBookmarkRemoved_: true
+    };
+  },
+  [types.REMOVE_BOOKMARK_FETCHING]: (state, action) => {
+    const index = List(state.myBookmarks_).indexOf(action.payload);
+    return {
+      ...state,
+      myBookmarks_: List(state.myBookmarks_).delete(index).toJS()
     };
   },
   [types.REMOVE_BOOKMARK_SUCCESS]: (state, action) => {
@@ -43,7 +62,7 @@ const add = {
       isBookmarkRemoved_: false
     };
   },
-  [types.FETCH_BOOKMARK_REQEUST]: (state, action) => {
+  [types.FETCH_BOOKMARK_READY]: (state, action) => {
     return {
       ...state,
       isBookmarkFetched_: true
@@ -81,5 +100,8 @@ export const actions = {
 };
 
 export const selectors = {
+  GetIsBookmarkedFetched: state => state.bookmark.isBookmarkFetched_,
+  GetIsBookmarkedAdded: state => state.bookmark.isBookmarkAdded_,
+  GetIsBookmarkedRemoved: state => state.bookmark.isBookmarkRemoved_,
   GetMyBookmarks: state => state.bookmark.myBookmarks_
 };

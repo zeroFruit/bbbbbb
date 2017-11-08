@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
@@ -15,18 +15,20 @@ const { func, arrayOf, number } = PropTypes;
 const propTypes = {
   onMomentumScrollEnd: func.isRequired,
   onClickNewsfeedCard: func.isRequired,
-  bookmarks: arrayOf(number).isRequired
+  myBookmarksAndBooks_: arrayOf(number).isRequired,
+  myBookmarks_: arrayOf(number).isRequired,
+  myBooks_: arrayOf(number).isRequired
 };
 const defaultProps = {};
 
-class NewsFeedList extends Component {
+class NewsFeedList extends PureComponent {
   render() {
-    const { booksWithBookmark } = this.props;
+    const { booksInfo, myBookmarksAndBooks_ } = this.props;
     return (
       <View style={ { flex: 1 } } >
         <FlatList
-          data={ booksWithBookmark }
-          extraData={ this.state }
+          data={ booksInfo }
+          extraData={ myBookmarksAndBooks_ }
           keyExtractor={ this._keyExtractor }
           renderItem={ this._renderItem }
           onMomentumScrollEnd={ this._onMomentumScrollEnd } />
@@ -34,20 +36,38 @@ class NewsFeedList extends Component {
     );
   }
 
-  _keyExtractor = item => {
-    return item.id;
-  }
+  _keyExtractor = item => item.id;
 
   _renderItem = ({ item, index }) => {
-    const { bookmarked, id, user_id } = item;
+    const { id, user_id } = item;
+    const isMyBookmark = this._isMyBookmark(id);
+    const isMyBook = this._isMyBook(id);
+    const bookmarked = this._isMyBookOrBookmark(id);
     return (
       <Post
         onClickPost={ () => { this._onClickNewsfeedCard(id, user_id); } }
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
         selectType={ SelectType.SELECT_FROM_NEWSFEED }
+        isMyBookmark={ isMyBookmark }
+        isMyBook={ isMyBook }
         isBookmarked={ bookmarked } />
     );
+  }
+
+  _isMyBookmark = (id) => {
+    const { myBookmarks_ } = this.props;
+    return (indexOfValueInArray(myBookmarks_, id) !== -1);
+  }
+
+  _isMyBook = (id) => {
+    const { myBooks_ } = this.props;
+    return (indexOfValueInArray(myBooks_, id) !== -1);
+  }
+
+  _isMyBookOrBookmark = (id) => {
+    const { myBookmarksAndBooks_ } = this.props;
+    return (indexOfValueInArray(myBookmarksAndBooks_, id) !== -1);
   }
 
   _onMomentumScrollEnd = () => {
@@ -62,7 +82,4 @@ class NewsFeedList extends Component {
 NewsFeedList.propTypes = propTypes;
 NewsFeedList.defaultProps = defaultProps;
 
-export default compose(
-  mapBookmarksToBooksHOC,
-  blockOnMomentumScrollEndHOC
-)(NewsFeedList);
+export default compose(blockOnMomentumScrollEndHOC)(NewsFeedList);

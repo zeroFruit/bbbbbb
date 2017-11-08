@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { compose } from 'recompose';
+
+import { fetchMyInfoHOC } from '../../hocs/fetchMyInfoHOC';
 import { navigateTo } from '../../Router';
 
 class Splash extends Component {
@@ -37,4 +40,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Splash;
+export default compose(fetchMyInfoHOC)(Splash);

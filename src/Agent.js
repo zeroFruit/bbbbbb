@@ -18,48 +18,48 @@ const requests = {
 };
 
 const Book = {
-  fetch: async(numOfFeedsPerLoad, page) => {
+  fetch: async (numOfFeedsPerLoad, page) => {
     const { byId, allIds } = await new BookData().get().books;
     const slicedIds = sliceArray(allIds, page * numOfFeedsPerLoad, (page + 1) * numOfFeedsPerLoad);
-    return _.map(slicedIds, id => {
+    return _.map(slicedIds, (id) => {
       return byId[id];
     });
   },
-  fetchByUserId: async userId => {
+  fetchByUserId: async (userId) => {
     const books = await new BookData().get().books.byId;
-    return _.filter(books, book => {
+    return _.filter(books, (book) => {
       return book.user_id === userId;
     });
   },
-  fetchByBookId: async bookId => {
+  fetchByBookId: async (bookId) => {
     const books = await new BookData().get().books.byId;
-    return _.filter(books, book => {
+    return _.filter(books, (book) => {
       return book.id === bookId;
     })[0];
   }
 };
 
 const User = {
-  fetchByUserId: async userId => {
+  fetchByUserId: async (userId) => {
     const users = await new UserData().get().users.byId;
-    return _.filter(users, user => {
+    return _.filter(users, (user) => {
       return user.id === userId;
     })[0];
   }
 };
 
 const Bookmark = {
-  fetchByUserId: async userId => {
+  fetchByUserId: async (userId) => {
     const bookmarks = await new BookmarkData().get().bookmarks.byId;
-    return _.filter(bookmarks, bookmark => {
+    return _.filter(bookmarks, (bookmark) => {
       return bookmark.user_id === userId;
     })[0];
   },
-  addByBookId: async(bookId, userId) => {
+  addByBookId: async (bookId, userId) => {
     const bookmarks = await new BookmarkData().setToById(userId, bookId);
     return bookmarks;
   },
-  removeByBookId: async(bookId, userId) => {
+  removeByBookId: async (bookId, userId) => {
     const bookmarks = await new BookmarkData().removeToById(userId, bookId);
     return bookmarks;
   }

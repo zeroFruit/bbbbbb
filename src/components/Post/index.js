@@ -32,6 +32,8 @@ const propTypes = {
     views: number
   }),
   selectType: string.isRequired,
+  isMyBook: bool,
+  isMyBookmark: bool,
   isBookmarked: bool,
   onClickPost: func.isRequired
 };
@@ -39,12 +41,14 @@ const propTypes = {
 const defaultProps = {
   userInfo: {},
   bookInfo: {},
+  isMyBook: false,
+  isMyBookmark: false,
   isBookmarked: false
 };
 
 class Post extends PureComponent {
   render() {
-    const { bookInfo, selectType, isBookmarked } = this.props;
+    const { bookInfo, selectType, isBookmarked, isMyBook, isMyBookmark } = this.props;
     const title = this._fetchPostTitle(selectType);
 
     return (
@@ -58,6 +62,8 @@ class Post extends PureComponent {
           bookId={ bookInfo.id }
           likes={ bookInfo.likes }
           views={ bookInfo.views }
+          isMyBook={ isMyBook }
+          isMyBookmark={ isMyBookmark }
           isBookmarked={ isBookmarked } />
         <PostContent
           content={ bookInfo.content } />

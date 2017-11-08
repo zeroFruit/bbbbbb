@@ -9,8 +9,9 @@ import {
 } from '../../Router';
 
 import Header from '../../components/Header';
-import NewsFeedList from '../../components/NewsFeedList';
+import NewsFeedList from '../../components/NewsFeedList/container';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
+import { selectBookmarksAndBooksHOC } from '../../hocs/selectBookmarksAndBooksHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 
 import { selectType, USER_ID } from '../../config';
@@ -48,7 +49,7 @@ class NewsFeed extends Component {
       usersInfo,
       page,
       numOfFeedsPerLoad,
-      bookmarks
+      bookmarksAndBooks
     } = this.props;
     return (
       <View style={ styles.container }>
@@ -57,7 +58,7 @@ class NewsFeed extends Component {
           usersInfo={ usersInfo }
           page={ page }
           numOfFeedsPerLoad={ numOfFeedsPerLoad }
-          bookmarks={ bookmarks }
+          bookmarks={ bookmarksAndBooks }
           onClickNewsfeedCard={ this._onClickNewsfeedCard }
           requestBooksAndUsers={ this._requestBooksAndUsers } />
       </View>

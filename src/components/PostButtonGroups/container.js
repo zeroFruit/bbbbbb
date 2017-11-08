@@ -1,19 +1,17 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import ComponentWithHOC from './index';
-import { actions, types } from '../../ducks/bookmarkReducer';
+import { actions, types } from '../../ducks/bookmark';
 
-const mapStateToProps = state => {
-  return {
-    ...state
-  };
-};
+const mapDispatchToProps = dispatch => bindActionCreators({
+  AsyncAddBookmarkRequestAction: bookId => ({
+    type: types.ADD_BOOKMARK_REQUEST,
+    payload: bookId
+  }),
+  AsyncRemoveBookmarkRequestAction: bookId => ({
+    type: types.REMOVE_BOOKMARK_REQUEST,
+    payload: bookId
+  })
+}, dispatch);
 
-const mapDispatchToProps = dispatch => {
-  return bindActionCreators({
-    AddBookmarkRequestAction: actions.AddBookmarkRequest,
-    RemoveBookmarkRequestAction: actions.RemoveBookmarkRequest
-  }, dispatch);
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithHOC);
+export default connect(null, mapDispatchToProps)(ComponentWithHOC);

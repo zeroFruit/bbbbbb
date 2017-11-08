@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { Card, Avatar, ButtonGroup } from 'react-native-elements';
-import autobind from 'autobind-decorator';
 
 import { takeFromArray } from '../../utils/ArrayUtils';
 import { isObjectHasProperty } from '../../utils/ObjectUtils';
@@ -22,7 +21,7 @@ import { selectType, USER_ID } from '../../config';
 
 const NUM_OF_CARDS_IN_GALLERY = 7;
 
-const renderHeader = params => {
+const renderHeader = (params) => {
   const headerTitle = isObjectHasProperty(params, 'my') ? params.my.display_name : 'Loading';
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -79,25 +78,25 @@ class MyPage extends Component {
     );
   }
 
-  async fetchMyGalleryCards(userId) {
+  fetchMyGalleryCards = async (userId) => {
     const images = await agent.Book.fetchByUserId(userId);
     const fetchedCards = takeFromArray(images, NUM_OF_CARDS_IN_GALLERY);
     const myGalleryCardsProps = this.arrangeGalleryCards(fetchedCards);
     this.setState({ myGalleryCardsProps });
   }
 
-  async fetchMyInfo(userId) {
+  fetchMyInfo = async (userId) => {
     const my = await agent.User.fetchByUserId(userId);
     setParamsToNavigation(this.props, { my });
   }
 
-  arrangeGalleryCards(cards) {
-    return cards.map(card => {
+  arrangeGalleryCards = (cards) => {
+    return cards.map((card) => {
       return this.getCardInfo(card);
     });
   }
 
-  getMyPageButtons() {
+  getMyPageButtons = () => {
     return [{
       element: MyBookListBtn
     }, {
@@ -105,14 +104,13 @@ class MyPage extends Component {
     }];
   }
 
-  @autobind
-  onClickGalleryCard(id, user) {
+  onClickGalleryCard = (id, user) => {
     const key = 'Post';
     const params = { id, user, selectType: selectType.SELECT_FROM_MYPAGE };
     navigateTo(this.props, key, params);
   }
 
-  getCardInfo(card) {
+  getCardInfo = (card) => {
     const { id, img_src, user_id, views, tags } = card;
     return {
       id,
