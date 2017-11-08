@@ -58,6 +58,10 @@ const Bookmark = {
   addByBookId: async(bookId, userId) => {
     const bookmarks = await new BookmarkData().setToById(userId, bookId);
     return bookmarks;
+  },
+  removeByBookId: async(bookId, userId) => {
+    const bookmarks = await new BookmarkData().removeToById(userId, bookId);
+    return bookmarks;
   }
 };
 

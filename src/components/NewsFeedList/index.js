@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, FlatList } from 'react-native';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 
 import Post from '../../components/Post';
 import { blockOnMomentumScrollEndHOC } from '../../hocs/blockOnMomentumScrollEndHOC';
@@ -13,6 +14,7 @@ const { func, arrayOf, number } = PropTypes;
 
 const propTypes = {
   onMomentumScrollEnd: func.isRequired,
+  onClickNewsfeedCard: func.isRequired,
   bookmarks: arrayOf(number).isRequired
 };
 const defaultProps = {};
@@ -37,9 +39,10 @@ class NewsFeedList extends Component {
   }
 
   _renderItem = ({ item, index }) => {
-    const { bookmarked } = item;
+    const { bookmarked, id, user_id } = item;
     return (
       <Post
+        onClickPost={ () => { this._onClickNewsfeedCard(id, user_id); } }
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
         selectType={ SelectType.SELECT_FROM_NEWSFEED }
@@ -50,9 +53,16 @@ class NewsFeedList extends Component {
   _onMomentumScrollEnd = () => {
     this.props.onMomentumScrollEnd();
   }
+
+  _onClickNewsfeedCard = (bookId, userId) => {
+    this.props.onClickNewsfeedCard(bookId, userId);
+  }
 }
 
 NewsFeedList.propTypes = propTypes;
 NewsFeedList.defaultProps = defaultProps;
 
-export default mapBookmarksToBooksHOC(blockOnMomentumScrollEndHOC(NewsFeedList));
+export default compose(
+  mapBookmarksToBooksHOC,
+  blockOnMomentumScrollEndHOC
+)(NewsFeedList);

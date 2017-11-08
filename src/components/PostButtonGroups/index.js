@@ -1,5 +1,6 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 import { View, Text, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 import autobind from 'autobind-decorator';
@@ -9,13 +10,17 @@ import { requestBookmarkHOC } from '../../hocs/requestBookmarkHOC';
 const { bool, func } = PropTypes;
 
 const propTypes = {
-  isBookmarked: bool.isRequired,
-  onClickbookmark: func.isRequired,
-  AddBookmarkRequestAction: func.isRequired
+  isBookmarked: bool,
+  onClickBookmarkAdd: func.isRequired,
+  onClickBookmarkRemove: func.isRequired,
+  AddBookmarkRequestAction: func.isRequired,
+  RemoveBookmarkRequestAction: func.isRequired
 };
-const defaultProps = {};
+const defaultProps = {
+  isBookmarked: false
+};
 
-class PostButtonGroups extends Component {
+class PostButtonGroups extends PureComponent {
   render() {
     const { isBookmarked } = this.props;
 
@@ -29,15 +34,19 @@ class PostButtonGroups extends Component {
           name={ isBookmarked ? 'turned-in' : 'turned-in-not' }
           size={ 30 }
           containerStyle={ styles.iconContainer }
-          onPress={ this.onClickBookmarkButton } />
+          onPress={ !isBookmarked ? this._onClickBookmarkAdd : this._onClickBookmarkRemove } />
       </View>
     );
   }
 
-  @autobind
-  onClickBookmarkButton() {
-    this.props.onClickbookmark();
-    this.props.AddBookmarkRequestAction();
+  _onClickBookmarkAdd = async () => {
+    await this.props.onClickBookmarkAdd();
+    await this.props.AddBookmarkRequestAction();
+  }
+
+  _onClickBookmarkRemove = async () => {
+    await this.props.onClickBookmarkRemove();
+    await this.props.RemoveBookmarkRequestAction();
   }
 }
 
@@ -60,4 +69,6 @@ const styles = StyleSheet.create({
 PostButtonGroups.propTypes = propTypes;
 PostButtonGroups.defaultProps = defaultProps;
 
-export default requestBookmarkHOC(PostButtonGroups);
+export default compose(
+  requestBookmarkHOC
+)(PostButtonGroups);

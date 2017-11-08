@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import { View, Text, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import PropTypes from 'prop-types';
 
-const { string } = PropTypes;
+const { string, func } = PropTypes;
 
 const propTypes = {
-  imgSrc: string.isRequired
+  imgSrc: string.isRequired,
+  onClickImage: func.isRequired
 };
 const defaultProps = {};
 
@@ -13,10 +14,16 @@ class PostImage extends Component {
   render() {
     const { imgSrc } = this.props;
     return (
-      <TouchableHighlight style={ styles.container }>
+      <TouchableHighlight
+        style={ styles.container }
+        onPress={ this._onClickImage }>
         <Image source={ { uri: imgSrc } } style={ styles.image } />
       </TouchableHighlight>
     );
+  }
+
+  _onClickImage = () => {
+    this.props.onClickImage();
   }
 }
 

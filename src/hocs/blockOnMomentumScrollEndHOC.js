@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 export const blockOnMomentumScrollEndHOC = WrappedComponent => {
   return class WithBlockedHandler extends Component {
     static navigationOptions = WrappedComponent.navigationOptions;
-
+    
     render() {
       return (
         <WrappedComponent

@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 
 import {
+  navigateTo,
   renderHeaderWithNavigation
 } from '../../Router';
 
@@ -11,15 +13,17 @@ import NewsFeedList from '../../components/NewsFeedList';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 
+import { selectType, USER_ID } from '../../config';
+
 const { func } = PropTypes;
 
 const propTypes = {
   requestBooksAndUsers: func.isRequired,
-  AddBookmarkSuccessAction: func.isRequired
+  ResetPageAction: func.isRequired
 };
 const defaultProps = {};
 
-const renderHeader = params => {
+const renderHeader = (params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <Text style={ styles.headerText }>
@@ -33,6 +37,10 @@ class NewsFeed extends Component {
   static navigationOptions = {
     header: ({ navigation }) => { return renderHeaderWithNavigation(navigation)(renderHeader); }
   };
+
+  componentWillUnmount() {
+    this.props.ResetPageAction();
+  }
 
   render() {
     const {
@@ -50,6 +58,7 @@ class NewsFeed extends Component {
           page={ page }
           numOfFeedsPerLoad={ numOfFeedsPerLoad }
           bookmarks={ bookmarks }
+          onClickNewsfeedCard={ this._onClickNewsfeedCard }
           requestBooksAndUsers={ this._requestBooksAndUsers } />
       </View>
     );
@@ -57,6 +66,12 @@ class NewsFeed extends Component {
 
   _requestBooksAndUsers = () => {
     this.props.requestBooksAndUsers();
+  }
+
+  _onClickNewsfeedCard = (id, user) => {
+    const key = 'Post';
+    const params = { id, user, selectType: selectType.SELECT_FROM_NEWSFEED };
+    navigateTo(this.props, key, params);
   }
 }
 
@@ -81,4 +96,7 @@ const styles = StyleSheet.create({
 NewsFeed.propTypes = propTypes;
 NewsFeed.defaultProps = defaultProps;
 
-export default fetchBookmarksHOC(fetchBooksAndUsersHOC(NewsFeed));
+export default compose(
+  fetchBookmarksHOC,
+  fetchBooksAndUsersHOC
+)(NewsFeed);

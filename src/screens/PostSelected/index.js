@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 
 import Header from '../../components/Header';
 import SearchBar from '../../components/SearchBar';
 import Post from '../../components/Post';
 import { fetchBookAndUserHOC } from '../../hocs/fetchBookAndUserHOC';
-import { loaderHOC } from '../../hocs/loaderHOC';
+import { withLoaderHOC } from '../../hocs/withLoaderHOC';
 
 import agent from '../../Agent';
 import {
@@ -81,4 +82,7 @@ const styles = StyleSheet.create({
 PostSelected.propTypes = propTypes;
 PostSelected.defaultProps = defaultProps;
 
-export default fetchBookAndUserHOC(loaderHOC(PostSelected));
+export default compose(
+  fetchBookAndUserHOC,
+  withLoaderHOC
+)(PostSelected);

@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 import _ from 'lodash';
 
-import { loaderHOC as WithLoader } from '../../hocs/loaderHOC';
+import { withLoaderHOC as WithLoader } from '../../hocs/withLoaderHOC';
+import { withDefaultOnClickPostHandlerHOC } from '../../hocs/withDefaultOnClickPostHandlerHOC';
 
 import PostTitle from '../PostTitle';
 import PostImage from '../PostImage';
@@ -13,7 +15,7 @@ import PostContent from '../PostContent';
 import logger from '../../utils/LogUtils';
 import { selectType as SelectType } from '../../config';
 
-const { string, shape, number, bool } = PropTypes;
+const { string, shape, number, bool, func } = PropTypes;
 
 const propTypes = {
   userInfo: shape({
@@ -30,24 +32,28 @@ const propTypes = {
     views: number
   }),
   selectType: string.isRequired,
-  isBookmarked: bool.isRequired
+  isBookmarked: bool,
+  onClickPost: func.isRequired
 };
 
 const defaultProps = {
   userInfo: {},
-  bookInfo: {}
+  bookInfo: {},
+  isBookmarked: false
 };
 
-class Post extends Component {
+class Post extends PureComponent {
   render() {
     const { bookInfo, selectType, isBookmarked } = this.props;
-    const title = this.fetchPostTitle(selectType);
+    const title = this._fetchPostTitle(selectType);
+
     return (
       <View>
         <PostTitle
           title={ title } />
         <PostImage
-          imgSrc={ bookInfo.img_src } />
+          imgSrc={ bookInfo.img_src }
+          onClickImage={ this._onClickImage } />
         <PostButtonGroups
           bookId={ bookInfo.id }
           likes={ bookInfo.likes }
@@ -59,7 +65,7 @@ class Post extends Component {
     );
   }
 
-  fetchPostTitle(selectType) {
+  _fetchPostTitle(selectType) {
     if (selectType === SelectType.SELECT_FROM_MYPAGE) {
       return this.props.userInfo.display_name;
     } else if (selectType === SelectType.SELECT_FROM_NEWSFEED) {
@@ -68,9 +74,16 @@ class Post extends Component {
       logger.error('Invalid select type');
     }
   }
+
+  _onClickImage = () => {
+    this.props.onClickPost();
+  }
 }
 
 Post.propTypes = propTypes;
 Post.defaultProps = defaultProps;
 
-export default WithLoader(Post);
+export default compose(
+  withDefaultOnClickPostHandlerHOC,
+  WithLoader
+)(Post);

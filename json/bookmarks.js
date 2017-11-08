@@ -50,6 +50,27 @@ class Bookmark {
     return bookmark;
   }
 
+  removeToById(userId, bookId) {
+    let bookmarkId;
+    const { bookmarks } = this._data;
+    const { byId } = bookmarks;
+    const bookmark = _.filter(byId, bookmark => {
+      if (bookmark.user_id === userId) {
+        bookmarkId = bookmark.id;
+        return true;
+      }
+    })[0];
+
+    const idx = bookmark.book_ids.indexOf(bookId);
+    if (idx > -1) {
+      bookmark.book_ids.splice(idx, 1);
+      bookmark.book_ids.sort();
+      this._data.bookmarks.byId[bookmarkId] = bookmark;
+    }
+
+    return bookmark;
+  }
+
   get() {
     return this._data;
   }

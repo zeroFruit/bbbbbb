@@ -4,17 +4,24 @@ import { USER_ID } from '../config';
 
 export const requestBookmarkHOC = WrappedComponent => {
   return class WithBookmarkRequest extends PureComponent {
+    static navigationOptions = WrappedComponent.navigationOptions;
     render() {
       return (
         <WrappedComponent
-          onClickbookmark={ this._bookmark }
+          onClickBookmarkAdd={ this._addBookmark }
+          onClickBookmarkRemove={ this._removeBookmark }
           { ...this.props } />
       );
     }
 
-    _bookmark = async() => {
+    _addBookmark = async () => {
       const { bookId } = this.props;
-      const bookmark = await agent.Bookmark.addByBookId(bookId, USER_ID);
+      const bookmarks = await agent.Bookmark.addByBookId(bookId, USER_ID);
+    }
+
+    _removeBookmark = async () => {
+      const { bookId } = this.props;
+      const bookmarks = await agent.Bookmark.removeByBookId(bookId, USER_ID);
     }
   };
 };

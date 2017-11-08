@@ -14,7 +14,7 @@ import { mapNavigateParamsToProps } from './hocs/mapNavigateParamsToProps';
 import Splash from './screens/Splash';
 import BookMark from './screens/BookMark';
 import MyPage from './screens/MyPage';
-import NewsFeed from './screens/NewsFeed/container';
+import NewsFeed from './screens/NewsFeed';
 import PostSelected from './screens/PostSelected';
 
 import CustomTabBar from './components/TabBar';

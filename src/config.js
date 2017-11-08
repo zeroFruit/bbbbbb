@@ -9,3 +9,5 @@ export const selectType = {
 export const NUM_OF_FEEDS_PER_LOAD = 3;
 
 export const USER_ID = 1;
+
+export const NUM_OF_ROW = 3;

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 import { SearchBar as SearchBarElement } from 'react-native-elements';
 import _ from 'lodash';
 
-import { loaderHOC as WithLoader } from '../../hocs/loaderHOC';
+import { withLoaderHOC as WithLoader } from '../../hocs/withLoaderHOC';
 import { selectType } from '../../config';
 import logger from '../../utils/LogUtils';
 
@@ -104,4 +105,4 @@ const styles = StyleSheet.create({
 SearchBar.propTypes = propTypes;
 SearchBar.defaultProps = defaultProps;
 
-export default WithLoader(SearchBar);
+export default compose(WithLoader)(SearchBar);

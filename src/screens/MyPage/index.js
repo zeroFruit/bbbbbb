@@ -13,7 +13,7 @@ import {
   renderHeaderWithNavigation
 } from '../../Router';
 
-import Gallery from '../../components/Gallery';
+import MyPageBookGallery from '../../components/MyPageBookGallery';
 import Header from '../../components/Header';
 import PostAddingPanel from '../../components/PostAddingPanel';
 
@@ -71,7 +71,7 @@ class MyPage extends Component {
 
         <View style={ styles.body }>
           <PostAddingPanel />
-          <Gallery
+          <MyPageBookGallery
             galleryCardsProps={ myGalleryCardsProps }
             onClickGalleryCard={ this.onClickGalleryCard } />
         </View>

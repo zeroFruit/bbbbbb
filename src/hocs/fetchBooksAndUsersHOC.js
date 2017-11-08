@@ -32,26 +32,26 @@ export const fetchBooksAndUsersHOC = WrappedComponent => {
       );
     }
 
-    _requestBooksAndUsers = async() => {
+    _requestBooksAndUsers = async () => {
       const { booksInfo, usersInfo } = await this._fetchBooksAndUsers();
       this._setBooksAndUsersToState(booksInfo, usersInfo);
       this.props.UpdatePageAction();
     }
 
-    _fetchBooksAndUsers = async() => {
+    _fetchBooksAndUsers = async () => {
       const booksInfo = await this._fetchBooks();
       const usersInfo = await this._fetchUsers(booksInfo);
 
       return { booksInfo, usersInfo };
     }
 
-    _fetchBooks = async() => {
+    _fetchBooks = async () => {
       const { page_, numOfFeedsPerLoad_ } = this.props;
       const books = await agent.Book.fetch(numOfFeedsPerLoad_, page_);
       return books;
     }
 
-    _fetchUsers = async booksInfo => {
+    _fetchUsers = async (booksInfo) => {
       const promises = booksInfo.map(({ user_id }) => {
         return agent.User.fetchByUserId(user_id);
       });
