@@ -4,11 +4,13 @@ import { List } from 'immutable';
 import book, { selectors as bookSelectors } from './book';
 import bookmark, { selectors as bookmarkSelectors } from './bookmark';
 import user from './user';
+import tag from './tag';
 
 export default combineReducers({
   book,
   bookmark,
-  user
+  user,
+  tag
 });
 
 export const selectors = {

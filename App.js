@@ -15,10 +15,7 @@ const loggerMiddleware = createLogger({ predicate: (getState, action) => { retur
 const sagaMiddleware = createSagaMiddleware();
 
 function configureStore(initialState) {
-  const enhancer = compose(applyMiddleware(
-    sagaMiddleware,
-    loggerMiddleware
-  ));
+  const enhancer = compose(applyMiddleware(sagaMiddleware));
   return createStore(reducer, initialState, enhancer);
 }
 

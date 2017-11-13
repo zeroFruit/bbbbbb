@@ -46,11 +46,10 @@ const defaultProps = {
   isBookmarked: false
 };
 
-class Post extends PureComponent {
+class Post extends React.Component {
   render() {
     const { bookInfo, selectType, isBookmarked, isMyBook, isMyBookmark } = this.props;
     const title = this._fetchPostTitle(selectType);
-
     return (
       <View>
         <PostTitle
@@ -72,10 +71,13 @@ class Post extends PureComponent {
   }
 
   _fetchPostTitle(selectType) {
-    if (selectType === SelectType.SELECT_FROM_MYPAGE) {
+    if (selectType === SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE) {
       return this.props.userInfo.display_name;
-    } else if (selectType === SelectType.SELECT_FROM_NEWSFEED) {
-      return this.props.bookInfo.tags;
+    } else if (
+      selectType === SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE ||
+      selectType === SelectType.FETCHED_FROM_NEWSFEED
+    ) {
+      return this.props.userInfo.display_name;
     } else {
       logger.error('Invalid select type');
     }

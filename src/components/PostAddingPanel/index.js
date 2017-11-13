@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { Icon } from 'react-native-elements';
-import autobind from 'autobind-decorator';
 
 class PostAddingPanel extends Component {
   render() {

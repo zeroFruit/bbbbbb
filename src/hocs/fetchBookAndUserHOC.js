@@ -1,36 +1,70 @@
 import React, { Component } from 'react';
-import agent from '../Agent';
+import { View } from 'react-native';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import {
+  selectors as bookSelectors,
+  types as bookTypes,
+  actions as bookActions
+} from '../ducks/book';
+import {
+  selectors as userSelectors,
+  types as userTypes
+} from '../ducks/user';
+
+const { func } = PropTypes;
 
 export const fetchBookAndUserHOC = (WrappedComponent) => {
-  return class WithBookAndUser extends Component {
-    static navigationOptions = WrappedComponent.navigationOptions;
+  const propTypes = {
+    AsyncFetchBookRequestAction: func.isRequired,
+    AsyncFetchUserRequestAction: func.isRequired
+  };
+  const defaultProps = {};
 
-    state = {
-      bookInfo: {},
-      userInfo: {}
-    };
+  class WithBookAndUser extends Component {
+    static navigationOptions = WrappedComponent.navigationOptions;
 
     async componentDidMount() {
       const { id, user } = this.props;
-      const { userInfo, bookInfo } = await this._fetchBookAndUser(id, user);
-      this._setStateBookAndUser(userInfo, bookInfo);
+      await this.props.AsyncFetchBookRequestAction(id);
+      await this.props.AsyncFetchUserRequestAction(user);
     }
+
     render() {
-      const { bookInfo, userInfo } = this.state;
+      const { selectedUserDisplayName_, selectedBook_ } = this.props;
       return (
-        <WrappedComponent userInfo={ userInfo } bookInfo={ bookInfo } { ...this.props } />
+        <WrappedComponent
+          { ...this.props }
+          userInfo={ { display_name: selectedUserDisplayName_ } }
+          bookInfo={ selectedBook_ } />
       );
     }
+  }
+  WithBookAndUser.propTypes = propTypes;
+  WithBookAndUser.defaultProps = defaultProps;
 
-    _fetchBookAndUser = async(id, user) => {
-      const bookInfo = await agent.Book.fetchByBookId(id);
-      const userInfo = await agent.User.fetchByUserId(user);
-
-      return { bookInfo, userInfo };
-    }
-
-    _setStateBookAndUser = (userInfo, bookInfo) => {
-      this.setState({ bookInfo, userInfo });
-    }
-  };
+  return connect(mapStateToProps, mapDispatchToProps)(WithBookAndUser);
 };
+
+const mapStateToProps = state => ({
+  selectedBook_: bookSelectors.GetSelectedBook(state),
+  isBookFetched_: bookSelectors.GetIsBookFetched(state),
+  selectedUserDisplayName_: userSelectors.GetSelectedUserDisplayName(state),
+  isSelectedUserInfoFetched_: userSelectors.GetIsSelectedUserInfoFetched(state)
+});
+
+const mapDispatchToProps = dispatch => bindActionCreators({
+  AsyncFetchBookRequestAction: (bookId) => {
+    return ({
+      type: bookTypes.FETCH_BOOK_REQUEST,
+      payload: bookId
+    });
+  },
+  AsyncFetchUserRequestAction: (userId) => {
+    return ({
+      type: userTypes.FETCH_SELECTED_USER_REQUEST,
+      payload: userId
+    });
+  }
+}, dispatch);

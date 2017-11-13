@@ -5,9 +5,7 @@ import { compose } from 'recompose';
 
 import Post from '../../components/Post';
 import { blockOnMomentumScrollEndHOC } from '../../hocs/blockOnMomentumScrollEndHOC';
-import { mapBookmarksToBooksHOC } from '../../hocs/mapBookmarksToBooksHOC';
 
-import { selectType as SelectType } from '../../config';
 import { indexOfValueInArray } from '../../utils/ArrayUtils';
 
 const { func, arrayOf, number } = PropTypes;
@@ -42,16 +40,15 @@ class NewsFeedList extends PureComponent {
     const { id, user_id } = item;
     const isMyBookmark = this._isMyBookmark(id);
     const isMyBook = this._isMyBook(id);
-    const bookmarked = this._isMyBookOrBookmark(id);
     return (
       <Post
         onClickPost={ () => { this._onClickNewsfeedCard(id, user_id); } }
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
-        selectType={ SelectType.SELECT_FROM_NEWSFEED }
+        selectType={ this.props.selectType }
         isMyBookmark={ isMyBookmark }
         isMyBook={ isMyBook }
-        isBookmarked={ bookmarked } />
+        isBookmarked={ isMyBookmark } />
     );
   }
 
@@ -65,16 +62,12 @@ class NewsFeedList extends PureComponent {
     return (indexOfValueInArray(myBooks_, id) !== -1);
   }
 
-  _isMyBookOrBookmark = (id) => {
-    const { myBookmarksAndBooks_ } = this.props;
-    return (indexOfValueInArray(myBookmarksAndBooks_, id) !== -1);
-  }
-
   _onMomentumScrollEnd = () => {
     this.props.onMomentumScrollEnd();
   }
 
   _onClickNewsfeedCard = (bookId, userId) => {
+    this.props.FetchBookTagInitAction();
     this.props.onClickNewsfeedCard(bookId, userId);
   }
 }

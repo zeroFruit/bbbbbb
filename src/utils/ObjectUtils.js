@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-const isEmpty = obj => {
+export const isEmpty = obj => {
   return (
     obj === undefined ||
     _.isEmpty(obj)
@@ -17,3 +17,5 @@ export const isObjectHasProperty = (obj, key) => {
 export const assignObjects = (obj1, obj2) => {
   return _.merge(obj1, obj2);
 };
+
+export const pickByKey = (obj, keyArr) => _.pick(obj, keyArr);

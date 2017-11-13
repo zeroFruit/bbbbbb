@@ -21,14 +21,18 @@ const defaultProps = {
 
 class PostButtonGroups extends PureComponent {
   render() {
-    const { isBookmarked } = this.props;
+    const { isBookmarked, isMyBook } = this.props;
 
     return (
       <View style={ styles.container }>
-        <Icon
-          name="more-horiz"
-          size={ 30 }
-          containerStyle={ styles.iconContainer } />
+        {
+          isMyBook ?
+            <Icon
+              name="more-horiz"
+              size={ 30 }
+              containerStyle={ styles.iconContainer } /> :
+            null
+        }
         <Icon
           name={ isBookmarked ? 'turned-in' : 'turned-in-not' }
           size={ 30 }

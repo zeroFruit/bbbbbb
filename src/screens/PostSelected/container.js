@@ -3,7 +3,7 @@ import { bindActionCreators } from 'redux';
 import { selectors } from '../../ducks';
 import { selectors as bookSelectors } from '../../ducks/book';
 import { selectors as bookmarkSelectors } from '../../ducks/bookmark';
-import { actions as tagActions } from '../../ducks/tag';
+import { selectors as tagSelectors, types as tagTypes } from '../../ducks/tag';
 import ComponentWithHOC from './index';
 
 const mapStateToProps = state => ({
@@ -12,8 +12,4 @@ const mapStateToProps = state => ({
   myBookmarksAndBooks_: selectors.BookAndBookmarkSelector(state)
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  FetchBookTagInitAction: tagActions.FetchBookTagInit
-}, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithHOC);
+export default connect(mapStateToProps, null)(ComponentWithHOC);

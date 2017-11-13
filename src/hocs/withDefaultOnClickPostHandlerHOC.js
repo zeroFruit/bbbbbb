@@ -1,10 +1,10 @@
 import React, { PureComponent } from 'react';
 import logger from '../utils/LogUtils';
 
-export const withDefaultOnClickPostHandlerHOC = WrappedComponent => {
+export const withDefaultOnClickPostHandlerHOC = (WrappedComponent) => {
   class WithDefaultOnClickHandler extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
-    
+
     render() {
       if (!this.props.onClickPost) {
         return (

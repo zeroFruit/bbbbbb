@@ -106,7 +106,7 @@ class MyPage extends Component {
 
   onClickGalleryCard = (id, user) => {
     const key = 'Post';
-    const params = { id, user, selectType: selectType.SELECT_FROM_MYPAGE };
+    const params = { id, user, selectType: selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE };
     navigateTo(this.props, key, params);
   }
 

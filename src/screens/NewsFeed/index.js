@@ -10,11 +10,12 @@ import {
 
 import Header from '../../components/Header';
 import NewsFeedList from '../../components/NewsFeedList/container';
+import PostAddingPanel from '../../components/PostAddingPanel';
+import HeaderBarBasic from '../../components/HeaderBarBasic';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
-import { selectBookmarksAndBooksHOC } from '../../hocs/selectBookmarksAndBooksHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 
-import { selectType, USER_ID } from '../../config';
+import { selectType } from '../../config';
 
 const { func } = PropTypes;
 
@@ -27,9 +28,10 @@ const defaultProps = {};
 const renderHeader = (params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
-      <Text style={ styles.headerText }>
-        뉴스피드
-      </Text>
+      <View>
+        <HeaderBarBasic />
+        <PostAddingPanel />
+      </View>
     </Header>
   );
 };
@@ -56,6 +58,7 @@ class NewsFeed extends Component {
         <NewsFeedList
           booksInfo={ booksInfo }
           usersInfo={ usersInfo }
+          selectType={ selectType.FETCHED_FROM_NEWSFEED }
           page={ page }
           numOfFeedsPerLoad={ numOfFeedsPerLoad }
           bookmarks={ bookmarksAndBooks }
@@ -71,7 +74,7 @@ class NewsFeed extends Component {
 
   _onClickNewsfeedCard = (id, user) => {
     const key = 'Post';
-    const params = { id, user, selectType: selectType.SELECT_FROM_NEWSFEED };
+    const params = { id, user, selectType: selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE };
     navigateTo(this.props, key, params);
   }
 }
@@ -81,16 +84,14 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    height: 50,
-    marginTop: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'black'
+    height: 100,
+    marginTop: 25,
+    alignItems: 'stretch',
+    backgroundColor: 'white'
   },
   headerText: {
-    fontSize: 20
+    fontSize: 20,
+    textAlign: 'center'
   }
 });
 

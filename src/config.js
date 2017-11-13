@@ -2,8 +2,16 @@ export const SEARCHBY_TAG = 'searchby_tag';
 export const SEARCHBY_NAME = 'searchby_name';
 
 export const selectType = {
-  SELECT_FROM_MYPAGE: 'select_from_mypage',
-  SELECT_FROM_NEWSFEED: 'select_from_newsfeed'
+  FETCHED_FROM_NEWSFEED: 'selectType/fetched_from_newsfeed',
+  SELECT_FROM_MYPAGE_CLICKED_IMAGE: 'selectType/select_from_mypage_clicked_image',
+  SELECT_FROM_MYPAGE_CLICKED_NICKNAME: 'selectType/select_from_mypage_clicked_nickname',
+  SELECT_FROM_NEWSFEED_CLICKED_IMAGE: 'selectType/select_from_newsfeed_clicked_image',
+  SELECT_FROM_NEWSFEED_CLICKED_NICKNAME: 'selectType/select_from_newsfeed_clicked_nickname'
+};
+
+export const headerType = {
+  TAG: 'headerType/tag',
+  TEXT: 'headerType/text'
 };
 
 export const NUM_OF_FEEDS_PER_LOAD = 3;

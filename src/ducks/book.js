@@ -5,13 +5,21 @@ export const types = {
   LOAD_NEWSFEED_REQUEST: 'book/load_newsfeed_request',
   RESET_NEWSFFED_STATE: 'book/reset_newsfeed_state',
   FETCH_MY_BOOKS_REQUEST: 'book/fetch_my_books_request',
-  FETCH_MY_BOOKS_SUCCESS: 'book/fetch_my_books_success'
+  FETCH_MY_BOOKS_SUCCESS: 'book/fetch_my_books_success',
+
+  FETCH_BOOK_READY: 'book/fetch_book_ready',
+  FETCH_BOOK_REQUEST: 'book/fetch_book_request',
+  FETCH_BOOK_SUCCESS: 'book/fetch_book_success',
+
+  UNMOUNT_BOOK: 'book/unmount_book'
 };
 
 export const initialState = {
   page_: 0,
   numOfFeedsPerLoad_: 3,
-  myBooks_: List().toJS()
+  myBooks_: List().toJS(),
+  isBookFetched_: false,
+  selectedBook_: {}
 };
 
 const page = {
@@ -23,17 +31,38 @@ const page = {
     ...state,
     page_: 0
   }),
-  [types.FETCH_MY_BOOKS_REQUEST]: (state, action) => ({
-    ...state,
-  }),
+};
+
+const fetchMyBooks = {
   [types.FETCH_MY_BOOKS_SUCCESS]: (state, action) => ({
     ...state,
     myBooks_: List(action.payload).toJS()
   })
 };
 
+const fetchSelectedBook = {
+  [types.FETCH_BOOK_READY]: (state, action) => ({
+    ...state,
+    isBookFetched_: true
+  }),
+  [types.FETCH_BOOK_SUCCESS]: (state, action) => ({
+    ...state,
+    isBookFetched_: false,
+    selectedBook_: action.payload
+  })
+};
+
+const unmountSeletedBook = {
+  [types.UNMOUNT_BOOK]: (state, action) => ({
+    ...state,
+    selectedBook_: initialState.selectedBook_
+  })
+}
+
 export default book = createReducer(initialState, {
-  ...page
+  ...page,
+  ...fetchMyBooks,
+  ...fetchSelectedBook
 });
 
 export const actions = {
@@ -46,9 +75,16 @@ export const actions = {
     return {
       type: types.RESET_NEWSFFED_STATE
     };
+  },
+  UnmountSelectedBook: () => {
+    return {
+      type: types.UNMOUNT_BOOK
+    };
   }
 };
 
 export const selectors = {
-  GetMyBooks: state => state.book.myBooks_
+  GetMyBooks: state => state.book.myBooks_,
+  GetSelectedBook: state => state.book.selectedBook_,
+  GetIsBookFetched: state => state.book.isBookFetched_
 };

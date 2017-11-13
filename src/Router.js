@@ -15,7 +15,7 @@ import Splash from './screens/Splash';
 import BookMark from './screens/BookMark';
 import MyPage from './screens/MyPage';
 import NewsFeed from './screens/NewsFeed';
-import PostSelected from './screens/PostSelected';
+import PostSelected from './screens/PostSelected/container';
 
 import CustomTabBar from './components/TabBar';
 
@@ -118,17 +118,17 @@ export const navigateTo = (props, to, params) => {
   props.navigation.navigate(to, params);
 };
 
-export const getParamsFromNavigationState = state => {
+export const getParamsFromNavigationState = (state) => {
   const { routes } = state;
   const { index } = routes[0];
   const { params } = routes[0].routes[index];
   return params;
 };
 
-export const renderHeaderWithNavigation = navigation => {
+export const renderHeaderWithNavigation = (navigation) => {
   const params = getParamsFromNavigationState(navigation.state);
 
-  return renderHeaderMethod => {
+  return (renderHeaderMethod) => {
     return renderHeaderMethod(params);
   };
 };

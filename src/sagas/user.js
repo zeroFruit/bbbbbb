@@ -9,7 +9,7 @@ export function* AsyncFetchMyInfoRequest(action) {
   });
 
   const me = yield call(agent.User.fetchByUserId, action.payload);
-  
+
   yield put({
     type: bookTypes.FETCH_MY_BOOKS_SUCCESS,
     payload: me.books
@@ -20,6 +20,19 @@ export function* AsyncFetchMyInfoRequest(action) {
   });
 }
 
+export function* AsyncFetchSelectedUserInfoRequest(action) {
+  yield put({
+    type: userTypes.FETCH_SELECTED_USER_READY
+  });
+
+  const me = yield call(agent.User.fetchByUserId, action.payload);
+  yield put({
+    type: userTypes.FETCH_SELECTED_USER_SUCCESS,
+    payload: me
+  });
+}
+
 export default function* rootSaga() {
   yield takeLatest(userTypes.FETCH_ME_REQUEST, AsyncFetchMyInfoRequest);
+  yield takeLatest(userTypes.FETCH_SELECTED_USER_REQUEST, AsyncFetchSelectedUserInfoRequest);
 }

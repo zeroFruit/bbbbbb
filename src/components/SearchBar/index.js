@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
-import { StyleSheet } from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, Text, StyleSheet, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
-import { SearchBar as SearchBarElement } from 'react-native-elements';
-import _ from 'lodash';
 
 import { withLoaderHOC as WithLoader } from '../../hocs/withLoaderHOC';
 import { selectType } from '../../config';
@@ -30,7 +28,7 @@ const defaultProps = {
   selectType: ''
 };
 
-class SearchBar extends Component {
+class SearchBar extends PureComponent {
   state = {
     searchText: '',
     isTextInit: false
@@ -44,25 +42,24 @@ class SearchBar extends Component {
 
   render() {
     const { searchText } = this.state;
-    const { bookInfo: { tags } } = this.props;
-
+    const { bookInfo: { tags }, headerFlex } = this.props;
     return (
-      <SearchBarElement
-        containerStyle={ styles.container }
-        inputStyle={ styles.input }
-        icon={ {
-          color: '#86939e',
-          name: 'search',
-          style: styles.icon
-        } }
-        placeholder="Type Here..."
-        lightTheme
-        value={ searchText } />
+      <View style={ styles.container }>
+        <TextInput
+          style={ styles.searchbarText }
+          onChangeText={ this._onChangeText }
+          onBlur={ this._onBlur }
+          value={ this.props.searchText } />
+      </View>
     );
   }
 
-  onChangeText = text => {
+  _onChangeText = (text) => {
+    this.props.onChangeSearchText(text);
+  }
 
+  _onBlur = () => {
+    this.props.onBlurSearchbar();
   }
 
   shouldInitSearchText = () => {
@@ -75,34 +72,21 @@ class SearchBar extends Component {
       userInfo.display_name !== ''
     );
   }
-
-  fetchInitSearchText = () => {
-    if (selectType.SELECT_FROM_MYPAGE === this.props.selectType) {
-      this.setState({ searchText: this.props.bookInfo.tags, isTextInit: true });
-    } else if (selectType.SELECT_FROM_NEWSFEED === this.props.selectType) {
-      this.setState({ searchText: this.props.userInfo.display_name, isTextInit: true });
-    } else {
-      logger.error('Invalid select type');
-    }
-  }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white'
-  },
-  input: {
     backgroundColor: 'white',
-    fontSize: 20
+    flex: 1,
+    justifyContent: 'center'
   },
-  icon: {
-    width: 30,
-    height: 30,
-    marginRight: 10
+  searchbarText: {
+    fontSize: 20,
+    textAlign: 'left'
   }
 });
 
 SearchBar.propTypes = propTypes;
 SearchBar.defaultProps = defaultProps;
 
-export default compose(WithLoader)(SearchBar);
+export default SearchBar;

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { Bookmark as BookmarkData } from '../json/bookmarks';
 import { Book as BookData } from '../json/books';
 import { User as UserData } from '../json/users';
+import { Tag as TagData } from '../json/tags';
 
 import { sliceArray } from './utils/ArrayUtils';
 
@@ -65,8 +66,21 @@ const Bookmark = {
   }
 };
 
+const Tag = {
+  fetchByAuthorTagIdAndBookTagId: async (authorTagId, bookTagId) => {
+    const { book_title_tags, book_author_tags } = await new TagData().get();
+    const { book_title } = book_title_tags.byId[bookTagId];
+    const { book_author } = book_author_tags.byId[authorTagId];
+    return {
+      bookTitle: book_title,
+      bookAuthor: book_author
+    };
+  }
+};
+
 export default {
   Book,
   User,
-  Bookmark
+  Bookmark,
+  Tag
 };

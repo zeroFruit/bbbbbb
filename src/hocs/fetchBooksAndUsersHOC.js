@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import agent from '../Agent';
 import { concatArrays } from '../utils/ArrayUtils';
 
-export const fetchBooksAndUsersHOC = WrappedComponent => {
+export const fetchBooksAndUsersHOC = (WrappedComponent) => {
   return class WithUsers extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
