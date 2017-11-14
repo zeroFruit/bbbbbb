@@ -32,16 +32,20 @@ class MyPageBookGallery extends GalleryParentComponent {
   }
 
   _getGalleryCard = (card) => {
-    const { onClickGalleryCard } = this.props;
     const { id, user, imgSrc } = card;
     return (
       <MyPageBookGalleryCard
         key={ id }
-        onClickGalleryCard={ onClickGalleryCard }
+        onClickGalleryCard={ this._onClickGalleryCard }
         user={ user }
         id={ id }
         imgSrc={ imgSrc } />
     );
+  }
+
+  _onClickGalleryCard = (id, user) => {
+    this.props.FetchBookTagInitAction();
+    this.props.onClickGalleryCard(id, user);
   }
 }
 

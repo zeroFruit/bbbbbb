@@ -1,5 +1,6 @@
 import axios from 'axios';
 import _ from 'lodash';
+import { Collection } from 'immutable';
 import { Bookmark as BookmarkData } from '../json/bookmarks';
 import { Book as BookData } from '../json/books';
 import { User as UserData } from '../json/users';
@@ -25,6 +26,21 @@ const Book = {
     return _.map(slicedIds, (id) => {
       return byId[id];
     });
+  },
+  fetchByTag: async (numOfFeedsPerLoad, page, bookTitleTag, bookAuthorTag) => {
+    const { byId } = await new BookData().get().books;
+    const filteredBook = _.filter(byId, (book) => {
+      return (
+        book.title_tag_id === bookTitleTag &&
+        book.author_tag_id === bookAuthorTag
+      );
+    });
+
+    return sliceArray(
+      filteredBook,
+      page * numOfFeedsPerLoad,
+      (page + 1) * numOfFeedsPerLoad
+    );
   },
   fetchByUserId: async (userId) => {
     const books = await new BookData().get().books.byId;

@@ -14,6 +14,11 @@ export const headerType = {
   TEXT: 'headerType/text'
 };
 
+export const postTitleType = {
+  TAG: 'postTitleType/tag',
+  TEXT: 'postTitleType/text'
+};
+
 export const NUM_OF_FEEDS_PER_LOAD = 3;
 
 export const USER_ID = 1;

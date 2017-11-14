@@ -15,7 +15,7 @@ import Splash from './screens/Splash';
 import BookMark from './screens/BookMark';
 import MyPage from './screens/MyPage';
 import NewsFeed from './screens/NewsFeed';
-import PostSelected from './screens/PostSelected/container';
+import PostSelectedList from './screens/PostSelectedList/container';
 
 import CustomTabBar from './components/TabBar';
 
@@ -82,7 +82,7 @@ export const CustomTabConfig = TabRouter({
     screen: BookMark
   },
   Post: {
-    screen: mapNavigateParamsToProps(PostSelected)
+    screen: mapNavigateParamsToProps(PostSelectedList)
   }
 }, TabsNavigatorOptions);
 
@@ -133,8 +133,8 @@ export const renderHeaderWithNavigation = (navigation) => {
   };
 };
 
-export const setParamsToNavigation = (props, params) => {
-  props.navigation.setParams({ ...params });
+export const setParamsToNavigation = async (props, params) => {
+  await props.navigation.setParams({ ...params });
 };
 
 export default RouterComponent;

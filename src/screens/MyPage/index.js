@@ -12,7 +12,7 @@ import {
   renderHeaderWithNavigation
 } from '../../Router';
 
-import MyPageBookGallery from '../../components/MyPageBookGallery';
+import MyPageBookGallery from '../../components/MyPageBookGallery/container';
 import Header from '../../components/Header';
 import PostAddingPanel from '../../components/PostAddingPanel';
 
@@ -72,7 +72,7 @@ class MyPage extends Component {
           <PostAddingPanel />
           <MyPageBookGallery
             galleryCardsProps={ myGalleryCardsProps }
-            onClickGalleryCard={ this.onClickGalleryCard } />
+            onClickGalleryCard={ this._onClickGalleryCard } />
         </View>
       </View>
     );
@@ -104,7 +104,7 @@ class MyPage extends Component {
     }];
   }
 
-  onClickGalleryCard = (id, user) => {
+  _onClickGalleryCard = (id, user) => {
     const key = 'Post';
     const params = { id, user, selectType: selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE };
     navigateTo(this.props, key, params);

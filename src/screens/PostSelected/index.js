@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
@@ -6,7 +6,6 @@ import { compose } from 'recompose';
 import Header from '../../components/Header';
 import HeaderBarWithBackButton from '../../components/HeaderBarWithBackButton';
 import Post from '../../components/Post';
-import { fetchBookAndUserHOC } from '../../hocs/fetchBookAndUserHOC';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
 import { withLoaderHOC } from '../../hocs/withLoaderHOC';
 
@@ -33,39 +32,37 @@ const propTypes = {
     views: number
   }),
   selectType: string.isRequired,
-  selectedBookTitleTag_: string.isRequired,
-  selectedBookAuthorTag_: string.isRequired
+  selectedBookTitleTag: string.isRequired,
+  selectedBookAuthorTag: string.isRequired
 };
 const defaultProps = {
   bookInfo: {},
   userInfo: {}
 };
 
-const PARAMS_KEY = ['userInfo', 'bookInfo', 'selectType', 'selectedBookTitleTag_', 'selectedBookAuthorTag_'];
+const PARAMS_KEY = ['userInfo', 'bookInfo', 'selectType'];
+
 const renderHeader = (params) => {
-  const { userInfo, selectType } = params;
+  const { selectType } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithBackButton
-        userInfo={ userInfo }
         selectType={ selectType } />
     </Header>
   );
 };
 
-class PostSelected extends PureComponent {
+class PostSelected extends Component {
   static navigationOptions = {
-    header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
-  }
-
-  componentDidMount() {
-    this._setParamsToNavigation(this.props);
+    header: ({ navigation }) => {
+      return renderHeaderWithNavigation(navigation)(renderHeader);
+    }
   }
 
   render() {
     const {
       bookInfo, userInfo, selectType, id,
-      selectedBookTitleTag_, selectedBookAuthorTag_
+      selectedBookTitleTag, selectedBookAuthorTag
     } = this.props;
     const isMyBookmark = this._isMyBookmark(id);
     const isMyBook = this._isMyBook(id);
@@ -75,8 +72,8 @@ class PostSelected extends PureComponent {
           bookInfo={ bookInfo }
           userInfo={ userInfo }
           selectType={ selectType }
-          bookTitleTag={ selectedBookTitleTag_ }
-          bookAuthorTag={ selectedBookAuthorTag_ }
+          bookTitleTag={ selectedBookTitleTag }
+          bookAuthorTag={ selectedBookAuthorTag }
           isMyBookmark={ isMyBookmark }
           isMyBook={ isMyBook }
           isBookmarked={ isMyBookmark } />
@@ -84,9 +81,9 @@ class PostSelected extends PureComponent {
     );
   }
 
-  _setParamsToNavigation = (props) => {
+  _setParamsToNavigation = async (props) => {
     const paramsOfNav = pickByKey(props, PARAMS_KEY);
-    setParamsToNavigation(props, paramsOfNav);
+    await setParamsToNavigation(props, paramsOfNav);
   }
 
   _isMyBookmark = (id) => {
@@ -111,7 +108,6 @@ PostSelected.propTypes = propTypes;
 PostSelected.defaultProps = defaultProps;
 
 export default compose(
-  fetchBookAndUserHOC,
   fetchTagHOC,
   withLoaderHOC
 )(PostSelected);

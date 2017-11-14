@@ -14,6 +14,8 @@ export const fetchMyInfoHOC = (WrappedComponent) => {
   const defaultProps = {};
 
   class WithMyInfo extends PureComponent {
+    static navigationOptions = WrappedComponent.navigationOptions;
+
     async componentDidMount() {
       this.props.AsyncFetchMyInfoRequestAction(USER_ID);
     }

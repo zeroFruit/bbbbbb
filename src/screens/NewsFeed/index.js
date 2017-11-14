@@ -29,7 +29,8 @@ const renderHeader = (params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <View>
-        <HeaderBarBasic />
+        <HeaderBarBasic
+          selectType={ selectType.FETCHED_FROM_NEWSFEED } />
         <PostAddingPanel />
       </View>
     </Header>

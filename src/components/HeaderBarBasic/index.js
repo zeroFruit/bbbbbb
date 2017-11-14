@@ -1,10 +1,12 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 
 import SearchBar from '../SearchBar';
 import HeaderTitleBar from '../HeaderTitleBar';
 import HeaderRightIcon from '../HeaderRightIcon';
+import { fetchHeaderTitlePropsHOC } from '../../hocs/fetchHeaderTitlePropsHOC';
 
 import { headerType } from '../../config';
 
@@ -24,13 +26,15 @@ class HeaderBarBasic extends PureComponent {
 
   render() {
     const { searchText } = this.state;
+    const { headerTitleProps } = this.props;
+
     return (
       <View style={ styles.container }>
         {
           !this.state.isFocus ?
             <HeaderTitleBar
-              type={ headerType.TEXT }
-              text="북북북" /> :
+              type={ headerTitleProps.type }
+              text={ headerTitleProps.text } /> :
             <SearchBar
               searchText={ searchText }
               onChangeSearchText={ this._onChangeSearchText }
@@ -66,4 +70,4 @@ const styles = StyleSheet.create({
 HeaderBarBasic.propTypes = propTypes;
 HeaderBarBasic.defaultProps = defaultProps;
 
-export default HeaderBarBasic;
+export default compose(fetchHeaderTitlePropsHOC)(HeaderBarBasic);

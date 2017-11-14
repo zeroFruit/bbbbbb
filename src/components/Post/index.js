@@ -13,7 +13,7 @@ import PostButtonGroups from '../PostButtonGroups/container';
 import PostContent from '../PostContent';
 
 import logger from '../../utils/LogUtils';
-import { selectType as SelectType } from '../../config';
+import { selectType as SelectType, postTitleType } from '../../config';
 
 const { string, shape, number, bool, func } = PropTypes;
 
@@ -49,11 +49,12 @@ const defaultProps = {
 class Post extends React.Component {
   render() {
     const { bookInfo, selectType, isBookmarked, isMyBook, isMyBookmark } = this.props;
-    const title = this._fetchPostTitle(selectType);
+    const titleProps = this._fetchPostTitle(selectType);
     return (
       <View>
         <PostTitle
-          title={ title } />
+          type={ titleProps.type }
+          text={ titleProps.text } />
         <PostImage
           imgSrc={ bookInfo.img_src }
           onClickImage={ this._onClickImage } />
@@ -71,13 +72,21 @@ class Post extends React.Component {
   }
 
   _fetchPostTitle(selectType) {
-    if (selectType === SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE) {
-      return this.props.userInfo.display_name;
-    } else if (
+    if (
       selectType === SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE ||
       selectType === SelectType.FETCHED_FROM_NEWSFEED
     ) {
-      return this.props.userInfo.display_name;
+      const { userInfo } = this.props;
+      return {
+        text: this.props.userInfo.display_name,
+        type: postTitleType.TEXT
+      };
+    } else if (selectType === SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE) {
+      const { bookTitleTag, bookAuthorTag } = this.props;
+      return {
+        text: [bookTitleTag, bookAuthorTag],
+        type: postTitleType.TAG
+      };
     } else {
       logger.error('Invalid select type');
     }

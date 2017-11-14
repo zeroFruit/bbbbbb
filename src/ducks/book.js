@@ -84,6 +84,8 @@ export const actions = {
 };
 
 export const selectors = {
+  GetPage: state => state.book.page_,
+  GetNumOfFeedsPerLoad: state => state.book.numOfFeedsPerLoad_,
   GetMyBooks: state => state.book.myBooks_,
   GetSelectedBook: state => state.book.selectedBook_,
   GetIsBookFetched: state => state.book.isBookFetched_

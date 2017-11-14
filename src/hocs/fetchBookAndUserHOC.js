@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { isEmpty } from '../utils/ObjectUtils';
 import {
   selectors as bookSelectors,
   types as bookTypes,
@@ -33,6 +34,15 @@ export const fetchBookAndUserHOC = (WrappedComponent) => {
 
     render() {
       const { selectedUserDisplayName_, selectedBook_ } = this.props;
+      if (this._isLoading(selectedUserDisplayName_, selectedBook_)) {
+        return (
+          <View>
+            <Text>
+              Loading...
+            </Text>
+          </View>
+        );
+      }
       return (
         <WrappedComponent
           { ...this.props }
@@ -40,6 +50,12 @@ export const fetchBookAndUserHOC = (WrappedComponent) => {
           bookInfo={ selectedBook_ } />
       );
     }
+
+    // TODO: HOC로 분리
+    _isLoading = (displayName, book) => (
+      displayName === undefined ||
+      isEmpty(book)
+    )
   }
   WithBookAndUser.propTypes = propTypes;
   WithBookAndUser.defaultProps = defaultProps;

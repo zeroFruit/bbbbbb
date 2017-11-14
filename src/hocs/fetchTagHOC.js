@@ -1,8 +1,11 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { selectors as tagSelectors, types as tagTypes } from '../ducks/tag';
+import { selectors as bookSelectors } from '../ducks/book';
+import { selectors as userSelectors } from '../ducks/user';
 import { isEmpty, isObjectHasProperty } from '../utils/ObjectUtils';
 
 const { bool, shape, func, number, string } = PropTypes;
@@ -23,39 +26,40 @@ export const fetchTagHOC = (WrappedComponent) => {
 
   };
 
-  class WithTag extends PureComponent {
+  class WithTag extends Component {
     static navigationOptions = WrappedComponent.navigationOptions;
 
-    async componentWillReceiveProps(nextProps) {
-      const { bookInfo, isSelectedBookTagFetched_ } = nextProps;
-
-      if (this._shouldRequestTagAction(bookInfo, isSelectedBookTagFetched_)) {
-        const { author_tag_id, title_tag_id } = bookInfo;
-        await this.props.AsyncFetchTagRequestAction(author_tag_id, title_tag_id);
-      }
+    async componentDidMount() {
+      await this._fetchTags(this.props);
     }
 
     render() {
       const {
         selectedBookTitleTag_,
-        selectedBookAuthorTag_
+        selectedBookAuthorTag_,
+        selectedUserDisplayName_,
+        isSelectedBookTagFetched_,
+        selectedBook_
       } = this.props;
+
       return (
         <WrappedComponent
           { ...this.props }
-          selectedBookTitleTag_={ selectedBookTitleTag_ }
-          selectedBookAuthorTag_={ selectedBookAuthorTag_ } />
+          selectedBookTitleTag={ selectedBookTitleTag_ }
+          selectedBookAuthorTag={ selectedBookAuthorTag_ }
+          isSelectedBookTagFetched={ isSelectedBookTagFetched_ }
+          bookInfo={ selectedBook_ }
+          userInfo={ { display_name: selectedUserDisplayName_ } } />
       );
     }
-    _shouldRequestTagAction = (bookInfo, isSelectedBookTagFetched_) => (
-      this._isObjectHasTagIds(bookInfo) && !isSelectedBookTagFetched_
-    );
 
+    _fetchTags = async (props) => {
+      const { isSelectedBookTagFetched_, id, user } = props;
 
-    _isObjectHasTagIds = bookInfo => (
-      isObjectHasProperty(bookInfo, 'author_tag_id') &&
-      isObjectHasProperty(bookInfo, 'title_tag_id')
-    )
+      if (!isSelectedBookTagFetched_) {
+        await this.props.AsyncFetchTagRequestAction(user, id);
+      }
+    }
   }
 
   WithTag.propTypes = propTypes;
@@ -67,12 +71,14 @@ export const fetchTagHOC = (WrappedComponent) => {
 const mapStateToProps = state => ({
   selectedBookTitleTag_: tagSelectors.GetSeletedBookTitleTag(state),
   selectedBookAuthorTag_: tagSelectors.GetSelectedBookAuthorTag(state),
-  isSelectedBookTagFetched_: tagSelectors.GetIsSelectedBookTagFetched(state)
+  isSelectedBookTagFetched_: tagSelectors.GetIsSelectedBookTagFetched(state),
+  selectedBook_: bookSelectors.GetSelectedBook(state),
+  selectedUserDisplayName_: userSelectors.GetSelectedUserDisplayName(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  AsyncFetchTagRequestAction: (authorTagId, bookTagId) => ({
+  AsyncFetchTagRequestAction: (user, id) => ({
     type: tagTypes.FETCH_BOOK_TAG_REQUEST,
-    payload: { authorTagId, bookTagId }
+    payload: { user, id }
   })
 }, dispatch);

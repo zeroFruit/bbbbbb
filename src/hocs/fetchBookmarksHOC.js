@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { actions as bookActions, types as bookTypes } from '../ducks/book';
-import { actions as bookmarkActions, types as bookmarkTypes } from '../ducks/bookmark';
+import { selectors as bookSelectors, actions as bookActions, types as bookTypes } from '../ducks/book';
+import { selectors as bookmarkSelectors, actions as bookmarkActions, types as bookmarkTypes } from '../ducks/bookmark';
 import { USER_ID } from '../config';
 
 const { func, bool, arrayOf, number } = PropTypes;
@@ -37,18 +37,15 @@ export const fetchBookmarksHOC = (WrappedComponent) => {
         this.props.RemoveBookmarkSuccessAction();
         await this._fetchBookmarks(USER_ID);
       }
-      // if (nextProps.isBookmarkFetched_) {
-      //   this._setStateBookmarks(nextProps.myBookmarks_);
-      //   this.props.FetchBookmarkSuccessAction();
-      // }
     }
 
     render() {
       const { myBookmarks_ } = this.props;
       return (
         <WrappedComponent
-          bookmarks={ myBookmarks_ }
-          { ...this.props } />
+          { ...this.props }
+          bookmarks={ myBookmarks_ } />
+
       );
     }
 
@@ -72,8 +69,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
     // TODO: 나중에 api request를 action으로 이동
-    UpdatePageAction: bookActions.LoadNewsfeed,
-    ResetPageAction: bookActions.ResetNewsfeed,
     AddBookmarkSuccessAction: bookmarkActions.AddBookmarkSuccess,
     RemoveBookmarkSuccessAction: bookmarkActions.RemoveBookmarkSuccess,
     AsyncFetchBookmarkRequestAction: (userId) => {
