@@ -26,7 +26,6 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
           author_tag_id
         );
         this._setBooksAndUsersToState(booksInfo, usersInfo);
-        // this.props.UpdatePageAction();
       }
     }
 
@@ -47,8 +46,6 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
     _requestBooksAndUsers = async () => {
       const { booksInfo, usersInfo } = await this._fetchBooksAndUsers();
       this._setBooksAndUsersToState(booksInfo, usersInfo);
-      // this.props.UpdatePageAction();
-      console.log('_requestBooksAndUsers');
     }
 
     _fetchBooksAndUsers = async (numOfFeedsPerLoad, page, titleTagId, authorTagId) => {

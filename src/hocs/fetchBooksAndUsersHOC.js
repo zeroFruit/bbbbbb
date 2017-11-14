@@ -17,7 +17,6 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
     async componentDidMount() {
       const { booksInfo, usersInfo } = await this._fetchBooksAndUsers();
       this._setBooksAndUsersToState(booksInfo, usersInfo);
-      this.props.UpdatePageAction();
     }
 
     render() {
@@ -38,7 +37,6 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
     _requestBooksAndUsers = async () => {
       const { booksInfo, usersInfo } = await this._fetchBooksAndUsers();
       this._setBooksAndUsersToState(booksInfo, usersInfo);
-      this.props.UpdatePageAction();
     }
 
     _fetchBooksAndUsers = async () => {
