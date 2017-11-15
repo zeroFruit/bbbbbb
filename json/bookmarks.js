@@ -36,7 +36,7 @@ class Bookmark {
     let bookmarkId;
     const { bookmarks } = this._data;
     const { byId } = bookmarks;
-    const bookmark = _.filter(byId, bookmark => {
+    const bookmark = _.filter(byId, (bookmark) => {
       if (bookmark.user_id === userId) {
         bookmarkId = bookmark.id;
         return true;
@@ -54,7 +54,7 @@ class Bookmark {
     let bookmarkId;
     const { bookmarks } = this._data;
     const { byId } = bookmarks;
-    const bookmark = _.filter(byId, bookmark => {
+    const bookmark = _.filter(byId, (bookmark) => {
       if (bookmark.user_id === userId) {
         bookmarkId = bookmark.id;
         return true;

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import _ from 'lodash';
-import { Collection } from 'immutable';
 import { Bookmark as BookmarkData } from '../json/bookmarks';
 import { Book as BookData } from '../json/books';
 import { User as UserData } from '../json/users';
 import { Tag as TagData } from '../json/tags';
+import { Collection as CollectionData } from '../json/collections';
 
 import { sliceArray } from './utils/ArrayUtils';
 
@@ -94,9 +94,19 @@ const Tag = {
   }
 };
 
+const Collection = {
+  fetchByIds: async (collectionIdArray) => {
+    const collections = await new CollectionData().get().collections.byId;
+    return _.map(collectionIdArray, (collectionId) => {
+      return collections[collectionId];
+    });
+  }
+};
+
 export default {
   Book,
   User,
   Bookmark,
-  Tag
+  Tag,
+  Collection
 };

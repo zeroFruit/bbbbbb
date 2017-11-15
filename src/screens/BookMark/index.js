@@ -7,10 +7,12 @@ import BookmarkBookGallery from '../../components/BookmarkBookGallery';
 import BookmarkCollectionGallery from '../../components/BookmarkCollectionGallery';
 
 import {
-  renderHeaderWithNavigation
+  renderHeaderWithNavigation,
+  navigateTo
 } from '../../Router';
+import { selectType } from '../../config';
 
-const renderHeader = params => {
+const renderHeader = (params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <Text style={ styles.headerText }>
@@ -43,7 +45,9 @@ class BookMark extends PureComponent {
           onClickBooklistButton={ this._onClickBooklistButton }
           onClickCollectionButton={ this._onClickCollectionButton } />
         <BookmarkBookGallery isShown={ screenType === screenTypes.BOOK_LIST } />
-        <BookmarkCollectionGallery isShown={ screenType === screenTypes.COLLECTIONS } />
+        <BookmarkCollectionGallery
+          isShown={ screenType === screenTypes.COLLECTIONS }
+          onClickAddCollectionButton={ this._onClickAddCollectionButton } />
       </View>
     );
   }
@@ -54,6 +58,12 @@ class BookMark extends PureComponent {
 
   _onClickCollectionButton = () => {
     this.setState({ screenType: screenTypes.COLLECTIONS });
+  }
+
+  _onClickAddCollectionButton = () => {
+    const key = 'collectionAdd';
+    const params = { selectType: selectType.SELECT_FROM_COLLECTION_ADD_BUTTON };
+    navigateTo(this.props, key, params);
   }
 }
 

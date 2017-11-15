@@ -1,16 +1,18 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 
 import { takeFromArray, dropFromArray } from '../../utils/ArrayUtils';
 import { NUM_OF_ROW } from '../../config';
 
+const { width } = Dimensions.get('window');
+
 class GalleryParentComponent extends Component {
-  _renderGalleryCards = galleryCardsProps => {
+  _renderGalleryCards = (galleryCardsProps) => {
     const arrangedCards = this._arrangeGalleryCards(galleryCardsProps);
     return this._mapArrangedGalleryCards(arrangedCards);
   }
 
-  _arrangeGalleryCards = galleryCardsProps => {
+  _arrangeGalleryCards = (galleryCardsProps) => {
     const arrangedCards = [];
     let galleryCardsLeft = galleryCardsProps;
 
@@ -23,9 +25,9 @@ class GalleryParentComponent extends Component {
     return arrangedCards;
   }
 
-  _mapArrangedGalleryCards = arrangedCards => {
-    return arrangedCards.map(arrangedCardsInRow => {
-      const colKey = arrangedCardsInRow[0].id;
+  _mapArrangedGalleryCards = (arrangedCards) => {
+    return arrangedCards.map((arrangedCardsInRow) => {
+      const colKey = arrangedCardsInRow[0].id || 'add';
       return (
         <View style={ styles.Col } key={ colKey }>
           { this._mapCardsInRow(arrangedCardsInRow) }
@@ -34,8 +36,8 @@ class GalleryParentComponent extends Component {
     });
   }
 
-  _mapCardsInRow = cardsInRow => {
-    return cardsInRow.map(card => {
+  _mapCardsInRow = (cardsInRow) => {
+    return cardsInRow.map((card) => {
       return (
         <View style={ styles.Row } key={ card.id }>
           { this._getGalleryCard(card) }
@@ -44,7 +46,7 @@ class GalleryParentComponent extends Component {
     });
   }
 
-  _getGalleryCard = card => {}
+  _getGalleryCard = (card) => {}
 }
 
 const styles = StyleSheet.create({
@@ -56,7 +58,7 @@ const styles = StyleSheet.create({
   Row: {
     borderColor: 'white',
     borderWidth: 1,
-    flex: 1
+    width: width / 3
   }
 });
 

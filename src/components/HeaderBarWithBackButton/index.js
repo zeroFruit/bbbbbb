@@ -31,7 +31,8 @@ class HeaderBarWithBackButton extends PureComponent {
           !this.state.isFocus ?
             <HeaderTitleBar
               type={ headerTitleProps.type }
-              text={ headerTitleProps.text } /> :
+              text={ headerTitleProps.text }
+              onClickAuthorTagOfHeader={ this._onClickAuthorTagOfHeader } /> :
             <SearchBar
               searchText={ searchText }
               onChangeSearchText={ this._onChangeSearchText }
@@ -57,6 +58,10 @@ class HeaderBarWithBackButton extends PureComponent {
 
   _onBlurSearchbar = () => {
     this.setState({ isFocus: false });
+  }
+
+  _onClickAuthorTagOfHeader = (tagId) => {
+    this.props.onClickAuthorTagOfHeader(tagId);
   }
 }
 

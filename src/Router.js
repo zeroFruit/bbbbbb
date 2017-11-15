@@ -15,7 +15,12 @@ import Splash from './screens/Splash';
 import BookMark from './screens/BookMark';
 import MyPage from './screens/MyPage';
 import NewsFeed from './screens/NewsFeed';
+import PostSelected from './screens/PostSelected';
 import PostSelectedList from './screens/PostSelectedList/container';
+import AuthorPage from './screens/AuthorPage';
+import OtherPage from './screens/OtherPage';
+import CollectionAddPage from './screens/CollectionAddPage';
+import CollectionSelectPage from './screens/CollectionSelectPage';
 
 import CustomTabBar from './components/TabBar';
 
@@ -27,6 +32,12 @@ class RouterComponent extends Component {
         screen: StackNavigator({
           tabs: {
             screen: CustomTabNavigator
+          },
+          collectionAdd: {
+            screen: CollectionAddPage
+          },
+          collectionSelect: {
+            screen: CollectionSelectPage
           }
         }, MainNavigatorOptions)
       }
@@ -81,8 +92,17 @@ export const CustomTabConfig = TabRouter({
   BookMark: {
     screen: BookMark
   },
-  Post: {
+  PostList: {
     screen: mapNavigateParamsToProps(PostSelectedList)
+  },
+  Post: {
+    screen: mapNavigateParamsToProps(PostSelected)
+  },
+  Author: {
+    screen: mapNavigateParamsToProps(AuthorPage)
+  },
+  Other: {
+    screen: mapNavigateParamsToProps(OtherPage)
   }
 }, TabsNavigatorOptions);
 
@@ -119,10 +139,16 @@ export const navigateTo = (props, to, params) => {
 };
 
 export const getParamsFromNavigationState = (state) => {
-  const { routes } = state;
-  const { index } = routes[0];
-  const { params } = routes[0].routes[index];
-  return params;
+  const stackNavIdx = state.index;
+  const stackNavRoutes = state.routes[stackNavIdx];
+  // Nav Tree 구조에 따라 달라진다.
+  if (stackNavIdx === 0) {
+    const { index, routes } = stackNavRoutes;
+    const { params } = routes[index];
+    return params;
+  } else {
+    return stackNavRoutes.params;
+  }
 };
 
 export const renderHeaderWithNavigation = (navigation) => {

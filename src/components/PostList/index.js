@@ -32,6 +32,8 @@ class PostList extends PureComponent {
     return (
       <Post
         onClickPost={ () => { this._onClickNewsfeedCard(id, user_id); } }
+        onClickAuthorTagOfPostTitle={ this._onClickAuthorTagOfPostTitle }
+        onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle }
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
         selectType={ this.props.selectType }
@@ -59,6 +61,14 @@ class PostList extends PureComponent {
     // this.props.FetchBookTagInitAction();
     // this.props.onClickNewsfeedCard(bookId, userId);
     console.log('clicked!!');
+  }
+
+  _onClickAuthorTagOfPostTitle = (tagId) => {
+    this.props.onClickAuthorTagOfPostTitle(tagId);
+  }
+
+  _onClickNicknameTextOfPostTitle = (userId) => {
+    this.props.onClickNicknameTextOfPostTitle(userId);
   }
 }
 

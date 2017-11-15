@@ -43,6 +43,7 @@ class NewsFeedList extends PureComponent {
     return (
       <Post
         onClickPost={ () => { this._onClickNewsfeedCard(id, user_id); } }
+        onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle }
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
         selectType={ this.props.selectType }
@@ -69,6 +70,10 @@ class NewsFeedList extends PureComponent {
   _onClickNewsfeedCard = (bookId, userId) => {
     this.props.FetchBookTagInitAction();
     this.props.onClickNewsfeedCard(bookId, userId);
+  }
+
+  _onClickNicknameTextOfPostTitle = (userId) => {
+    this.props.onClickNicknameTextOfPostTitle(userId);
   }
 }
 

@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Image, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
 import { fetchBookByBookIdHOC } from '../../hocs/fetchBookByBookIdHOC';
+
+const { width } = Dimensions.get('window');
 
 const { string, func, number } = PropTypes;
 
@@ -29,6 +31,7 @@ class BookmarkBookGalleryCard extends Component {
 
 const styles = StyleSheet.create({
   container: {
+    width: width / 3,
     borderWidth: .5,
     borderColor: 'black'
   },

@@ -22,7 +22,7 @@ class HeaderTitleBar extends PureComponent {
         return (
           <View style={ styles.textContainer }>
             <Text style={ styles.title }>
-              { text }
+              { this._renderText(text) }
             </Text>
           </View>
         );
@@ -31,17 +31,42 @@ class HeaderTitleBar extends PureComponent {
     }
   }
 
+  _renderText = (text) => {
+    return (
+      <Text
+        style={ styles.title }
+        onPress={ () => this._onClickText(text.id, text.type) }>
+        { text.value }
+      </Text>
+    );
+  }
+
+  _onClickText = (textId, textType) => {
+    if (textType === 'nickname') {
+      console.log('Nickname clicked', textId);
+    }
+  }
+
   _renderTagButtons = (text) => {
     return text.map(tag => (
       <Button
-        key={ tag }
-        title={ `${tag}` }
+        key={ tag.value }
+        title={ `${tag.value}` }
         backgroundColor="#d3d3d3"
         borderRadius={ 5 }
         color="black"
-        buttonStyle={ styles.tagButton } />
+        buttonStyle={ styles.tagButton }
+        onPress={ () => this._onClickTagButton(tag.id, tag.type) } />
     ));
   }
+
+  _onClickTagButton = (tagId, tagType) => {
+    if (this._isAuthorTag(tagType)) {
+      this.props.onClickAuthorTagOfHeader(tagId);
+    }
+  }
+
+  _isAuthorTag = tagType => (tagType === 'author')
 }
 
 const styles = StyleSheet.create({

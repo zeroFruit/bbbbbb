@@ -5,12 +5,14 @@ import book, { selectors as bookSelectors } from './book';
 import bookmark, { selectors as bookmarkSelectors } from './bookmark';
 import user from './user';
 import tag from './tag';
+import collection from './collection';
 
 export default combineReducers({
   book,
   bookmark,
   user,
-  tag
+  tag,
+  collection
 });
 
 export const selectors = {

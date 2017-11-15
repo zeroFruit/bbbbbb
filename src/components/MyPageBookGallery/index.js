@@ -57,16 +57,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     alignSelf: 'stretch',
     justifyContent: 'space-between'
-  },
-  Col: {
-    borderColor: 'white',
-    borderWidth: 1,
-    flexDirection: 'row'
-  },
-  Row: {
-    borderColor: 'white',
-    borderWidth: 1,
-    flex: 1
   }
 });
 

@@ -15,6 +15,7 @@ import HeaderBarBasic from '../../components/HeaderBarBasic';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 
+import logger from '../../utils/LogUtils';
 import { selectType } from '../../config';
 
 const { func } = PropTypes;
@@ -64,6 +65,7 @@ class NewsFeed extends Component {
           numOfFeedsPerLoad={ numOfFeedsPerLoad }
           bookmarks={ bookmarksAndBooks }
           onClickNewsfeedCard={ this._onClickNewsfeedCard }
+          onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle }
           requestBooksAndUsers={ this._requestBooksAndUsers } />
       </View>
     );
@@ -74,9 +76,13 @@ class NewsFeed extends Component {
   }
 
   _onClickNewsfeedCard = (id, user) => {
-    const key = 'Post';
+    const key = 'PostList';
     const params = { id, user, selectType: selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE };
     navigateTo(this.props, key, params);
+  }
+
+  _onClickNicknameTextOfPostTitle = (userId) => {
+    logger.log('At newsfeed, nickname clicked, userId:', userId);
   }
 }
 

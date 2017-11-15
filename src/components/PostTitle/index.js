@@ -26,7 +26,7 @@ class PostTitle extends Component {
       case postTitleType.TEXT:
         return (
           <View style={ styles.textTypeContainer }>
-            <Text style={ styles.title }>{ this.props.text }</Text>
+            { this._renderText(text) }
           </View>
         );
       case postTitleType.TAG:
@@ -40,27 +40,54 @@ class PostTitle extends Component {
     }
   }
 
+  _renderText = (text) => {
+    return (
+      <Text
+        style={ styles.title }
+        onPress={ () => this._onClickText(text.id, text.type) }>
+        { text.value }
+      </Text>
+    );
+  }
+
+  _onClickText = (textId, textType) => {
+    if (textType === 'nickname') {
+      this.props.onClickNicknameTextOfPostTitle(textId);
+    }
+  }
+
   _renderTagButtons = (text) => {
     return text.map(tag => (
       <Button
-        key={ tag }
-        title={ `${tag}` }
+        key={ `${tag.type}${tag.id}` }
+        title={ `${tag.value}` }
         backgroundColor="#d3d3d3"
         borderRadius={ 5 }
-        color="black" />
+        color="black"
+        onPress={ () => this._onClickTagButton(tag.id, tag.type) } />
     ));
   }
+
+  _onClickTagButton = (tagId, tagType) => {
+    if (this._isAuthorTag(tagType)) {
+      console.log('author tag clicked');
+    }
+  }
+
+  _isAuthorTag = tagType => (tagType === 'author')
 }
 
 const styles = StyleSheet.create({
-  textTypeContainer: {
+  tagTypeContainer: {
+    flexDirection: 'row',
     height: 50,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
     backgroundColor: 'white',
     borderBottomWidth: 1,
     borderBottomColor: 'gray'
   },
-  tagTypeContainer: {
+  textTypeContainer: {
     height: 50,
     justifyContent: 'center',
     backgroundColor: 'white',

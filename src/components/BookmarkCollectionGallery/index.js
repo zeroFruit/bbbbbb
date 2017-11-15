@@ -1,25 +1,45 @@
-import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import React from 'react';
+import { View, Text, StyleSheet } from 'react-native';
+import { List } from 'immutable';
+import { compose } from 'recompose';
+
+import { fetchCollectionsHOC } from '../../hocs/fetchCollectionsHOC';
+import GalleryParentComponent from '../GalleryParentComponent';
+import BookmarkCollectionGalleryCard from '../BookmarkCollectionGalleryCard';
+import BookmarkCollectionAddButton from '../BookmarkCollectionAddButton';
+
+import { SCREEN_HEIGHT } from '../../config';
 
 const { flatten } = StyleSheet;
-const { height } = Dimensions.get('window');
 
-class BookmarkCollectionGallery extends PureComponent {
+class BookmarkCollectionGallery extends GalleryParentComponent {
   render() {
-    const { isShown } = this.props;
+    const { isShown, collections } = this.props;
+    const collectionsWithEmptyObj = List(collections).push({ id: 'add' }).toJS();
     const containerStyle = this._getContainerStyle(isShown);
-
     return (
       <View style={ containerStyle }>
-        <Text>
-          collection gallery
-        </Text>
+        { this._renderGalleryCards(collectionsWithEmptyObj) }
       </View>
     );
   }
 
-  _getContainerStyle = isShown => {
+  _getGalleryCard = (collection) => {
+    return (collection.id !== 'add') ?
+      <BookmarkCollectionGalleryCard
+        key={ collection.id }
+        label={ collection.label } /> :
+      <BookmarkCollectionAddButton
+        key="add"
+        onClickAddCollectionButton={ this._onClickAddCollectionButton } />;
+  }
+
+  _getContainerStyle = (isShown) => {
     return isShown ? flatten(styles.container) : flatten(styles.hiddenContainer);
+  }
+
+  _onClickAddCollectionButton = () => {
+    this.props.onClickAddCollectionButton();
   }
 }
 
@@ -37,8 +57,8 @@ const styles = StyleSheet.create({
   hiddenContainer: {
     zIndex: -1,
     position: 'absolute',
-    top: 2 * height
+    top: 2 * SCREEN_HEIGHT
   }
 });
 
-export default BookmarkCollectionGallery;
+export default compose(fetchCollectionsHOC)(BookmarkCollectionGallery);

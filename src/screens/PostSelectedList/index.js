@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
@@ -14,20 +14,18 @@ import { withLoaderHOC } from '../../hocs/withLoaderHOC';
 
 import {
   setParamsToNavigation,
-  renderHeaderWithNavigation
+  renderHeaderWithNavigation,
+  navigateTo
 } from '../../Router';
-import { indexOfValueInArray } from '../../utils/ArrayUtils';
-import { pickByKey } from '../../utils/ObjectUtils';
 import { selectType } from '../../config';
-
-const PARAMS_KEY = ['userInfo', 'bookInfo', 'selectType'];
 
 const renderHeader = (params) => {
   const { selectType } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithBackButton
-        selectType={ selectType } />
+        selectType={ selectType }
+        onClickAuthorTagOfHeader={ params.onClickAuthorTagOfHeader } />
     </Header>
   );
 };
@@ -38,7 +36,12 @@ class PostSelectedList extends Component {
       return renderHeaderWithNavigation(navigation)(renderHeader);
     }
   }
-
+  componentWillMount() {
+    setParamsToNavigation(
+      this.props,
+      { onClickAuthorTagOfHeader: this._onClickAuthorTagOfHeader }
+    );
+  }
   componentWillUnmount() {
     this.props.ResetPageAction();
   }
@@ -62,6 +65,8 @@ class PostSelectedList extends Component {
           numOfFeedsPerLoad={ numOfFeedsPerLoad }
           bookmarks={ bookmarksAndBooks }
           onClickNewsfeedCard={ this._onClickNewsfeedCard }
+          onClickAuthorTagOfPostTitle={ this._onClickAuthorTagOfPostTitle }
+          onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle }
           requestBooksAndUsers={ this._requestBooksAndUsers } />
       </View>
     );
@@ -69,6 +74,23 @@ class PostSelectedList extends Component {
 
   _requestBooksAndUsers = () => {
     this.props.requestBooksAndUsers();
+  }
+
+  _onClickAuthorTagOfPostTitle = (tagId) => {
+    console.log('PostSelectedList', tagId);
+  }
+
+  _onClickAuthorTagOfHeader = (tagId) => {
+    const key = 'Author';
+    const params = { tagId };
+    navigateTo(this.props, key, params);
+  }
+
+  _onClickNicknameTextOfPostTitle = (userId) => {
+    console.log('PostSelectedList', userId);
+    const key = 'Other';
+    const params = { userId };
+    navigateTo(this.props, key, params);
   }
 }
 

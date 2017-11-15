@@ -13,6 +13,7 @@ import PostButtonGroups from '../PostButtonGroups/container';
 import PostContent from '../PostContent';
 
 import logger from '../../utils/LogUtils';
+import { tagTitlePropFormatter, textTitlePropFormatter } from '../../utils/PropUtils';
 import { selectType as SelectType, postTitleType } from '../../config';
 
 const { string, shape, number, bool, func } = PropTypes;
@@ -54,7 +55,8 @@ class Post extends React.Component {
       <View>
         <PostTitle
           type={ titleProps.type }
-          text={ titleProps.text } />
+          text={ titleProps.text }
+          onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle } />
         <PostImage
           imgSrc={ bookInfo.img_src }
           onClickImage={ this._onClickImage } />
@@ -78,14 +80,17 @@ class Post extends React.Component {
     ) {
       const { userInfo } = this.props;
       return {
-        text: this.props.userInfo.display_name,
-        type: postTitleType.TEXT
+        type: postTitleType.TEXT,
+        text: textTitlePropFormatter(userInfo.id, userInfo.display_name, 'nickname')
       };
     } else if (selectType === SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE) {
-      const { bookTitleTag, bookAuthorTag } = this.props;
+      const { bookTitleTag, bookAuthorTag, bookInfo } = this.props;
       return {
-        text: [bookTitleTag, bookAuthorTag],
-        type: postTitleType.TAG
+        type: postTitleType.TAG,
+        text: [
+          tagTitlePropFormatter(bookInfo.title_tag_id, bookTitleTag, 'title'),
+          tagTitlePropFormatter(bookInfo.author_tag_id, bookAuthorTag, 'author')
+        ]
       };
     } else {
       logger.error('Invalid select type');
@@ -95,12 +100,19 @@ class Post extends React.Component {
   _onClickImage = () => {
     this.props.onClickPost();
   }
+
+  _onClickAuthorTagOfPostTitle = (tagId) => {
+    this.props.onClickAuthorTagOfPostTitle(tagId);
+  }
+
+  _onClickNicknameTextOfPostTitle = (userId) => {
+    this.props.onClickNicknameTextOfPostTitle(userId);
+  }
 }
 
 Post.propTypes = propTypes;
 Post.defaultProps = defaultProps;
 
 export default compose(
-  withDefaultOnClickPostHandlerHOC,
-  WithLoader
+  withDefaultOnClickPostHandlerHOC
 )(Post);

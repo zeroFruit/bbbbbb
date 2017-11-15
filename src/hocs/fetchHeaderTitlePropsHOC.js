@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { selectType as SelectType, headerType } from '../config';
+import { tagTitlePropFormatter, textTitlePropFormatter } from '../utils/PropUtils';
 import logger from '../utils/LogUtils';
 import { selectors as userSelectors } from '../ducks/user';
 import { selectors as tagSelectors } from '../ducks/tag';
+import { selectors as bookSelectors } from '../ducks/book';
+import { selectType as SelectType, headerType, headerTextType as HeaderTextType } from '../config';
 
 export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
   class WithHeaderTitle extends Component {
@@ -27,29 +29,56 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
           return this._getTagsWhenSelectFromNewsfeedClickedImage();
         case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
           return this._getPropsWhenSelectFromMyPageClickedImage();
+        case SelectType.SELECT_FROM_COLLECTION_ADD_BUTTON:
+        case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
+          return this._getPropsWhenSelectFromCollectionButton();
         default:
-          logger.error('fetchHeaderTitleHOC, invalid select type');
+          return logger.warn('fetchHeaderTitlePropsHOC, invalid select type:', selectType);
       }
     }
 
     _getPropsWhenFetchedFromNewsfeed = () => {
-      return { type: headerType.TEXT, text: '북북북' };
+      return {
+        type: headerType.TEXT,
+        text: textTitlePropFormatter(-1, '북북북', HeaderTextType.NONE)
+      };
     }
 
     _getTagsWhenSelectFromNewsfeedClickedImage = () => {
-      const { selectedBookTitleTag_, selectedBookAuthorTag_ } = this.props;
+      const {
+        selectedBookTitleTag_,
+        selectedBookAuthorTag_,
+        selectedBook_
+      } = this.props;
       if (selectedBookTitleTag_ && selectedBookAuthorTag_) {
-        return { type: headerType.TAG, text: [selectedBookTitleTag_, selectedBookAuthorTag_] };
+        return {
+          type: headerType.TAG,
+          text: [
+            tagTitlePropFormatter(selectedBook_.title_tag_id, selectedBookTitleTag_, HeaderTextType.TITLE),
+            tagTitlePropFormatter(selectedBook_.author_tag_id, selectedBookAuthorTag_, HeaderTextType.AUTHOR)
+          ]
+        };
       }
       return { type: headerType.TAG, text: [] };
     }
 
     _getPropsWhenSelectFromMyPageClickedImage = () => {
-      const { selectedUserDisplayName_ } = this.props;
-
+      const { selectedUserDisplayName_, selectedBook_: { user_id } } = this.props;
       return {
         type: headerType.TEXT,
-        text: selectedUserDisplayName_
+        text: textTitlePropFormatter(user_id, selectedUserDisplayName_, HeaderTextType.NICKNAME)
+      };
+    }
+
+    _getPropsWhenSelectFromCollectionButton = () => {
+      const { leftLabel, rightLabel, title } = this.props;
+      return {
+        type: headerType.TEXT,
+        text: textTitlePropFormatter('id', title, HeaderTextType.NONE),
+        header: {
+          leftLabel,
+          rightLabel
+        }
       };
     }
   }
@@ -61,5 +90,6 @@ const mapStateToProps = state => ({
   isSelectedBookTagFetched_: tagSelectors.GetIsSelectedBookTagFetched(state),
   selectedBookTitleTag_: tagSelectors.GetSeletedBookTitleTag(state),
   selectedBookAuthorTag_: tagSelectors.GetSelectedBookAuthorTag(state),
-  selectedUserDisplayName_: userSelectors.GetSelectedUserDisplayName(state)
+  selectedUserDisplayName_: userSelectors.GetSelectedUserDisplayName(state),
+  selectedBook_: bookSelectors.GetSelectedBook(state)
 });

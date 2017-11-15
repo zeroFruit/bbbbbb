@@ -8,7 +8,7 @@ import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 import { mapBookmarksToObjectWithIdHOC } from '../../hocs/mapBookmarksToObjectWithIdHOC';
 
 const { flatten } = StyleSheet;
-const { height, width } = Dimensions.get('window');
+const { height } = Dimensions.get('window');
 
 class BookmarkBookGallery extends GalleryParentComponent {
   render() {
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    alignSelf: 'stretch',
-    justifyContent: 'space-between',
+    alignSelf: 'flex-start',
+    justifyContent: 'flex-start',
     zIndex: 1,
     position: 'absolute'
   },
