@@ -33,7 +33,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
         case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
           return this._getPropsWhenSelectFromCollectionButton();
         default:
-          return logger.warn('fetchHeaderTitlePropsHOC, invalid select type:', selectType);
+          return this._getPropsDefault(selectType)
       }
     }
 
@@ -80,6 +80,10 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
           rightLabel
         }
       };
+    }
+    _getPropsDefault = (selectType) => {
+      logger.warn('fetchHeaderTitlePropsHOC, invalid select type:', selectType);
+
     }
   }
 

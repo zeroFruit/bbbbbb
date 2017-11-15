@@ -6,7 +6,8 @@ import {
   StackNavigator,
   TabRouter,
   createNavigator,
-  addNavigationHelpers
+  addNavigationHelpers,
+  NavigationActions
 } from 'react-navigation';
 
 import { mapNavigateParamsToProps } from './hocs/mapNavigateParamsToProps';
@@ -20,7 +21,7 @@ import PostSelectedList from './screens/PostSelectedList/container';
 import AuthorPage from './screens/AuthorPage';
 import OtherPage from './screens/OtherPage';
 import CollectionAddPage from './screens/CollectionAddPage';
-import CollectionSelectPage from './screens/CollectionSelectPage';
+import CollectionSelectPage from './screens/CollectionSelectPage/container';
 
 import CustomTabBar from './components/TabBar';
 
@@ -34,10 +35,10 @@ class RouterComponent extends Component {
             screen: CustomTabNavigator
           },
           collectionAdd: {
-            screen: CollectionAddPage
+            screen: mapNavigateParamsToProps(CollectionAddPage)
           },
           collectionSelect: {
-            screen: CollectionSelectPage
+            screen: mapNavigateParamsToProps(CollectionSelectPage)
           }
         }, MainNavigatorOptions)
       }
@@ -136,6 +137,15 @@ const CustomTabNavigator = createNavigator(CustomTabConfig)(CustomTabView);
 */
 export const navigateTo = (props, to, params) => {
   props.navigation.navigate(to, params);
+};
+
+export const navigateToNested = (props, to, params, nestedScreenKey) => {
+  const navigateAction = NavigationActions.navigate({
+    routeName: to,
+    params,
+    action: NavigationActions.navigate({ routeName: nestedScreenKey })
+  });
+  props.navigation.dispatch(navigateAction);
 };
 
 export const getParamsFromNavigationState = (state) => {

@@ -11,6 +11,7 @@ import { fetchBooksAndUsersByTagHOC } from '../../hocs/fetchBooksAndUsersByTagHO
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
 import { withLoaderHOC } from '../../hocs/withLoaderHOC';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
   setParamsToNavigation,
@@ -19,7 +20,7 @@ import {
 } from '../../Router';
 import { selectType } from '../../config';
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -28,7 +29,7 @@ const renderHeader = (params) => {
         onClickAuthorTagOfHeader={ params.onClickAuthorTagOfHeader } />
     </Header>
   );
-};
+});
 
 class PostSelectedList extends Component {
   static navigationOptions = {

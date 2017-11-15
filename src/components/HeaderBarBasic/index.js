@@ -7,6 +7,7 @@ import SearchBar from '../SearchBar';
 import HeaderTitleBar from '../HeaderTitleBar';
 import HeaderRightIcon from '../HeaderRightIcon';
 import { fetchHeaderTitlePropsHOC } from '../../hocs/fetchHeaderTitlePropsHOC';
+import { withDefaultHeaderHOC } from '../../hocs/withDefaultHeaderHOC';
 
 import { headerType } from '../../config';
 
@@ -70,4 +71,7 @@ const styles = StyleSheet.create({
 HeaderBarBasic.propTypes = propTypes;
 HeaderBarBasic.defaultProps = defaultProps;
 
-export default compose(fetchHeaderTitlePropsHOC)(HeaderBarBasic);
+export default compose(
+  fetchHeaderTitlePropsHOC,
+  withDefaultHeaderHOC
+)(HeaderBarBasic);

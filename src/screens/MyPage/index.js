@@ -15,13 +15,14 @@ import {
 import MyPageBookGallery from '../../components/MyPageBookGallery/container';
 import Header from '../../components/Header';
 import PostAddingPanel from '../../components/PostAddingPanel';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import agent from '../../Agent';
 import { selectType, USER_ID } from '../../config';
 
 const NUM_OF_CARDS_IN_GALLERY = 7;
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   const headerTitle = isObjectHasProperty(params, 'my') ? params.my.display_name : 'Loading';
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -30,7 +31,7 @@ const renderHeader = (params) => {
       </Text>
     </Header>
   );
-};
+});
 
 class MyPage extends Component {
   static navigationOptions = {

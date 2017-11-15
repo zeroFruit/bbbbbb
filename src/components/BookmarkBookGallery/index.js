@@ -5,7 +5,6 @@ import { compose } from 'recompose';
 import GalleryParentComponent from '../GalleryParentComponent';
 import BookmarkBookGalleryCard from '../BookmarkBookGalleryCard';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
-import { mapBookmarksToObjectWithIdHOC } from '../../hocs/mapBookmarksToObjectWithIdHOC';
 
 const { flatten } = StyleSheet;
 const { height } = Dimensions.get('window');
@@ -50,7 +49,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default compose(
-  fetchBookmarksHOC,
-  mapBookmarksToObjectWithIdHOC
-)(BookmarkBookGallery);
+export default compose(fetchBookmarksHOC)(BookmarkBookGallery);

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const users = {
   users: {
     byId: {
@@ -46,6 +48,23 @@ class User {
 
   get() {
     return this._data;
+  }
+
+  getById() {
+    return this._data.users.byId;
+  }
+
+  setCollection(userId, collectionId) {
+    const byId = this.getById();
+    const user = _.filter(byId, (user) => {
+      return user.id === userId;
+    })[0];
+    const newUser = {
+      ...user,
+      collections: [...user.collections, collectionId]
+    };
+    this._data.users.byId[userId] = newUser;
+    return newUser;
   }
 }
 export { User };

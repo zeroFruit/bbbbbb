@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, Alert } from 'react-native';
 
 import Header from '../../components/Header';
 import HeaderBarWithTexts from '../../components/HeaderBarWithTexts';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
   setParamsToNavigation,
@@ -11,7 +12,7 @@ import {
 } from '../../Router';
 import { selectType } from '../../config';
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType, onClickHeaderRightButton, onClickHeaderLeftButton } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -24,7 +25,7 @@ const renderHeader = (params) => {
         selectType={ selectType } />
     </Header>
   );
-};
+});
 
 class CollectionAddPage extends PureComponent {
   static navigationOptions = {
@@ -43,6 +44,7 @@ class CollectionAddPage extends PureComponent {
       }
     );
   }
+
 
   render() {
     return (
@@ -70,9 +72,11 @@ class CollectionAddPage extends PureComponent {
     if (this.state.inputText === '') {
       return Alert.alert('컬렉션 이름을 입력해주세요.');
     }
-    const params = { selectType: selectType.SELECT_FROM_COLLECTION_NEXT_BUTTON };
+    const params = {
+      selectType: selectType.SELECT_FROM_COLLECTION_NEXT_BUTTON,
+      collectionLabel: this.state.inputText
+    };
     navigateTo(this.props, 'collectionSelect', params);
-    console.log('navigateTo');
   }
 
   _onClickHeaderCancelButton = () => {

@@ -1,18 +1,21 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import { compose } from 'recompose';
 
 import Header from '../../components/Header';
 import HeaderBarWithTexts from '../../components/HeaderBarWithTexts';
 import CollectionSelectGallery from '../../components/CollectionSelectGallery';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
   setParamsToNavigation,
   renderHeaderWithNavigation,
-  navigateTo
+  navigateTo,
+  navigateToNested
 } from '../../Router';
+import { selectType } from '../../config';
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType, onClickHeaderRightButton, onClickHeaderLeftButton } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -25,12 +28,16 @@ const renderHeader = (params) => {
         selectType={ selectType } />
     </Header>
   );
-};
+});
 
 class CollectionSelectPage extends PureComponent {
   static navigationOptions = {
     header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
   }
+
+  state = {
+    selectedBookIdList: []
+  };
 
   componentWillMount() {
     setParamsToNavigation(
@@ -43,15 +50,41 @@ class CollectionSelectPage extends PureComponent {
   }
 
   render() {
-    return <CollectionSelectGallery />;
+    return (
+      <CollectionSelectGallery
+        onClickBookSelectButton={ this._onClickBookSelectButton } />
+    );
   }
 
   _onClickHeaderCompleteButton = () => {
+    const { selectedBookIdList } = this.state;
+    if (selectedBookIdList.length === 0) {
+      return Alert.alert('책을 선택해주세요.');
+    }
 
+    this.props.AsyncAddCollectionRequestAction(
+      this.props.collectionLabel,
+      this.state.selectedBookIdList
+    );
+    const params = {
+      selectType: selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON
+    };
+    navigateToNested(this.props, 'tabs', params, 'BookMark');
   }
 
   _onClickHeaderBackButton = () => {
 
+  }
+
+  _onClickBookSelectButton = (bookId) => {
+    const { selectedBookIdList } = this.state;
+    const index = selectedBookIdList.indexOf(bookId);
+    if (index === -1) {
+      selectedBookIdList.push(bookId);
+    } else {
+      selectedBookIdList.splice(index, 1);
+    }
+    this.setState({ selectedBookIdList });
   }
 }
 

@@ -8,6 +8,7 @@ import HeaderBarWithBackButton from '../../components/HeaderBarWithBackButton';
 import Post from '../../components/Post';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
 import { withLoaderHOC } from '../../hocs/withLoaderHOC';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
   setParamsToNavigation,
@@ -42,7 +43,7 @@ const defaultProps = {
 
 const PARAMS_KEY = ['userInfo', 'bookInfo', 'selectType'];
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -50,7 +51,7 @@ const renderHeader = (params) => {
         selectType={ selectType } />
     </Header>
   );
-};
+});
 
 class PostSelected extends Component {
   static navigationOptions = {

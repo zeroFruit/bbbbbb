@@ -22,5 +22,12 @@ export const selectors = {
     (book, bookmark) => {
       return List(book).concat(bookmark).sort().toJS();
     }
+  ),
+  BookmarksWithIdProp: createSelector(
+    bookmarkSelectors.GetMyBookmarks,
+    bookmarks => bookmarks.map(bookmark => ({
+      id: bookmark,
+      bookId: bookmark
+    }))
   )
 };

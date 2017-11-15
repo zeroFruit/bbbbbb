@@ -8,6 +8,7 @@ import HeaderTitleBar from '../HeaderTitleBar';
 import HeaderLeftIcon from '../HeaderLeftIcon';
 import HeaderRightIcon from '../HeaderRightIcon';
 import { fetchHeaderTitlePropsHOC } from '../../hocs/fetchHeaderTitlePropsHOC';
+import { withDefaultHeaderHOC } from '../../hocs/withDefaultHeaderHOC';
 
 const propTypes = {};
 const defaultProps = {};
@@ -75,4 +76,7 @@ const styles = StyleSheet.create({
 HeaderBarWithBackButton.propTypes = propTypes;
 HeaderBarWithBackButton.defaultProps = defaultProps;
 
-export default compose(fetchHeaderTitlePropsHOC)(HeaderBarWithBackButton);
+export default compose(
+  fetchHeaderTitlePropsHOC,
+  withDefaultHeaderHOC
+)(HeaderBarWithBackButton);

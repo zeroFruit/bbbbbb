@@ -24,6 +24,25 @@ class Collection {
   get() {
     return this._data;
   }
+
+  getId() {
+    return this._data.collections.allIds.length + 1;
+  }
+
+  getById() {
+    return this._data.collections.byId;
+  }
+
+  insert(label, bookIds) {
+    const id = this.getId();
+    const newCollection = { id, label, book_ids: bookIds };
+    const byId = this.getById();
+    this._data.collections.byId = { ...byId, [id]: newCollection };
+    this._data.collections.allIds.push(id);
+    return newCollection;
+  }
+
+
 }
 
 export { Collection };

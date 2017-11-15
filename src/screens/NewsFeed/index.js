@@ -14,6 +14,7 @@ import PostAddingPanel from '../../components/PostAddingPanel';
 import HeaderBarBasic from '../../components/HeaderBarBasic';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import logger from '../../utils/LogUtils';
 import { selectType } from '../../config';
@@ -26,7 +27,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <View>
@@ -36,7 +37,7 @@ const renderHeader = (params) => {
       </View>
     </Header>
   );
-};
+});
 
 class NewsFeed extends Component {
   static navigationOptions = {

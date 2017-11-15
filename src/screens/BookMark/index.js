@@ -5,6 +5,7 @@ import Header from '../../components/Header';
 import BookmarkButtonGroups from '../../components/BookmarkButtonGroups';
 import BookmarkBookGallery from '../../components/BookmarkBookGallery';
 import BookmarkCollectionGallery from '../../components/BookmarkCollectionGallery';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
   renderHeaderWithNavigation,
@@ -12,7 +13,7 @@ import {
 } from '../../Router';
 import { selectType } from '../../config';
 
-const renderHeader = (params) => {
+const renderHeader = defaultViewWhileNoParams((params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <Text style={ styles.headerText }>
@@ -20,7 +21,7 @@ const renderHeader = (params) => {
       </Text>
     </Header>
   );
-};
+});
 
 const screenTypes = {
   BOOK_LIST: 'BOOK_LIST',

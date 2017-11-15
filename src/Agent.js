@@ -62,6 +62,10 @@ const User = {
     return _.filter(users, (user) => {
       return user.id === userId;
     })[0];
+  },
+  insertCollection: async (userId, collectionId) => {
+    const newUser = await new UserData().setCollection(userId, collectionId);
+    return newUser;
   }
 };
 
@@ -100,6 +104,10 @@ const Collection = {
     return _.map(collectionIdArray, (collectionId) => {
       return collections[collectionId];
     });
+  },
+  insertCollection: async (label, bookIds) => {
+    const newCollection = await new CollectionData().insert(label, bookIds);
+    return newCollection;
   }
 };
 

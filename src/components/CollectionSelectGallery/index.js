@@ -4,13 +4,14 @@ import { compose } from 'recompose';
 
 import GalleryParentComponent from '../../components/GalleryParentComponent';
 import CollectionSelectGalleryCard from '../../components/CollectionSelectGalleryCard';
+import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 
 class CollectionSelectGallery extends GalleryParentComponent {
   render() {
-    const bookmark = [{ id: 1 }, { id: 2 }, { id: 3 }];
+    const { bookmarks } = this.props;
     return (
       <View style={ styles.container }>
-        { this._renderGalleryCards(bookmark) }
+        { this._renderGalleryCards(bookmarks) }
       </View>
     );
   }
@@ -18,8 +19,14 @@ class CollectionSelectGallery extends GalleryParentComponent {
   _getGalleryCard = (card) => {
     return (
       <CollectionSelectGalleryCard
-        key={ card.id } />
+        key={ card.id }
+        bookId={ card.bookId }
+        onClickBookSelectButton={ this._onClickBookSelectButton } />
     );
+  }
+
+  _onClickBookSelectButton = (bookId) => {
+    this.props.onClickBookSelectButton(bookId);
   }
 }
 
@@ -34,4 +41,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CollectionSelectGallery;
+export default compose(fetchBookmarksHOC)(CollectionSelectGallery);

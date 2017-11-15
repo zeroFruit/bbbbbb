@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { selectors } from '../ducks';
 import { selectors as bookSelectors, actions as bookActions, types as bookTypes } from '../ducks/book';
 import { selectors as bookmarkSelectors, actions as bookmarkActions, types as bookmarkTypes } from '../ducks/bookmark';
 import { USER_ID } from '../config';
@@ -63,7 +64,8 @@ export const fetchBookmarksHOC = (WrappedComponent) => {
 
 const mapStateToProps = state => ({
   ...state.book,
-  ...state.bookmark
+  ...state.bookmark,
+  myBookmarks_: selectors.BookmarksWithIdProp(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
