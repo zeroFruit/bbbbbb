@@ -1,19 +1,22 @@
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import { compose } from 'recompose';
 
 import Header from '../../components/Header';
 import BookmarkButtonGroups from '../../components/BookmarkButtonGroups';
 import BookmarkBookGallery from '../../components/BookmarkBookGallery';
 import BookmarkCollectionGallery from '../../components/BookmarkCollectionGallery';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
+import { mapNavigateParamsToProps } from '../../hocs/mapNavigateParamsToProps';
 
 import {
   renderHeaderWithNavigation,
   navigateTo
 } from '../../Router';
 import { selectType } from '../../config';
+import { hasPath } from '../../utils/ObjectUtils';
 
-const renderHeader = defaultViewWhileNoParams((params) => {
+const renderHeader = (params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <Text style={ styles.headerText }>
@@ -21,7 +24,7 @@ const renderHeader = defaultViewWhileNoParams((params) => {
       </Text>
     </Header>
   );
-});
+};
 
 const screenTypes = {
   BOOK_LIST: 'BOOK_LIST',
@@ -36,6 +39,12 @@ class BookMark extends PureComponent {
   state = {
     screenType: screenTypes.BOOK_LIST
   };
+
+  componentDidMount() {
+    if (this._isNavigationParamHasSelectType(this.props)) {
+      this._setStateScreenType(screenTypes.COLLECTIONS);
+    }
+  }
 
   render() {
     const { screenType } = this.state;
@@ -53,18 +62,27 @@ class BookMark extends PureComponent {
     );
   }
 
+  _setStateScreenType = (screenType) => {
+    this.setState({ screenType });
+  }
+
   _onClickBooklistButton = () => {
-    this.setState({ screenType: screenTypes.BOOK_LIST });
+    this._setStateScreenType(screenTypes.BOOK_LIST);
   }
 
   _onClickCollectionButton = () => {
-    this.setState({ screenType: screenTypes.COLLECTIONS });
+    this._setStateScreenType(screenTypes.COLLECTIONS);
   }
 
   _onClickAddCollectionButton = () => {
     const key = 'collectionAdd';
     const params = { selectType: selectType.SELECT_FROM_COLLECTION_ADD_BUTTON };
     navigateTo(this.props, key, params);
+  }
+
+  _isNavigationParamHasSelectType = (props) => {
+    const { state } = props.navigation;
+    return hasPath(state, 'params') && hasPath(state, 'params.selectType');
   }
 }
 
@@ -87,4 +105,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default BookMark;
+export default compose(mapNavigateParamsToProps)(BookMark);

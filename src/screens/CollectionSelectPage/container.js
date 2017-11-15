@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { types as CollectionTypes } from '../../ducks/collection';
+import { selectors as CollectionSelectors, types as CollectionTypes } from '../../ducks/collection';
 import ComponentWithHOC from './index';
 
 const mapStateToProps = state => ({
-  ...state
+  isCollectionAdded_: CollectionSelectors.GetIsCollectionAdded(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
@@ -14,4 +14,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   })
 }, dispatch);
 
-export default connect(null, mapDispatchToProps)(ComponentWithHOC);
+export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithHOC);

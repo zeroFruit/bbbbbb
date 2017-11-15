@@ -55,5 +55,6 @@ export default collection = createReducer(initialState, {
 
 export const selectors = {
   GetIsCollectionFetched: state => state.collection.isCollectionFetched_,
-  GetMyCollections: state => state.collection.myCollections_
+  GetMyCollections: state => state.collection.myCollections_,
+  GetIsCollectionAdded: state => state.collection.isCollectionAdded_
 };

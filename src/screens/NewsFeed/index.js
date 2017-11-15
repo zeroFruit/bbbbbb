@@ -27,7 +27,7 @@ const propTypes = {
 };
 const defaultProps = {};
 
-const renderHeader = defaultViewWhileNoParams((params) => {
+const renderHeader = (params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <View>
@@ -37,7 +37,7 @@ const renderHeader = defaultViewWhileNoParams((params) => {
       </View>
     </Header>
   );
-});
+};
 
 class NewsFeed extends Component {
   static navigationOptions = {

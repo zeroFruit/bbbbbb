@@ -55,7 +55,6 @@ class CollectionSelectGalleryCard extends PureComponent {
 const styles = StyleSheet.create({
   container: {
     width: SCREEN_WIDTH / 3,
-    height: 100,
     borderWidth: .5,
     borderColor: 'black'
   },

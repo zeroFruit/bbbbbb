@@ -19,3 +19,5 @@ export const assignObjects = (obj1, obj2) => {
 };
 
 export const pickByKey = (obj, keyArr) => _.pick(obj, keyArr);
+
+export const hasPath = (obj, path) => _.has(obj, path);

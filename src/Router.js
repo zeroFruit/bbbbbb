@@ -91,7 +91,7 @@ export const CustomTabConfig = TabRouter({
     screen: MyPage
   },
   BookMark: {
-    screen: BookMark
+    screen: mapNavigateParamsToProps(BookMark)
   },
   PostList: {
     screen: mapNavigateParamsToProps(PostSelectedList)
@@ -139,11 +139,14 @@ export const navigateTo = (props, to, params) => {
   props.navigation.navigate(to, params);
 };
 
-export const navigateToNested = (props, to, params, nestedScreenKey) => {
+export const navigateToNested = (props, to, params, nestedScreenKey, nestedScreenParams = {}) => {
   const navigateAction = NavigationActions.navigate({
     routeName: to,
     params,
-    action: NavigationActions.navigate({ routeName: nestedScreenKey })
+    action: NavigationActions.navigate({
+      routeName: nestedScreenKey,
+      params: nestedScreenParams
+    })
   });
   props.navigation.dispatch(navigateAction);
 };

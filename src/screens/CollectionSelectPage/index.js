@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Alert } from 'react-native';
+import { View, Text, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import { compose } from 'recompose';
 
 import Header from '../../components/Header';
@@ -36,7 +36,8 @@ class CollectionSelectPage extends PureComponent {
   }
 
   state = {
-    selectedBookIdList: []
+    selectedBookIdList: [],
+    isCompleteButtonClicked: false
   };
 
   componentWillMount() {
@@ -49,27 +50,40 @@ class CollectionSelectPage extends PureComponent {
     );
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isCollectionAdded_ && this.state.isCompleteButtonClicked) {
+      this._setStateIsCompleteButtonClicked(false);
+      this._navigateToBookmarkPage();
+    }
+  }
+
   render() {
+    if (this.state.isCompleteButtonClicked) {
+      return (
+        <View style={ styles.activityIndiatorContainer }>
+          <ActivityIndicator />
+        </View>
+      );
+    }
+
     return (
       <CollectionSelectGallery
         onClickBookSelectButton={ this._onClickBookSelectButton } />
     );
   }
 
-  _onClickHeaderCompleteButton = () => {
+  _onClickHeaderCompleteButton = async () => {
     const { selectedBookIdList } = this.state;
     if (selectedBookIdList.length === 0) {
       return Alert.alert('책을 선택해주세요.');
     }
 
-    this.props.AsyncAddCollectionRequestAction(
+    await this.props.AsyncAddCollectionRequestAction(
       this.props.collectionLabel,
       this.state.selectedBookIdList
     );
-    const params = {
-      selectType: selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON
-    };
-    navigateToNested(this.props, 'tabs', params, 'BookMark');
+
+    this._setStateIsCompleteButtonClicked(true);
   }
 
   _onClickHeaderBackButton = () => {
@@ -86,9 +100,32 @@ class CollectionSelectPage extends PureComponent {
     }
     this.setState({ selectedBookIdList });
   }
+
+  _setStateIsCompleteButtonClicked = (value) => {
+    this.setState({ isCompleteButtonClicked: value });
+  }
+
+  _navigateToBookmarkPage = () => {
+    const params = {
+      selectType: selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON
+    };
+    navigateToNested(this.props, 'tabs', params, 'BookMark', params);
+  }
 }
 
 const styles = StyleSheet.create({
+  activityIndiatorContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    bottom: 0,
+    right: 0,
+    backgroundColor: 'black',
+    opacity: .2,
+    zIndex: 3,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
   header: {
     marginTop: 25,
     backgroundColor: 'white'
