@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const collections = {
   collections: {
     byId: {
@@ -33,6 +35,10 @@ class Collection {
     return this._data.collections.byId;
   }
 
+  getAllIds() {
+    return this._data.collections.allIds;
+  }
+
   insert(label, bookIds) {
     const id = this.getId();
     const newCollection = { id, label, book_ids: bookIds };
@@ -42,7 +48,15 @@ class Collection {
     return newCollection;
   }
 
-
+  delete(id) {
+    const byId = this.getById();
+    const allIds = this.getAllIds();
+    const index = allIds.indexOf(id);
+    const removedCollection = byId[id];
+    this._data.collections.byId = _.omit(byId, id);
+    this._data.collections.allIds = allIds.splice(index, 1);
+    return removedCollection;
+  }
 }
 
 export { Collection };

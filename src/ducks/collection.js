@@ -9,12 +9,17 @@ export const types = {
   ADD_COLLECTION_REQUEST: 'collection/add_collection_request',
   ADD_COLLECTION_READY: 'collection/add_collection_ready',
   ADD_COLLECTION_SUCCESS: 'collection/add_collection_success',
+
+  REMOVE_COLLECTION_REQUEST: 'collection/remove_collection_request',
+  REMOVE_COLLECTION_READY: 'collection/remove_collection_ready',
+  REMOVE_COLLECTION_SUCCESS: 'collection/remove_collection_success'
 };
 
 export const initialState = {
   isCollectionFetched_: false,
   myCollections_: List().toJS(),
-  isCollectionAdded_: false
+  isCollectionAdded_: false,
+  isCollectionRemoved_: false
 };
 
 export const fetch = {
@@ -28,7 +33,7 @@ export const fetch = {
     return {
       ...state,
       isCollectionFetched_: true,
-      myCollections_: List(action.payload).toJS()
+      myCollections_: List(action.payload).toJS() || []
     };
   }
 };
@@ -48,13 +53,30 @@ export const add = {
   }
 };
 
+export const remove = {
+  [types.REMOVE_COLLECTION_READY]: (state, action) => {
+    return {
+      ...state,
+      isCollectionRemoved_: false
+    };
+  },
+  [types.REMOVE_COLLECTION_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isCollectionRemoved_: true
+    };
+  }
+};
+
 export default collection = createReducer(initialState, {
   ...fetch,
-  ...add
+  ...add,
+  ...remove
 });
 
 export const selectors = {
   GetIsCollectionFetched: state => state.collection.isCollectionFetched_,
   GetMyCollections: state => state.collection.myCollections_,
-  GetIsCollectionAdded: state => state.collection.isCollectionAdded_
+  GetIsCollectionAdded: state => state.collection.isCollectionAdded_,
+  GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_
 };

@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { compose } from 'recompose';
 
+import ProgressBar from '../../components/ProgressBar';
 import Header from '../../components/Header';
+import HeaderBarWithTexts from '../../components/HeaderBarWithTexts';
 import BookmarkButtonGroups from '../../components/BookmarkButtonGroups';
 import BookmarkBookGallery from '../../components/BookmarkBookGallery';
 import BookmarkCollectionGallery from '../../components/BookmarkCollectionGallery';
@@ -11,20 +13,45 @@ import { mapNavigateParamsToProps } from '../../hocs/mapNavigateParamsToProps';
 
 import {
   renderHeaderWithNavigation,
+  setParamsToNavigation,
   navigateTo
 } from '../../Router';
 import { selectType } from '../../config';
-import { hasPath } from '../../utils/ObjectUtils';
+import { hasPath, isEmpty } from '../../utils/ObjectUtils';
 
 const renderHeader = (params) => {
-  return (
-    <Header headerStyle={ StyleSheet.flatten(styles.header) }>
-      <Text style={ styles.headerText }>
-        담아 둔 글
-      </Text>
-    </Header>
-  );
+  if (isHeaderDeletingMode(params)) {
+    return HeaderOnDeletingMode(params);
+  } else {
+    return HeaderDefault(params);
+  }
 };
+
+const isHeaderDeletingMode = params => (
+  !isEmpty(params) &&
+  hasPath(params, 'isDeletingCollectionMode') &&
+  params.isDeletingCollectionMode
+);
+
+const HeaderDefault = params => (
+  <Header headerStyle={ StyleSheet.flatten(styles.defaultHeaderContainer) }>
+    <Text style={ styles.headerText }>
+      담아 둔 글
+    </Text>
+  </Header>
+);
+
+const HeaderOnDeletingMode = params => (
+  <Header headerStyle={ StyleSheet.flatten(styles.deletingModeHeaderContainer) }>
+    <HeaderBarWithTexts
+      title="삭제"
+      leftLabel="취소"
+      rightLabel="완료"
+      onClickHeaderRightButton={ params.onClickHeaderRightButton }
+      onClickHeaderLeftButton={ params.onClickHeaderLeftButton }
+      selectType={ params.selectType } />
+  </Header>
+);
 
 const screenTypes = {
   BOOK_LIST: 'BOOK_LIST',
@@ -33,11 +60,13 @@ const screenTypes = {
 
 class BookMark extends PureComponent {
   static navigationOptions = {
-    header: ({ navigation }) => { return renderHeaderWithNavigation(navigation)(renderHeader); }
+    header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
   }
 
   state = {
-    screenType: screenTypes.BOOK_LIST
+    screenType: screenTypes.BOOK_LIST,
+    isDeletingCollectionMode: false,
+    isCollectionDeleteButtonClicked: false
   };
 
   componentDidMount() {
@@ -46,25 +75,57 @@ class BookMark extends PureComponent {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.isCollectionRemoved_ && this.state.isCollectionDeleteButtonClicked) {
+      this._setStateCollectionDeleteButtonClicked(false);
+    }
+  }
+
   render() {
     const { screenType } = this.state;
 
+    if (this.state.isCollectionDeleteButtonClicked) {
+      return <ProgressBar />;
+    }
+
     return (
-      <View style={ styles.container }>
-        <BookmarkButtonGroups
-          onClickBooklistButton={ this._onClickBooklistButton }
-          onClickCollectionButton={ this._onClickCollectionButton } />
-        <BookmarkBookGallery isShown={ screenType === screenTypes.BOOK_LIST } />
-        <BookmarkCollectionGallery
-          isShown={ screenType === screenTypes.COLLECTIONS }
-          onClickAddCollectionButton={ this._onClickAddCollectionButton } />
-      </View>
+      <TouchableWithoutFeedback
+        style={ styles.container }
+        onPress={ () => {} }>
+        <View style={ { flex: 1, backgroundColor: 'white' } }>
+          <BookmarkButtonGroups
+            onClickBooklistButton={ this._onClickBooklistButton }
+            onClickCollectionButton={ this._onClickCollectionButton } />
+          <BookmarkBookGallery isShown={ screenType === screenTypes.BOOK_LIST } />
+          <BookmarkCollectionGallery
+            isShown={ screenType === screenTypes.COLLECTIONS }
+            isDeletingMode={ this.state.isDeletingCollectionMode }
+            onClickAddCollectionButton={ this._onClickAddCollectionButton }
+            onClickCollectionDeleteButton={ this._onClickCollectionDeleteButton }
+            onLongClickCollectionCard={ this._onLongClickCollectionCard } />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 
   _setStateScreenType = (screenType) => {
     this.setState({ screenType });
   }
+
+  _setStateDeletingMode = (state) => {
+    this.setState({ isDeletingCollectionMode: state });
+  }
+
+  _setStateCollectionDeleteButtonClicked = (state) => {
+    this.setState({ isCollectionDeleteButtonClicked: state });
+  }
+
+  // _onClickScreen = () => {
+  //   const { screenType, isDeletingCollectionMode } = this.state;
+  //   if (screenType === screenTypes.COLLECTIONS && isDeletingCollectionMode) {
+  //     console.log('screen clicked');
+  //   }
+  // }
 
   _onClickBooklistButton = () => {
     this._setStateScreenType(screenTypes.BOOK_LIST);
@@ -80,6 +141,28 @@ class BookMark extends PureComponent {
     navigateTo(this.props, key, params);
   }
 
+  _onClickRemoveCompleteCollectionButton = async () => {
+    await this._setStateDeletingMode(false);
+    await setParamsToNavigation(this.props, {
+      isDeletingCollectionMode: this.state.isDeletingCollectionMode
+    });
+  }
+
+  _onLongClickCollectionCard = async () => {
+    await this._setStateDeletingMode(true);
+    await setParamsToNavigation(this.props, {
+      selectType: selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
+      isDeletingCollectionMode: this.state.isDeletingCollectionMode,
+      onClickHeaderRightButton: this._onClickRemoveCompleteCollectionButton,
+      onClickHeaderLeftButton: () => {}
+    });
+  }
+
+  _onClickCollectionDeleteButton = async (id) => {
+    this._setStateCollectionDeleteButtonClicked(true);
+    await this.props.AsyncDeleteCollectionRequestAction(id);
+  }
+
   _isNavigationParamHasSelectType = (props) => {
     const { state } = props.navigation;
     return hasPath(state, 'params') && hasPath(state, 'params.selectType');
@@ -91,7 +174,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white'
   },
-  header: {
+  defaultHeaderContainer: {
     height: 50,
     marginTop: 20,
     alignItems: 'center',
@@ -102,6 +185,10 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 20
+  },
+  deletingModeHeaderContainer: {
+    marginTop: 25,
+    backgroundColor: 'white'
   }
 });
 

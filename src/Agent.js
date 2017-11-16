@@ -66,6 +66,10 @@ const User = {
   insertCollection: async (userId, collectionId) => {
     const newUser = await new UserData().setCollection(userId, collectionId);
     return newUser;
+  },
+  deleteCollection: async (userId, collectionId) => {
+    const newUser = await new UserData().deleteCollection(userId, collectionId);
+    return newUser;
   }
 };
 
@@ -108,6 +112,10 @@ const Collection = {
   insertCollection: async (label, bookIds) => {
     const newCollection = await new CollectionData().insert(label, bookIds);
     return newCollection;
+  },
+  deleteCollection: async (id) => {
+    const removedCollection = await new CollectionData().delete(id);
+    return removedCollection;
   }
 };
 

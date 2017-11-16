@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { List } from 'immutable';
 
 const users = {
   users: {
@@ -62,6 +63,20 @@ class User {
     const newUser = {
       ...user,
       collections: [...user.collections, collectionId]
+    };
+    this._data.users.byId[userId] = newUser;
+    return newUser;
+  }
+
+  deleteCollection(userId, collectionId) {
+    const byId = this.getById();
+    const user = _.filter(byId, (user) => {
+      return user.id === userId;
+    })[0];
+    const index = user.collections.indexOf(collectionId);
+    const newUser = {
+      ...user,
+      collections: List(user.collections).delete(index).toJS()
     };
     this._data.users.byId[userId] = newUser;
     return newUser;

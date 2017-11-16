@@ -31,6 +31,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
           return this._getPropsWhenSelectFromMyPageClickedImage();
         case SelectType.SELECT_FROM_COLLECTION_ADD_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
+        case SelectType.SELECT_FROM_COLLECTION_DELETE_BUTTON:
           return this._getPropsWhenSelectFromCollectionButton();
         default:
           return this._getPropsDefault(selectType)

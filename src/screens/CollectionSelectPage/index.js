@@ -5,6 +5,7 @@ import { compose } from 'recompose';
 import Header from '../../components/Header';
 import HeaderBarWithTexts from '../../components/HeaderBarWithTexts';
 import CollectionSelectGallery from '../../components/CollectionSelectGallery';
+import ProgressBar from '../../components/ProgressBar';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
@@ -59,11 +60,7 @@ class CollectionSelectPage extends PureComponent {
 
   render() {
     if (this.state.isCompleteButtonClicked) {
-      return (
-        <View style={ styles.activityIndiatorContainer }>
-          <ActivityIndicator />
-        </View>
-      );
+      return <ProgressBar />;
     }
 
     return (
@@ -114,18 +111,6 @@ class CollectionSelectPage extends PureComponent {
 }
 
 const styles = StyleSheet.create({
-  activityIndiatorContainer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    backgroundColor: 'black',
-    opacity: .2,
-    zIndex: 3,
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
   header: {
     marginTop: 25,
     backgroundColor: 'white'

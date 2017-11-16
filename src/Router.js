@@ -13,7 +13,7 @@ import {
 import { mapNavigateParamsToProps } from './hocs/mapNavigateParamsToProps';
 
 import Splash from './screens/Splash';
-import BookMark from './screens/BookMark';
+import BookMark from './screens/BookMark/container';
 import MyPage from './screens/MyPage';
 import NewsFeed from './screens/NewsFeed';
 import PostSelected from './screens/PostSelected';
