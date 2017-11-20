@@ -34,6 +34,8 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
         case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_DELETE_BUTTON:
           return this._getPropsWhenSelectFromCollectionButton();
+        case SelectType.SELECT_FROM_COLLECTION_CARD:
+          return this._getPropsForHeaderWithIcons();
         default:
           return this._getPropsDefault(selectType)
       }
@@ -84,6 +86,20 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
         header: {
           leftLabel,
           rightLabel
+        }
+      };
+    }
+
+    _getPropsForHeaderWithIcons = () => {
+      const { leftIconName, rightIconName, title } = this.props;
+      console.log('leftIconName', leftIconName);
+      console.log('rightIconName', rightIconName);
+      return {
+        type: headerType.TEXT,
+        text: textTitlePropFormatter('id', title, HeaderTextType.NONE),
+        header: {
+          leftIconName,
+          rightIconName
         }
       };
     }

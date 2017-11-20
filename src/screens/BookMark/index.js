@@ -5,9 +5,11 @@ import { compose } from 'recompose';
 import ProgressBar from '../../components/ProgressBar';
 import Header from '../../components/Header';
 import HeaderBarWithTexts from '../../components/HeaderBarWithTexts';
+import HeaderBarWithIcons from '../../components/HeaderBarWithIcons';
 import BookmarkButtonGroups from '../../components/BookmarkButtonGroups';
 import BookmarkBookGallery from '../../components/BookmarkBookGallery';
 import BookmarkCollectionGallery from '../../components/BookmarkCollectionGallery';
+import BookmarkCollectionBookGallery from '../../components/BookmarkCollectionBookGallery';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 import { mapNavigateParamsToProps } from '../../hocs/mapNavigateParamsToProps';
 
@@ -22,15 +24,23 @@ import { hasPath, isEmpty } from '../../utils/ObjectUtils';
 const renderHeader = (params) => {
   if (isHeaderDeletingMode(params)) {
     return HeaderOnDeletingMode(params);
-  } else {
-    return HeaderDefault(params);
   }
+
+  if (isHeaderCollectionBookListMode(params)) {
+    return HeaderOnCollectionBookListMode(params);
+  }
+
+  return HeaderDefault(params);
 };
 
 const isHeaderDeletingMode = params => (
-  !isEmpty(params) &&
   hasPath(params, 'isDeletingCollectionMode') &&
   params.isDeletingCollectionMode
+);
+
+const isHeaderCollectionBookListMode = params => (
+  hasPath(params, 'isCollectionBookListMode') &&
+  params.isCollectionBookListMode
 );
 
 const HeaderDefault = params => (
@@ -45,8 +55,20 @@ const HeaderOnDeletingMode = params => (
   <Header headerStyle={ StyleSheet.flatten(styles.deletingModeHeaderContainer) }>
     <HeaderBarWithTexts
       title="삭제"
-      leftLabel="취소"
-      rightLabel="완료"
+      leftLabel="뒤로"
+      rightLabel="편집"
+      onClickHeaderRightButton={ params.onClickHeaderRightButton }
+      onClickHeaderLeftButton={ params.onClickHeaderLeftButton }
+      selectType={ params.selectType } />
+  </Header>
+);
+
+const HeaderOnCollectionBookListMode = params => (
+  <Header headerStyle={ StyleSheet.flatten(styles.collectionListModeHeaderContainer) }>
+    <HeaderBarWithIcons
+      title={ params.title }
+      leftIconName="arrow-back"
+      rightIconName="more-horiz"
       onClickHeaderRightButton={ params.onClickHeaderRightButton }
       onClickHeaderLeftButton={ params.onClickHeaderLeftButton }
       selectType={ params.selectType } />
@@ -56,7 +78,7 @@ const HeaderOnDeletingMode = params => (
 const screenTypes = {
   BOOK_LIST: 'BOOK_LIST',
   COLLECTIONS: 'COLLECTIONS',
-  COLLECTION_BOOKS_LIST: 'COLLECTION_BOOKS_LIST'
+  COLLECTION_BOOK_LIST: 'COLLECTION_BOOK_LIST'
 };
 
 class BookMark extends PureComponent {
@@ -67,7 +89,9 @@ class BookMark extends PureComponent {
   state = {
     screenType: screenTypes.BOOK_LIST,
     isDeletingCollectionMode: false,
-    isCollectionDeleteButtonClicked: false
+    isCollectionBookListMode: false,
+    isCollectionDeleteButtonClicked: false,
+    collectionId: -1
   };
 
   componentDidMount() {
@@ -105,8 +129,11 @@ class BookMark extends PureComponent {
             isDeletingMode={ this.state.isDeletingCollectionMode }
             onClickAddCollectionButton={ this._onClickAddCollectionButton }
             onClickCollectionDeleteButton={ this._onClickCollectionDeleteButton }
-            onLongClickCollectionCard={ this._onLongClickCollectionCard }
-            onClickCollectionCard={ this.__onClickCollectionCard } />
+            onClickCollectionCard={ this._onClickCollectionCard }
+            onLongClickCollectionCard={ this._onLongClickCollectionCard } />
+          <BookmarkCollectionBookGallery
+            isShown={ screenType === screenTypes.COLLECTION_BOOK_LIST }
+            id={ this.state.collectionId } />
         </View>
       </TouchableWithoutFeedback>
     );
@@ -120,8 +147,16 @@ class BookMark extends PureComponent {
     this.setState({ isDeletingCollectionMode: state });
   }
 
+  _setStateCollectionBookListMode = (state) => {
+    this.setState({ isCollectionBookListMode: state });
+  }
+
   _setStateCollectionDeleteButtonClicked = (state) => {
     this.setState({ isCollectionDeleteButtonClicked: state });
+  }
+
+  _setStateCollectionId = (state) => {
+    this.setState({ collectionId: state });
   }
 
   // _onClickScreen = () => {
@@ -163,9 +198,17 @@ class BookMark extends PureComponent {
     });
   }
 
-  _onClickCollectionCard = (id) => {
-    console.log('collection card id: ', id);
-
+  _onClickCollectionCard = async (id, label) => {
+    await this._setStateCollectionBookListMode(true);
+    await setParamsToNavigation(this.props, {
+      selectType: selectType.SELECT_FROM_COLLECTION_CARD,
+      title: label,
+      isCollectionBookListMode: this.state.isCollectionBookListMode,
+      onClickHeaderRightButton: () => {},
+      onClickHeaderLeftButton: () => {}
+    });
+    await this._setStateCollectionId(id);
+    await this._setStateScreenType(screenTypes.COLLECTION_BOOK_LIST);
   }
 
   _onLongClickCollectionCard = async () => {
@@ -202,6 +245,10 @@ const styles = StyleSheet.create({
     fontSize: 20
   },
   deletingModeHeaderContainer: {
+    marginTop: 25,
+    backgroundColor: 'white'
+  },
+  collectionListModeHeaderContainer: {
     marginTop: 25,
     backgroundColor: 'white'
   }

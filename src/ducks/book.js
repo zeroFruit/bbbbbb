@@ -17,6 +17,10 @@ export const types = {
   FETCH_BOOKS_BY_TAG_READY: 'book/fetch_books_by_tag_ready',
   FETCH_BOOKS_BY_TAG_SUCCESS: 'book/fetch_books_by_tag_success',
 
+  FETCH_BOOKS_FOR_COLLECTION_REQUEST: 'book/fetch_books_for_collection_request',
+  FETCH_BOOKS_FOR_COLLECTION_READY: 'book/fetch_books_for_collection_ready',
+  FETCH_BOOKS_FOR_COLLECTION_SUCCESS: 'book/fetch_books_for_collection_success',
+
   UNMOUNT_BOOK: 'book/unmount_book'
 };
 
@@ -30,6 +34,8 @@ export const initialState = {
   selectedBooks_: List().toJS(),
   isBooksByTagFetched_: false,
   selectedBooksByTag_: List().toJS(),
+  isBooksForCollectionFetched_: false,
+  selectedBooksForCollection_: List().toJS()
 };
 
 const fetchMyBooks = {
@@ -81,6 +87,22 @@ const fetchBooksByTag = {
   }
 };
 
+const fetchBooksForCollection = {
+  [types.FETCH_BOOKS_FOR_COLLECTION_READY]: (state, action) => {
+    return {
+      ...state,
+      isBooksForCollectionFetched_: false
+    };
+  },
+  [types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBooksForCollectionFetched_: true,
+      selectedBooksForCollection_: List(action.payload).toJS()
+    };
+  }
+};
+
 const unmountSeletedBook = {
   [types.UNMOUNT_BOOK]: (state, action) => ({
     ...state,
@@ -92,7 +114,8 @@ export default book = createReducer(initialState, {
   ...fetchMyBooks,
   ...fetchSelectedBook,
   ...fetchBooks,
-  ...fetchBooksByTag
+  ...fetchBooksByTag,
+  ...fetchBooksForCollection
 });
 
 export const actions = {
@@ -122,5 +145,7 @@ export const selectors = {
   GetIsBooksFetched: state => state.book.isBooksFetched_,
   GetSelectedBooks: state => state.book.selectedBooks_,
   GetIsBooksByTagFetched: state => state.book.isBooksByTagFetched_,
-  GetSelectedBooksByTag: state => state.book.selectedBooksByTag_
+  GetSelectedBooksByTag: state => state.book.selectedBooksByTag_,
+  GetIsBooksForCollectionFetched: state => state.book.isBooksForCollectionFetched_,
+  GetSelectedBooksForCollection: state => state.book.selectedBooksForCollection_
 };

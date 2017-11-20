@@ -14,14 +14,20 @@ export const types = {
 
   FETCH_BOOKMARK_READY: 'bookmark/fetch_bookmark_ready',
   FETCH_BOOKMARK_REQEUST: 'bookmark/fetch_bookmark_request',
-  FETCH_BOOKMARK_SUCCESS: 'bookmark/fetch_bookmark_success'
+  FETCH_BOOKMARK_SUCCESS: 'bookmark/fetch_bookmark_success',
+
+  FETCH_BOOKMARKS_IN_COLLECTION_READY: 'bookmark/fetch_bookmarks_in_collection_ready',
+  FETCH_BOOKMARKS_IN_COLLECTION_REQUEST: 'bookmark/fetch_bookmarks_in_collection_request',
+  FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS: 'bookmark/fetch_bookmarks_in_collection_success'
 };
 
 export const initialState = {
   isBookmarkAdded_: false,
   isBookmarkRemoved_: false,
   isBookmarkFetched_: false,
-  myBookmarks_: List().toJS()
+  myBookmarks_: List().toJS(),
+  isBookmarksInCollectionFetched_: false,
+  myBookmarksInCollection_: {}
 };
 
 const add = {
@@ -77,8 +83,25 @@ const add = {
   }
 };
 
+const fetchInCollection = {
+  [types.FETCH_BOOKMARKS_IN_COLLECTION_READY]: (state, action) => {
+    return {
+      ...state,
+      isBookmarkInCollectionFetched_: false
+    };
+  },
+  [types.FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBookmarksInCollectionFetched_: true,
+      myBookmarksInCollection_: { ...action.payload }
+    };
+  }
+};
+
 export default bookmark = createReducer(initialState, {
-  ...add
+  ...add,
+  ...fetchInCollection
 });
 
 export const actions = {
@@ -103,5 +126,7 @@ export const selectors = {
   GetIsBookmarkedFetched: state => state.bookmark.isBookmarkFetched_,
   GetIsBookmarkedAdded: state => state.bookmark.isBookmarkAdded_,
   GetIsBookmarkedRemoved: state => state.bookmark.isBookmarkRemoved_,
-  GetMyBookmarks: state => state.bookmark.myBookmarks_
+  GetMyBookmarks: state => state.bookmark.myBookmarks_,
+  GetIsBookmarksInCollectionFetched: state => state.bookmark.isBookmarksInCollectionFetched_,
+  GetBookmarksInCollection: state => state.bookmark.myBookmarksInCollection_
 };

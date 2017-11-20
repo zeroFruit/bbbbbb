@@ -1,10 +1,11 @@
 import { fork, all, takeLatest, put, call } from 'redux-saga/effects';
 import { types } from '../ducks';
 import { types as pageTypes } from '../ducks/page';
+import agent from '../Agent';
 
 import bookmark from './bookmark';
 import user, { AsyncFetchUsersByUserIds, AsyncFetchUsersByUserIdsForPostList } from './user';
-import book, { AsyncFetchBooksByTagId, AsyncFetchBooks } from './book';
+import book, { AsyncFetchBooksByTagId, AsyncFetchBooks, AsyncFetchBooksByIds } from './book';
 import tag from './tag';
 import collection from './collection';
 
@@ -15,10 +16,8 @@ export function* AsyncFetchBooksAndUsersRequest(action) {
   });
 
   const books = yield* AsyncFetchBooks(action);
-  // console.log('saga 1', books);
   const users = books.map(book => book.user_id);
   const Users = yield* AsyncFetchUsersByUserIds({ payload: { users } });
-  // console.log('saga 2', Users);
 
   yield put({
     type: pageTypes.NEXT_NEWSFEED_PAGE
@@ -47,10 +46,22 @@ export function* AsyncFetchBooksAndUsersByTagRequest(action) {
   });
 }
 
+export function* AsyncFetchBooksWithCollection(action) {
+  yield put({
+    type: types.FETCH_BOOKS_BY_COLLECTION_READY
+  });
+  const Collection = yield call(agent.Collection.fetchById, action.payload);
+  yield* AsyncFetchBooksByIds({ payload: Collection.book_ids });
+  yield put({
+    type: types.FETCH_BOOKS_BY_COLLECTION_SUCCESS
+  });
+}
+
 const index =  function* indexSaga() {
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_REQUEST, AsyncFetchBooksAndUsersRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_TAG_REQUEST, AsyncFetchBooksAndUsersByTagRequest);
-}
+  yield takeLatest(types.FETCH_BOOKS_BY_COLLECTION_REQUEST, AsyncFetchBooksWithCollection);
+};
 
 export default function* rootSaga() {
   yield all([

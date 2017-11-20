@@ -145,6 +145,14 @@ class Book {
     return this._data.books.allIds;
   }
 
+  getByBookIds(bookIds) {
+    const byId = this.getById();
+    const filteredBooks = _.map(bookIds, (bookId) => {
+      return { ...byId[bookId] };
+    });
+    return filteredBooks;
+  }
+
   getByTagId(titleTagId, authorTagId, numOfFeeds, page) {
     const byId = this.getById();
     const filteredBook = _.filter(byId, (book) => {

@@ -48,8 +48,19 @@ export function* AsyncRemoveBookmarkRequest(action) {
   });
 }
 
+// export function* AsyncFetchBookmarksInCollection(action) {
+//   yield put({
+//     type: types.FETCH_BOOKMARKS_IN_COLLECTION_READY
+//   });
+//
+//   yield put({
+//     type: types.FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS
+//   });
+// }
+
 export default function* rootSaga() {
   yield takeLatest(types.ADD_BOOKMARK_REQUEST, AsyncAddBookmarkRequest);
   yield takeLatest(types.REMOVE_BOOKMARK_REQUEST, AsyncRemoveBookmarkRequest);
   yield takeLatest(types.FETCH_BOOKMARK_REQEUST, AsyncFetchBookmarkRequest);
+  // yield takeLatest(types.FETCH_BOOKMARKS_IN_COLLECTION_REQUEST, AsyncFetchBookmarksInCollection);
 }

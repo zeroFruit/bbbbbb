@@ -42,6 +42,10 @@ const Book = {
     return _.filter(books, (book) => {
       return book.id === bookId;
     })[0];
+  },
+  fetchByBookIds: async (bookIds) => {
+    const books = await new BookData().getByBookIds(bookIds);
+    return books;
   }
 };
 
@@ -96,6 +100,11 @@ const Tag = {
 };
 
 const Collection = {
+  fetchById: async (collectionId) => {
+    const collections = await new CollectionData().get().collections.byId;
+    const collection = collections[collectionId];
+    return collection;
+  },
   fetchByIds: async (collectionIdArray) => {
     const collections = await new CollectionData().get().collections.byId;
     return _.map(collectionIdArray, (collectionId) => {

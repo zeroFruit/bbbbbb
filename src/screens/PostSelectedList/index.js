@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
 import Header from '../../components/Header';
-import HeaderBarWithBackButton from '../../components/HeaderBarWithBackButton';
+import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import PostList from '../../components/PostList/container';
 
 import { fetchBooksAndUsersByTagHOC } from '../../hocs/fetchBooksAndUsersByTagHOC';
@@ -24,7 +24,7 @@ const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
-      <HeaderBarWithBackButton
+      <HeaderBarWithSearchBar
         selectType={ selectType }
         onClickAuthorTagOfHeader={ params.onClickAuthorTagOfHeader } />
     </Header>

@@ -21,7 +21,7 @@ class BookmarkCollectionGalleryCard extends PureComponent {
     return (
       <TouchableHighlight
         style={ styles.container }
-        onPress={ () => this._onClickCard(id) }
+        onPress={ () => this._onClickCard(id, label) }
         onLongPress={ this._onLongPressCard }>
         <View style={ styles.textContainer }>
           <Text>
@@ -35,8 +35,8 @@ class BookmarkCollectionGalleryCard extends PureComponent {
     );
   }
 
-  _onClickCard = (id) => {
-    this.props.onClickCollectionCard(id);
+  _onClickCard = (id, label) => {
+    this.props.onClickCollectionCard(id, label);
   }
 
   _onLongPressCard = () => {

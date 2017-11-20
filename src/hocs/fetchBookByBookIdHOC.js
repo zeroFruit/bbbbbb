@@ -18,8 +18,8 @@ export const fetchBookByBookIdHOC = (WrappedComponent) => {
     render() {
       return (
         <WrappedComponent
-          bookInfo={ this.state.bookInfo }
-          { ...this.props } />
+          { ...this.props }
+          bookInfo={ this.state.bookInfo } />
       );
     }
 

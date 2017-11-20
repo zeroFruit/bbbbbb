@@ -13,7 +13,7 @@ import { withDefaultHeaderHOC } from '../../hocs/withDefaultHeaderHOC';
 const propTypes = {};
 const defaultProps = {};
 
-class HeaderBarWithBackButton extends PureComponent {
+class HeaderBarWithSearchBar extends PureComponent {
   state = {
     isFocus: false,
     searchText: ''
@@ -73,10 +73,10 @@ const styles = StyleSheet.create({
   }
 });
 
-HeaderBarWithBackButton.propTypes = propTypes;
-HeaderBarWithBackButton.defaultProps = defaultProps;
+HeaderBarWithSearchBar.propTypes = propTypes;
+HeaderBarWithSearchBar.defaultProps = defaultProps;
 
 export default compose(
   fetchHeaderTitlePropsHOC,
   withDefaultHeaderHOC
-)(HeaderBarWithBackButton);
+)(HeaderBarWithSearchBar);

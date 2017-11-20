@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
 import Header from '../../components/Header';
-import HeaderBarWithBackButton from '../../components/HeaderBarWithBackButton';
+import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import Post from '../../components/Post';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
 import { withLoaderHOC } from '../../hocs/withLoaderHOC';
@@ -47,7 +47,7 @@ const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
-      <HeaderBarWithBackButton
+      <HeaderBarWithSearchBar
         selectType={ selectType } />
     </Header>
   );

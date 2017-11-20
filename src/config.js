@@ -18,7 +18,8 @@ export const selectType = {
   SELECT_FROM_COLLECTION_ADD_BUTTON: 'selectType/select_from_collection_add_button',
   SELECT_FROM_COLLECTION_NEXT_BUTTON: 'selectType/select_from_collection_next_button',
   SELECT_FROM_COLLECTION_COMPLETE_BUTTON: 'selectType/select_from_collection_complete_button',
-  SELECT_FROM_COLLECTION_DELETE_BUTTON: 'selectType/select_from_collection_delete_button'
+  SELECT_FROM_COLLECTION_DELETE_BUTTON: 'selectType/select_from_collection_delete_button',
+  SELECT_FROM_COLLECTION_CARD: 'selectType/select_from_collection_card'
 };
 
 export const headerType = {
