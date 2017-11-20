@@ -9,7 +9,6 @@ export function* AsyncFetchTagRequest(action) {
     type: tagTypes.FETCH_BOOK_TAG_READY
   });
   const { user, id } = action.payload;
-
   const me = yield call(agent.User.fetchByUserId, user);
   const book = yield call(agent.Book.fetchByBookId, id);
   const response = yield call(
@@ -17,6 +16,7 @@ export function* AsyncFetchTagRequest(action) {
     book.author_tag_id,
     book.title_tag_id
   );
+
   yield put({
     type: userTypes.FETCH_SELECTED_USER_SUCCESS,
     payload: me

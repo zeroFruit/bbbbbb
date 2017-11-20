@@ -11,6 +11,8 @@ import { indexOfValueInArray } from '../../utils/ArrayUtils';
 class PostList extends PureComponent {
   render() {
     const { booksInfo, myBookmarksAndBooks_ } = this.props;
+    // console.log('PostList', booksInfo);
+    // console.log('==============================');
     return (
       <View style={ { flex: 1 } } >
         <FlatList
@@ -54,11 +56,10 @@ class PostList extends PureComponent {
   }
 
   _onMomentumScrollEnd = () => {
-    this.props.onMomentumScrollEnd();
+    this.props.requestBooksAndUsers();
   }
 
   _onClickNewsfeedCard = (bookId, userId) => {
-    // this.props.FetchBookTagInitAction();
     // this.props.onClickNewsfeedCard(bookId, userId);
     console.log('clicked!!');
   }
@@ -72,4 +73,4 @@ class PostList extends PureComponent {
   }
 }
 
-export default compose(blockOnMomentumScrollEndHOC)(PostList);
+export default PostList;

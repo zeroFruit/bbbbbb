@@ -11,7 +11,6 @@ import { indexOfValueInArray } from '../../utils/ArrayUtils';
 const { func, arrayOf, number } = PropTypes;
 
 const propTypes = {
-  onMomentumScrollEnd: func.isRequired,
   onClickNewsfeedCard: func.isRequired,
   myBookmarksAndBooks_: arrayOf(number).isRequired,
   myBookmarks_: arrayOf(number).isRequired,
@@ -64,11 +63,11 @@ class NewsFeedList extends PureComponent {
   }
 
   _onMomentumScrollEnd = () => {
-    this.props.onMomentumScrollEnd();
+    this.props.requestBooksAndUsers();
   }
 
   _onClickNewsfeedCard = (bookId, userId) => {
-    this.props.FetchBookTagInitAction();
+    console.log('NewsFeedList', bookId, userId);
     this.props.onClickNewsfeedCard(bookId, userId);
   }
 
@@ -80,4 +79,4 @@ class NewsFeedList extends PureComponent {
 NewsFeedList.propTypes = propTypes;
 NewsFeedList.defaultProps = defaultProps;
 
-export default compose(blockOnMomentumScrollEndHOC)(NewsFeedList);
+export default NewsFeedList;

@@ -55,7 +55,8 @@ const HeaderOnDeletingMode = params => (
 
 const screenTypes = {
   BOOK_LIST: 'BOOK_LIST',
-  COLLECTIONS: 'COLLECTIONS'
+  COLLECTIONS: 'COLLECTIONS',
+  COLLECTION_BOOKS_LIST: 'COLLECTION_BOOKS_LIST'
 };
 
 class BookMark extends PureComponent {
@@ -96,13 +97,16 @@ class BookMark extends PureComponent {
           <BookmarkButtonGroups
             onClickBooklistButton={ this._onClickBooklistButton }
             onClickCollectionButton={ this._onClickCollectionButton } />
-          <BookmarkBookGallery isShown={ screenType === screenTypes.BOOK_LIST } />
+          <BookmarkBookGallery
+            isShown={ screenType === screenTypes.BOOK_LIST }
+            onClickGalleryCard={ this._onClickGalleryCard } />
           <BookmarkCollectionGallery
             isShown={ screenType === screenTypes.COLLECTIONS }
             isDeletingMode={ this.state.isDeletingCollectionMode }
             onClickAddCollectionButton={ this._onClickAddCollectionButton }
             onClickCollectionDeleteButton={ this._onClickCollectionDeleteButton }
-            onLongClickCollectionCard={ this._onLongClickCollectionCard } />
+            onLongClickCollectionCard={ this._onLongClickCollectionCard }
+            onClickCollectionCard={ this.__onClickCollectionCard } />
         </View>
       </TouchableWithoutFeedback>
     );
@@ -135,10 +139,21 @@ class BookMark extends PureComponent {
     this._setStateScreenType(screenTypes.COLLECTIONS);
   }
 
+  _onClickGalleryCard = (id, user) => {
+    const key = 'Post';
+    const params = { id, user, selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE };
+    navigateTo(this.props, key, params);
+  }
+
   _onClickAddCollectionButton = () => {
     const key = 'collectionAdd';
     const params = { selectType: selectType.SELECT_FROM_COLLECTION_ADD_BUTTON };
     navigateTo(this.props, key, params);
+  }
+
+  _onClickCollectionDeleteButton = async (id) => {
+    this._setStateCollectionDeleteButtonClicked(true);
+    await this.props.AsyncDeleteCollectionRequestAction(id);
   }
 
   _onClickRemoveCompleteCollectionButton = async () => {
@@ -146,6 +161,11 @@ class BookMark extends PureComponent {
     await setParamsToNavigation(this.props, {
       isDeletingCollectionMode: this.state.isDeletingCollectionMode
     });
+  }
+
+  _onClickCollectionCard = (id) => {
+    console.log('collection card id: ', id);
+
   }
 
   _onLongClickCollectionCard = async () => {
@@ -156,11 +176,6 @@ class BookMark extends PureComponent {
       onClickHeaderRightButton: this._onClickRemoveCompleteCollectionButton,
       onClickHeaderLeftButton: () => {}
     });
-  }
-
-  _onClickCollectionDeleteButton = async (id) => {
-    this._setStateCollectionDeleteButtonClicked(true);
-    await this.props.AsyncDeleteCollectionRequestAction(id);
   }
 
   _isNavigationParamHasSelectType = (props) => {

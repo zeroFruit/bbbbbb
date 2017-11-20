@@ -44,7 +44,6 @@ class MyPageBookGallery extends GalleryParentComponent {
   }
 
   _onClickGalleryCard = (id, user) => {
-    this.props.FetchBookTagInitAction();
     this.props.onClickGalleryCard(id, user);
   }
 }

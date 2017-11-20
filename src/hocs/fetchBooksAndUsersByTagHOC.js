@@ -2,8 +2,14 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import agent from '../Agent';
+
+import ProgressBar from '../components/ProgressBar';
+
+import { types, selectors } from '../ducks';
 import { selectors as bookSelectors, actions as bookActions, types as bookTypes } from '../ducks/book';
 import { selectors as tagSelectors, types as tagTypes } from '../ducks/tag';
+import { selectors as userSelectors } from '../ducks/user';
+import { selectors as pageSelectors, actions as pageActions } from '../ducks/page';
 import { concatArrays } from '../utils/ArrayUtils';
 
 export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
@@ -13,82 +19,80 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
     state = {
       booksInfo: [],
       usersInfo: [],
+      isBooksAndUsersFetching: true
     };
 
-    async componentWillReceiveProps(nextProps) {
-      const { isSelectedBookTagFetched_, id, page_, numOfFeedsPerLoad_ } = nextProps;
-      if (isSelectedBookTagFetched_) {
-        const { title_tag_id, author_tag_id } = await this._fetchSelectedBook(id);
-        const { booksInfo, usersInfo } = await this._fetchBooksAndUsers(
-          numOfFeedsPerLoad_,
-          page_,
-          title_tag_id,
-          author_tag_id
-        );
-        this._setBooksAndUsersToState(booksInfo, usersInfo);
+    async componentDidMount() {
+      const { id, numOfFeedsPerLoad_, page_ } = this.props;
+      await this.props.AsyncFetchBooksAndUsersByTagRequestAction(id, numOfFeedsPerLoad_, page_);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      if (nextProps.isBooksAndUsersFetchedByTag_) {
+        const { selectedBooksByTag_, selectedPostListUsers_ } = nextProps;
+        this._setStateBooksInfo(selectedBooksByTag_);
+        this._setStateUsersInfo(selectedPostListUsers_);
+        this._setStateIsBooksAndUsersFetching(false);
       }
     }
 
     render() {
+      if (this.state.isBooksAndUsersFetching) {
+        return <ProgressBar />;
+      }
+
       const { booksInfo, usersInfo } = this.state;
-      const { page_, numOfFeedsPerLoad_ } = this.props;
       return (
         <WrappedComponent
           { ...this.props }
           booksInfo={ booksInfo }
           usersInfo={ usersInfo }
-          page={ page_ }
-          numOfFeedsPerLoad={ numOfFeedsPerLoad_ }
-          requestBooksAndUsers={ this._requestBooksAndUsers } />
+          requestBooksAndUsers={ this._requestBooksAndUsers }
+          resetPage={ this._resetPage } />
       );
     }
 
+    _setStateIsBooksAndUsersFetching = (state) => {
+      this.setState({ isBooksAndUsersFetching: state });
+    }
+
+    _setStateBooksInfo = (state) => {
+      this.setState({ booksInfo: state });
+    }
+
+    _setStateUsersInfo = (state) => {
+      this.setState({ usersInfo: state });
+    }
+
+    /*
+      TODO: 현재 blockOnMomentumScrollEndHOC에서 사용되고 있다. 컴포넌트 안으로 옮기기 */
     _requestBooksAndUsers = async () => {
-      const { booksInfo, usersInfo } = await this._fetchBooksAndUsers();
-      this._setBooksAndUsersToState(booksInfo, usersInfo);
+      const { booksInfo } = this.state;
+      const { id, numOfFeedsPerLoad_, selectedListPage_ } = this.props;
+      if (booksInfo.length >= selectedListPage_ * numOfFeedsPerLoad_) {
+        await this.props.AsyncFetchBooksAndUsersByTagRequestAction(id, numOfFeedsPerLoad_, selectedListPage_);
+      }
     }
 
-    _fetchBooksAndUsers = async (numOfFeedsPerLoad, page, titleTagId, authorTagId) => {
-      const booksInfo = await this._fetchBooks(numOfFeedsPerLoad, page, titleTagId, authorTagId);
-      const usersInfo = await this._fetchUsers(booksInfo);
-      return { booksInfo, usersInfo };
+    _resetPage = () => {
+      this.props.ResetSelectedListPageAction();
     }
-
-    _fetchSelectedBook = async (bookId) => {
-      const book = await agent.Book.fetchByBookId(bookId);
-      return book;
-    }
-
-    _fetchBooks = async (numOfFeedsPerLoad, page, titleTagId, authorTagId) => {
-      const books = await agent.Book.fetchByTag(numOfFeedsPerLoad, page, titleTagId, authorTagId);
-      return books;
-    }
-
-    _fetchUsers = async (booksInfo) => {
-      const promises = booksInfo.map(({ user_id }) => {
-        return agent.User.fetchByUserId(user_id);
-      });
-      const usersInfo = await Promise.all(promises);
-      return usersInfo;
-    };
-
-    _setBooksAndUsersToState = (booksInfo, usersInfo) => {
-      const updatedBooksInfo = concatArrays(this.state.booksInfo, booksInfo);
-      const updatedUsersInfo = concatArrays(this.state.usersInfo, usersInfo);
-      this.setState({
-        booksInfo: updatedBooksInfo,
-        usersInfo: updatedUsersInfo
-      });
-    };
   }
 
   return connect(mapStateToProps, mapDispatchToProps)(WithBooksAndUsers);
 };
 
 const mapStateToProps = state => ({
-  ...state.tag
+  isBooksAndUsersFetchedByTag_: selectors.GetIsBooksAndUsersFetchedByTag(state),
+  selectedBooksByTag_: bookSelectors.GetSelectedBooksByTag(state),
+  selectedPostListUsers_: userSelectors.GetSelectedPostListUsers(state),
+  selectedListPage_: pageSelectors.GetSelectedListPage(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  ResetPageAction: bookActions.ResetNewsfeed
+  AsyncFetchBooksAndUsersByTagRequestAction: (id, numOfFeeds, page) => ({
+    type: types.FETCH_BOOKS_AND_USERS_BY_TAG_REQUEST,
+    payload: { id, numOfFeeds, page }
+  }),
+  ResetSelectedListPageAction: pageActions.ResetSelectedListPage
 }, dispatch);

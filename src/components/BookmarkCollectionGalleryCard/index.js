@@ -17,10 +17,11 @@ const defaultProps = {
 
 class BookmarkCollectionGalleryCard extends PureComponent {
   render() {
-    const { label, isDeletingMode } = this.props;
+    const { label, isDeletingMode, id } = this.props;
     return (
       <TouchableHighlight
         style={ styles.container }
+        onPress={ () => this._onClickCard(id) }
         onLongPress={ this._onLongPressCard }>
         <View style={ styles.textContainer }>
           <Text>
@@ -32,6 +33,10 @@ class BookmarkCollectionGalleryCard extends PureComponent {
         </View>
       </TouchableHighlight>
     );
+  }
+
+  _onClickCard = (id) => {
+    this.props.onClickCollectionCard(id);
   }
 
   _onLongPressCard = () => {

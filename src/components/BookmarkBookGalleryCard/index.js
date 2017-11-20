@@ -21,15 +21,20 @@ const defaultProps = {
 
 class BookmarkBookGalleryCard extends Component {
   render() {
-    const { bookInfo: { img_src } } = this.props;
-
+    const { bookInfo: { img_src, id, user_id } } = this.props;
     return (
-      <TouchableHighlight style={ styles.container }>
+      <TouchableHighlight
+        style={ styles.container }
+        onPress={ () => { this._onClickGalleryCard(id, user_id); } }>
         <Image
           style={ styles.image }
           source={ { uri: img_src } } />
       </TouchableHighlight>
     );
+  }
+
+  _onClickGalleryCard = (id, user) => {
+    this.props.onClickGalleryCard(id, user);
   }
 }
 

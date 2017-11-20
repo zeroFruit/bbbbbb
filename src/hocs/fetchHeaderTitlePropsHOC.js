@@ -26,6 +26,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
         case SelectType.FETCHED_FROM_NEWSFEED:
           return this._getPropsWhenFetchedFromNewsfeed();
         case SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE:
+        case SelectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE:
           return this._getTagsWhenSelectFromNewsfeedClickedImage();
         case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
           return this._getPropsWhenSelectFromMyPageClickedImage();
@@ -69,6 +70,10 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
         type: headerType.TEXT,
         text: textTitlePropFormatter(user_id, selectedUserDisplayName_, HeaderTextType.NICKNAME)
       };
+    }
+
+    _getTagsWhenSelectFromBookmarkClickedImage = () => {
+
     }
 
     _getPropsWhenSelectFromCollectionButton = () => {

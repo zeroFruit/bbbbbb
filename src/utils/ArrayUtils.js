@@ -9,3 +9,7 @@ export const concatArrays = (arr1, arr2) => _.concat(arr1, arr2);
 export const sliceArray = (arr, start, end) => _.slice(arr, start, end);
 
 export const indexOfValueInArray = (arr, value) => _.sortedIndexOf(arr, value);
+
+export const uniqWithArray = (arr, comp) => _.uniqWith(arr, comp);
+
+export const sortByArray = (arr, comp) => _.sortBy(arr, comp);

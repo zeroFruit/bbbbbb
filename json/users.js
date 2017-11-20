@@ -55,6 +55,12 @@ class User {
     return this._data.users.byId;
   }
 
+  getByUserIds(userIds) {
+    const byId = this.getById();
+    const Users = _.map(userIds, userId => byId[userId]);
+    return Users;
+  }
+
   setCollection(userId, collectionId) {
     const byId = this.getById();
     const user = _.filter(byId, (user) => {

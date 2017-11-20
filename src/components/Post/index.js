@@ -74,26 +74,30 @@ class Post extends React.Component {
   }
 
   _fetchPostTitle(selectType) {
-    if (
-      selectType === SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE ||
-      selectType === SelectType.FETCHED_FROM_NEWSFEED
-    ) {
-      const { userInfo } = this.props;
-      return {
-        type: postTitleType.TEXT,
-        text: textTitlePropFormatter(userInfo.id, userInfo.display_name, 'nickname')
-      };
-    } else if (selectType === SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE) {
-      const { bookTitleTag, bookAuthorTag, bookInfo } = this.props;
-      return {
-        type: postTitleType.TAG,
-        text: [
-          tagTitlePropFormatter(bookInfo.title_tag_id, bookTitleTag, 'title'),
-          tagTitlePropFormatter(bookInfo.author_tag_id, bookAuthorTag, 'author')
-        ]
-      };
-    } else {
-      logger.error('Invalid select type');
+    switch(selectType) {
+      case SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE:
+      case SelectType.FETCHED_FROM_NEWSFEED:
+      case SelectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE:
+      {
+        const { userInfo } = this.props;
+        return {
+          type: postTitleType.TEXT,
+          text: textTitlePropFormatter(userInfo.id, userInfo.display_name, 'nickname')
+        };
+      }
+      case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
+      {
+        const { bookTitleTag, bookAuthorTag, bookInfo } = this.props;
+        return {
+          type: postTitleType.TAG,
+          text: [
+            tagTitlePropFormatter(bookInfo.title_tag_id, bookTitleTag, 'title'),
+            tagTitlePropFormatter(bookInfo.author_tag_id, bookAuthorTag, 'author')
+          ]
+        };
+      }
+      default:
+        return logger.error('Invalid select type');
     }
   }
 

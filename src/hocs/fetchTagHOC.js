@@ -1,8 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { View, Text } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+
+import ProgressBar from '../components/ProgressBar';
+
 import { selectors as tagSelectors, types as tagTypes } from '../ducks/tag';
 import { selectors as bookSelectors } from '../ducks/book';
 import { selectors as userSelectors } from '../ducks/user';
@@ -26,11 +29,21 @@ export const fetchTagHOC = (WrappedComponent) => {
 
   };
 
-  class WithTag extends Component {
+  class WithTag extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
+    state = {
+      isSelectedBookTagFetching: false
+    }
     async componentDidMount() {
       await this._fetchTags(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      // console.log('cwrp', nextProps.isSelectedBookTagFetched_);
+      if (nextProps.isSelectedBookTagFetched_) {
+        this._setStateIsSelectedBookTagFetching(false);
+      }
     }
 
     render() {
@@ -42,6 +55,9 @@ export const fetchTagHOC = (WrappedComponent) => {
         selectedBook_
       } = this.props;
 
+      if (this.state.isSelectedBookTagFetching) {
+        return <ProgressBar />;
+      }
       return (
         <WrappedComponent
           { ...this.props }
@@ -54,11 +70,14 @@ export const fetchTagHOC = (WrappedComponent) => {
     }
 
     _fetchTags = async (props) => {
-      const { isSelectedBookTagFetched_, id, user } = props;
+      const { id, user } = props;
+      console.log('fetchTagHOC', id, user);
+      await this.props.AsyncFetchTagRequestAction(user, id);
+      await this._setStateIsSelectedBookTagFetching(true);
+    }
 
-      if (!isSelectedBookTagFetched_) {
-        await this.props.AsyncFetchTagRequestAction(user, id);
-      }
+    _setStateIsSelectedBookTagFetching = (state) => {
+      this.setState({ isSelectedBookTagFetching: state });
     }
   }
 

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 const books = {
   books: {
     byId: {
@@ -133,6 +135,25 @@ class Book {
 
   get() {
     return this._data;
+  }
+
+  getById() {
+    return this._data.books.byId;
+  }
+
+  getAllIds() {
+    return this._data.books.allIds;
+  }
+
+  getByTagId(titleTagId, authorTagId, numOfFeeds, page) {
+    const byId = this.getById();
+    const filteredBook = _.filter(byId, (book) => {
+      return (
+        book.title_tag_id === titleTagId &&
+        book.author_tag_id === authorTagId
+      );
+    });
+    return _.slice(filteredBook, page * numOfFeeds, (page + 1) * numOfFeeds);
   }
 }
 export { Book };

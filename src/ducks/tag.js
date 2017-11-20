@@ -1,7 +1,6 @@
 import { createReducer } from './helper';
 
 export const types = {
-  FETCH_BOOK_TAG_INIT: 'tag/fetch_book_tag_init',
   FETCH_BOOK_TAG_REQUEST: 'tag/fetch_book_tag_request',
   FETCH_BOOK_TAG_READY: 'tag/fetch_book_tag_ready',
   FETCH_BOOK_TAG_FETCHING: 'tag/fetch_book_tag_fetching',
@@ -15,11 +14,6 @@ export const initialState = {
 };
 
 const fetchSelectedBook = {
-  // TODO: 태그를 패치 받고 싶은 곳에서 다음 타입 액션을 실행하기
-  [types.FETCH_BOOK_TAG_INIT]: (state, action) => ({
-    ...state,
-    isSelectedBookTagFetched_: false
-  }),
   [types.FETCH_BOOK_TAG_READY]: (state, action) => ({
     ...state,
     isSelectedBookTagFetched_: false
@@ -44,10 +38,7 @@ export default tag = createReducer(initialState, {
 });
 
 export const actions = {
-  // TODO: 태그를 패치 받고 싶은 곳에서 다음 타입 액션을 실행하기
-  FetchBookTagInit: () => ({
-    type: types.FETCH_BOOK_TAG_INIT
-  })
+
 };
 
 export const selectors = {

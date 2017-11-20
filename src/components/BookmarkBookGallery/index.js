@@ -22,12 +22,19 @@ class BookmarkBookGallery extends GalleryParentComponent {
 
   _getGalleryCard = (bookmarks) => {
     return (
-      <BookmarkBookGalleryCard key={ bookmarks.id } bookId={ bookmarks.bookId } />
+      <BookmarkBookGalleryCard
+        key={ bookmarks.id }
+        bookId={ bookmarks.bookId }
+        onClickGalleryCard={ this._onClickGalleryCard } />
     );
   }
 
   _getContainerStyle = (isShown) => {
     return isShown ? flatten(styles.container) : flatten(styles.hiddenContainer);
+  }
+
+  _onClickGalleryCard = (id, user) => {
+    this.props.onClickGalleryCard(id, user);
   }
 }
 

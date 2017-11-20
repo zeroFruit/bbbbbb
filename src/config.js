@@ -5,10 +5,16 @@ export const SEARCHBY_NAME = 'searchby_name';
 
 export const selectType = {
   FETCHED_FROM_NEWSFEED: 'selectType/fetched_from_newsfeed',
+
   SELECT_FROM_MYPAGE_CLICKED_IMAGE: 'selectType/select_from_mypage_clicked_image',
   SELECT_FROM_MYPAGE_CLICKED_NICKNAME: 'selectType/select_from_mypage_clicked_nickname',
+
   SELECT_FROM_NEWSFEED_CLICKED_IMAGE: 'selectType/select_from_newsfeed_clicked_image',
   SELECT_FROM_NEWSFEED_CLICKED_NICKNAME: 'selectType/select_from_newsfeed_clicked_nickname',
+
+
+  SELECT_FROM_BOOKMARK_CLICKED_IMAGE: 'selectType/select_from_bookmark_clicked_image',
+
   SELECT_FROM_COLLECTION_ADD_BUTTON: 'selectType/select_from_collection_add_button',
   SELECT_FROM_COLLECTION_NEXT_BUTTON: 'selectType/select_from_collection_next_button',
   SELECT_FROM_COLLECTION_COMPLETE_BUTTON: 'selectType/select_from_collection_complete_button',

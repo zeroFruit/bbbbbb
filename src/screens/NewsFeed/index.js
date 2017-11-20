@@ -22,8 +22,6 @@ import { selectType } from '../../config';
 const { func } = PropTypes;
 
 const propTypes = {
-  requestBooksAndUsers: func.isRequired,
-  ResetPageAction: func.isRequired
 };
 const defaultProps = {};
 
@@ -45,15 +43,15 @@ class NewsFeed extends Component {
   };
 
   componentWillUnmount() {
-    this.props.ResetPageAction();
+    this.props.resetPage();
   }
 
   render() {
     const {
       booksInfo,
       usersInfo,
-      page,
-      numOfFeedsPerLoad,
+      newsfeedPage_,
+      numOfFeedsPerLoad_,
       bookmarksAndBooks
     } = this.props;
     return (
@@ -62,8 +60,8 @@ class NewsFeed extends Component {
           booksInfo={ booksInfo }
           usersInfo={ usersInfo }
           selectType={ selectType.FETCHED_FROM_NEWSFEED }
-          page={ page }
-          numOfFeedsPerLoad={ numOfFeedsPerLoad }
+          page={ newsfeedPage_ }
+          numOfFeedsPerLoad={ numOfFeedsPerLoad_ }
           bookmarks={ bookmarksAndBooks }
           onClickNewsfeedCard={ this._onClickNewsfeedCard }
           onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle }

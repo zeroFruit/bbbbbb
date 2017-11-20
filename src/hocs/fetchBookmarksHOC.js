@@ -10,15 +10,7 @@ import { USER_ID } from '../config';
 const { func, bool, arrayOf, number } = PropTypes;
 
 export const fetchBookmarksHOC = (WrappedComponent) => {
-  const propTypes = {
-    AddBookmarkSuccessAction: func.isRequired,
-    RemoveBookmarkSuccessAction: func.isRequired,
-    AsyncFetchBookmarkRequestAction: func.isRequired,
-    isBookmarkAdded_: bool.isRequired,
-    isBookmarkRemoved_: bool.isRequired,
-    isBookmarkFetched_: bool.isRequired,
-    myBookmarks_: arrayOf(number).isRequired
-  };
+  const propTypes = {};
   const defaultProps = {};
 
   class WithBookmarks extends PureComponent {
@@ -65,6 +57,7 @@ export const fetchBookmarksHOC = (WrappedComponent) => {
 const mapStateToProps = state => ({
   ...state.book,
   ...state.bookmark,
+  ...state.page,
   myBookmarks_: selectors.BookmarksWithIdProp(state)
 });
 

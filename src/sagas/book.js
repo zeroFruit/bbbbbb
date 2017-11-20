@@ -14,6 +14,40 @@ export function* AsyncFetchBookRequest(action) {
   });
 }
 
+export function* AsyncFetchBooks(action) {
+  const { numOfFeeds, page } = action.payload;
+  yield put({
+    type: types.FETCH_BOOKS_READY
+  });
+
+  const books = yield call(agent.Book.fetch, numOfFeeds, page);
+
+  yield put({
+    type: types.FETCH_BOOKS_SUCCESS,
+    payload: books
+  });
+
+  return books;
+}
+
+export function* AsyncFetchBooksByTagId(action) {
+  const { id, numOfFeeds, page } = action.payload;
+  yield put({
+    type: types.FETCH_BOOKS_BY_TAG_READY
+  });
+  const { title_tag_id, author_tag_id } = yield call(agent.Book.fetchByBookId, id);
+  const filteredBooks = yield call(agent.Book.fetchByTag, title_tag_id, author_tag_id, numOfFeeds, page);
+
+  yield put({
+    type: types.FETCH_BOOKS_BY_TAG_SUCCESS,
+    payload: filteredBooks
+  });
+
+  return filteredBooks;
+}
+
 export default function* rootSaga() {
   yield takeLatest(types.FETCH_BOOK_REQUEST, AsyncFetchBookRequest);
+  yield takeLatest(types.FETCH_BOOKS_REQUEST, AsyncFetchBooks);
+  yield takeLatest(types.FETCH_BOOKS_BY_TAG_REQUEST, AsyncFetchBooksByTagId);
 }

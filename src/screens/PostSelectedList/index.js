@@ -44,26 +44,27 @@ class PostSelectedList extends Component {
     );
   }
   componentWillUnmount() {
-    this.props.ResetPageAction();
+    this.props.resetPage();
   }
 
   render() {
     const {
       booksInfo,
       usersInfo,
-      page,
-      numOfFeedsPerLoad,
+      selectedListPage_,
+      numOfFeedsPerLoad_,
       bookmarksAndBooks
     } = this.props;
-
+    // console.log('PostSelectedList booksInfo', booksInfo);
+    // console.log('==========================================');
     return (
       <View style={ { flex: 1 } }>
         <PostList
           booksInfo={ booksInfo }
           usersInfo={ usersInfo }
           selectType={ selectType.FETCHED_FROM_NEWSFEED }
-          page={ page }
-          numOfFeedsPerLoad={ numOfFeedsPerLoad }
+          page={ selectedListPage_ }
+          numOfFeedsPerLoad={ numOfFeedsPerLoad_ }
           bookmarks={ bookmarksAndBooks }
           onClickNewsfeedCard={ this._onClickNewsfeedCard }
           onClickAuthorTagOfPostTitle={ this._onClickAuthorTagOfPostTitle }

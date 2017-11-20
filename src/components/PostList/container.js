@@ -13,7 +13,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  FetchBookTagInitAction: tagActions.FetchBookTagInit
 }, dispatch)
 
-export default connect(mapStateToProps, mapDispatchToProps)(ComponentWithHOC);
+export default connect(mapStateToProps, null)(ComponentWithHOC);

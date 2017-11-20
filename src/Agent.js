@@ -27,20 +27,9 @@ const Book = {
       return byId[id];
     });
   },
-  fetchByTag: async (numOfFeedsPerLoad, page, bookTitleTag, bookAuthorTag) => {
-    const { byId } = await new BookData().get().books;
-    const filteredBook = _.filter(byId, (book) => {
-      return (
-        book.title_tag_id === bookTitleTag &&
-        book.author_tag_id === bookAuthorTag
-      );
-    });
-
-    return sliceArray(
-      filteredBook,
-      page * numOfFeedsPerLoad,
-      (page + 1) * numOfFeedsPerLoad
-    );
+  fetchByTag: async (titleTagId, authorTagId, numOfFeeds, page) => {
+    const filteredBooks = await new BookData().getByTagId(titleTagId, authorTagId, numOfFeeds, page);
+    return filteredBooks;
   },
   fetchByUserId: async (userId) => {
     const books = await new BookData().get().books.byId;
@@ -62,6 +51,10 @@ const User = {
     return _.filter(users, (user) => {
       return user.id === userId;
     })[0];
+  },
+  fetchByUserIds: async (userIds) => {
+    const users = await new UserData().getByUserIds(userIds);
+    return users;
   },
   insertCollection: async (userId, collectionId) => {
     const newUser = await new UserData().setCollection(userId, collectionId);

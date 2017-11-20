@@ -2,14 +2,20 @@ import { List } from 'immutable';
 import { createReducer } from './helper';
 
 export const types = {
-  LOAD_NEWSFEED_REQUEST: 'book/load_newsfeed_request',
-  RESET_NEWSFFED_STATE: 'book/reset_newsfeed_state',
   FETCH_MY_BOOKS_REQUEST: 'book/fetch_my_books_request',
   FETCH_MY_BOOKS_SUCCESS: 'book/fetch_my_books_success',
 
   FETCH_BOOK_READY: 'book/fetch_book_ready',
   FETCH_BOOK_REQUEST: 'book/fetch_book_request',
   FETCH_BOOK_SUCCESS: 'book/fetch_book_success',
+
+  FETCH_BOOKS_READY: 'book/fetch_books_ready',
+  FETCH_BOOKS_REQUEST: 'book/fetch_books_request',
+  FETCH_BOOKS_SUCCESS: 'book/fetch_books_success',
+
+  FETCH_BOOKS_BY_TAG_REQUEST: 'book/fetch_books_by_tag_request',
+  FETCH_BOOKS_BY_TAG_READY: 'book/fetch_books_by_tag_ready',
+  FETCH_BOOKS_BY_TAG_SUCCESS: 'book/fetch_books_by_tag_success',
 
   UNMOUNT_BOOK: 'book/unmount_book'
 };
@@ -19,18 +25,11 @@ export const initialState = {
   numOfFeedsPerLoad_: 3,
   myBooks_: List().toJS(),
   isBookFetched_: false,
-  selectedBook_: {}
-};
-
-const page = {
-  [types.LOAD_NEWSFEED_REQUEST]: (state, action) => ({
-    ...state,
-    page_: state.page_ + 1
-  }),
-  [types.RESET_NEWSFFED_STATE]: (state, action) => ({
-    ...state,
-    page_: 0
-  }),
+  selectedBook_: {},
+  isBooksFetched_: false,
+  selectedBooks_: List().toJS(),
+  isBooksByTagFetched_: false,
+  selectedBooksByTag_: List().toJS(),
 };
 
 const fetchMyBooks = {
@@ -52,6 +51,36 @@ const fetchSelectedBook = {
   })
 };
 
+const fetchBooks = {
+  [types.FETCH_BOOKS_READY]: (state, action) => ({
+    ...state,
+    isBooksFetched_: false
+  }),
+  [types.FETCH_BOOKS_SUCCESS]: (state, action) => {
+    return ({
+      ...state,
+      isBooksFetched_: true,
+      selectedBooks_: List(state.selectedBooks_).concat(action.payload).toJS()
+    })
+  }
+};
+
+const fetchBooksByTag = {
+  [types.FETCH_BOOKS_BY_TAG_READY]: (state, action) => {
+    return {
+      ...state,
+      isBooksByTagFetched_: false
+    };
+  },
+  [types.FETCH_BOOKS_BY_TAG_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBooksByTagFetched_: true,
+      selectedBooksByTag_: List(state.selectedBooksByTag_).concat(action.payload).toJS()
+    };
+  }
+};
+
 const unmountSeletedBook = {
   [types.UNMOUNT_BOOK]: (state, action) => ({
     ...state,
@@ -60,9 +89,10 @@ const unmountSeletedBook = {
 }
 
 export default book = createReducer(initialState, {
-  ...page,
   ...fetchMyBooks,
-  ...fetchSelectedBook
+  ...fetchSelectedBook,
+  ...fetchBooks,
+  ...fetchBooksByTag
 });
 
 export const actions = {
@@ -87,6 +117,10 @@ export const selectors = {
   GetPage: state => state.book.page_,
   GetNumOfFeedsPerLoad: state => state.book.numOfFeedsPerLoad_,
   GetMyBooks: state => state.book.myBooks_,
+  GetIsBookFetched: state => state.book.isBookFetched_,
   GetSelectedBook: state => state.book.selectedBook_,
-  GetIsBookFetched: state => state.book.isBookFetched_
+  GetIsBooksFetched: state => state.book.isBooksFetched_,
+  GetSelectedBooks: state => state.book.selectedBooks_,
+  GetIsBooksByTagFetched: state => state.book.isBooksByTagFetched_,
+  GetSelectedBooksByTag: state => state.book.selectedBooksByTag_
 };

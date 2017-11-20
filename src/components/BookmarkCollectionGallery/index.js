@@ -31,6 +31,7 @@ class BookmarkCollectionGallery extends GalleryParentComponent {
         id={ collection.id }
         label={ collection.label }
         isDeletingMode={ this.props.isDeletingMode }
+        onClickCollectionCard={ this._onClickCollectionCard }
         onLongClickCollectionCard={ this._onLongClickCollectionCard }
         onClickDeleteButton={ this._onClickDeleteButton } /> :
       <BookmarkCollectionAddButton
@@ -44,6 +45,10 @@ class BookmarkCollectionGallery extends GalleryParentComponent {
 
   _onClickAddCollectionButton = () => {
     this.props.onClickAddCollectionButton();
+  }
+
+  _onClickCollectionCard = (id) => {
+    this.props.onClickCollectionCard(id);
   }
 
   _onLongClickCollectionCard = () => {
