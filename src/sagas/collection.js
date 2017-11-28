@@ -1,5 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { types } from '../ducks/collection';
+import { types as bookTypes } from '../ducks/book';
 import agent from '../Agent';
 import { USER_ID } from '../config';
 
@@ -39,8 +40,25 @@ export function* AsyncDeleteCollectionRequest(action) {
   });
 }
 
+export function* AsyncAddBooksToCollectionRequest(action) {
+  yield put({
+    type: types.ADD_BOOKS_TO_COLLECTION_READY
+  });
+  const { id, bookIds } = action.payload;
+  const updatedCollection = yield call(agent.Collection.updateBooksToCollection, id, bookIds);
+
+  yield put({
+    type: bookTypes.FETCH_BOOKS_FOR_COLLECTION_FETCHING,
+    payload: updatedCollection.book_ids
+  });
+  yield put({
+    type: types.ADD_BOOKS_TO_COLLECTION_SUCCESS
+  });
+}
+
 export default function* rootSaga() {
   yield takeLatest(types.FETCH_COLLECTION_REQUEST, AsyncFetchCollectionRequest);
   yield takeLatest(types.ADD_COLLECTION_REQUEST, AsyncAddCollectionRequest);
   yield takeLatest(types.REMOVE_COLLECTION_REQUEST, AsyncDeleteCollectionRequest);
+  yield takeLatest(types.ADD_BOOKS_TO_COLLECTION_REQUEST, AsyncAddBooksToCollectionRequest);
 }

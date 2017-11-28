@@ -20,6 +20,7 @@ export const types = {
 
   FETCH_BOOKS_FOR_COLLECTION_REQUEST: 'book/fetch_books_for_collection_request',
   FETCH_BOOKS_FOR_COLLECTION_READY: 'book/fetch_books_for_collection_ready',
+  FETCH_BOOKS_FOR_COLLECTION_FETCHING: 'book/fetch_books_for_collection_fetching',
   FETCH_BOOKS_FOR_COLLECTION_SUCCESS: 'book/fetch_books_for_collection_success',
 
   UNMOUNT_BOOK: 'book/unmount_book'
@@ -102,11 +103,16 @@ const fetchBooksForCollection = {
       isBooksForCollectionFetched_: false
     };
   },
+  [types.FETCH_BOOKS_FOR_COLLECTION_FETCHING]: (state, action) => {
+    return {
+      ...state,
+      selectedBooksForCollection_: List(action.payload).toJS()
+    };
+  },
   [types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBooksForCollectionFetched_: true,
-      selectedBooksForCollection_: List(action.payload).toJS()
+      isBooksForCollectionFetched_: true
     };
   }
 };

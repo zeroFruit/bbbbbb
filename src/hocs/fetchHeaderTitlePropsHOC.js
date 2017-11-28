@@ -34,6 +34,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
         case SelectType.SELECT_FROM_COLLECTION_ADD_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_DELETE_BUTTON:
+        case SelectType.SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON:
           return this._getPropsWhenSelectFromCollectionButton();
 
         case SelectType.SELECT_FROM_COLLECTION_LIST_BUTTON:

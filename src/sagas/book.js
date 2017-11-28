@@ -51,10 +51,12 @@ export function* AsyncFetchBooksByIds(action) {
     type: types.FETCH_BOOKS_FOR_COLLECTION_READY
   });
   const books = yield call(agent.Book.fetchByBookIds, action.payload);
-
   yield put({
-    type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS,
+    type: types.FETCH_BOOKS_FOR_COLLECTION_FETCHING,
     payload: books
+  })
+  yield put({
+    type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS
   });
 
   return books;

@@ -1,9 +1,11 @@
 import React from 'react';
+import { List } from 'immutable';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { compose } from 'recompose';
 
 import GalleryParentComponent from '../GalleryParentComponent';
 import BookmarkCollectionBookGalleryCard from '../BookmarkCollectionBookGalleryCard';
+import BookmarkCollectionAddBookButton from '../BookmarkCollectionAddBookButton';
 import { fetchBooksByCollectionIdHOC } from '../../hocs/fetchBooksByCollectionIdHOC';
 
 const { flatten } = StyleSheet;
@@ -12,21 +14,24 @@ const { height } = Dimensions.get('window');
 class BookmarkCollectionBookGallery extends GalleryParentComponent {
   render() {
     const { booksInfo, isShown } = this.props;
+    const collectionsWithEmptyObj = List(booksInfo).push({ id: -1 }).toJS();
     const containerStyle = this._getContainerStyle(isShown);
     return (
       <View style={ containerStyle }>
-        { this._renderGalleryCards(booksInfo) }
+        { this._renderGalleryCards(collectionsWithEmptyObj) }
       </View>
     );
   }
 
   _getGalleryCard = (bookInfo) => {
-    return (
+    return (bookInfo.id !== -1) ?
       <BookmarkCollectionBookGalleryCard
         key={ bookInfo.id }
         bookId={ bookInfo.id }
-        onClickGalleryCard={ this._onClickGalleryCard } />
-    );
+        onClickGalleryCard={ this._onClickGalleryCard } /> :
+      <BookmarkCollectionAddBookButton
+        key={ -1 }
+        onClickAddCollectionBookButton={ this._onClickAddCollectionBookButton } />;
   }
 
   _getContainerStyle = (isShown) => {
@@ -35,6 +40,10 @@ class BookmarkCollectionBookGallery extends GalleryParentComponent {
 
   _onClickGalleryCard = (id, user) => {
     this.props.onClickCollectionBookGalleryCard(id, user);
+  }
+
+  _onClickAddCollectionBookButton = () => {
+    this.props.onClickAddCollectionBookButton();
   }
 }
 

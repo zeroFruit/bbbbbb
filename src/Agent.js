@@ -118,6 +118,10 @@ const Collection = {
   deleteCollection: async (id) => {
     const removedCollection = await new CollectionData().delete(id);
     return removedCollection;
+  },
+  updateBooksToCollection: async (cid, bids) => {
+    const updatedCollection = await new CollectionData().updateBooks(cid, bids);
+    return updatedCollection;
   }
 };
 

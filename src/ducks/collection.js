@@ -14,8 +14,9 @@ export const types = {
   REMOVE_COLLECTION_READY: 'collection/remove_collection_ready',
   REMOVE_COLLECTION_SUCCESS: 'collection/remove_collection_success',
 
-  LOAD_COLLECTION_READY: 'collection/load_collection_ready',
-  LOAD_COLLECTION_SUCCESS: 'collection/load_collection_success'
+  ADD_BOOKS_TO_COLLECTION_REQUEST: 'collection/add_books_to_collection_request',
+  ADD_BOOKS_TO_COLLECTION_READY: 'collection/add_books_to_collection_ready',
+  ADD_BOOKS_TO_COLLECTION_SUCCESS: 'collection/add_books_to_collection_success'
 };
 
 export const initialState = {
@@ -23,22 +24,8 @@ export const initialState = {
   myCollections_: List().toJS(),
   isCollectionAdded_: false,
   isCollectionRemoved_: false,
-  isCollectionLoading_: false
-};
-
-export const load = {
-  [types.LOAD_COLLECTION_READY]: (state, action) => {
-    return {
-      ...state,
-      isCollectionLoading_: true
-    };
-  },
-  [types.LOAD_COLLECTION_SUCCESS]: (state, action) => {
-    return {
-      ...state,
-      isCollectionLoading_: false
-    };
-  }
+  isCollectionLoading_: false,
+  isBooksAreAddingToCollection_: false
 };
 
 export const fetch = {
@@ -87,10 +74,26 @@ export const remove = {
   }
 };
 
+export const addBooks = {
+  [types.ADD_BOOKS_TO_COLLECTION_READY]: (state, action) => {
+    return {
+      ...state,
+      isBooksAreAddingToCollection_: false
+    };
+  },
+  [types.ADD_BOOKS_TO_COLLECTION_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBooksAreAddingToCollection_: true
+    };
+  }
+};
+
 export default collection = createReducer(initialState, {
   ...fetch,
   ...add,
-  ...remove
+  ...remove,
+  ...addBooks
 });
 
 export const selectors = {
@@ -98,5 +101,6 @@ export const selectors = {
   GetMyCollections: state => state.collection.myCollections_,
   GetIsCollectionAdded: state => state.collection.isCollectionAdded_,
   GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_,
-  GetIsCollectionLoading: state => state.collection.isCollectionLoading_
+  GetIsCollectionLoading: state => state.collection.isCollectionLoading_,
+  GetIsBooksAreAddingToCollection: state => state.collection.isBooksAreAddingToCollection_
 };

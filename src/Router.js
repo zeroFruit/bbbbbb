@@ -20,9 +20,9 @@ import PostSelected from './screens/PostSelected';
 import PostSelectedList from './screens/PostSelectedList/container';
 import AuthorPage from './screens/AuthorPage';
 import OtherPage from './screens/OtherPage';
-import CollectionSelected from './screens/CollectionSelected';
 import CollectionAddPage from './screens/CollectionAddPage';
 import CollectionSelectPage from './screens/CollectionSelectPage/container';
+import CollectionBookSelectPage from './screens/CollectionBookSelectPage/container';
 
 import CustomTabBar from './components/TabBar';
 
@@ -35,14 +35,14 @@ class RouterComponent extends Component {
           tabs: {
             screen: CustomTabNavigator
           },
-          collection: {
-            screen: mapNavigateParamsToProps(CollectionSelected)
-          },
           collectionAdd: {
             screen: mapNavigateParamsToProps(CollectionAddPage)
           },
           collectionSelect: {
             screen: mapNavigateParamsToProps(CollectionSelectPage)
+          },
+          collectionBookSelect: {
+            screen: mapNavigateParamsToProps(CollectionBookSelectPage)
           }
         }, MainNavigatorOptions)
       }

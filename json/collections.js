@@ -1,3 +1,4 @@
+import { List } from 'immutable';
 import _ from 'lodash';
 
 const collections = {
@@ -56,6 +57,14 @@ class Collection {
     this._data.collections.byId = _.omit(byId, id);
     this._data.collections.allIds = allIds.splice(index, 1);
     return removedCollection;
+  }
+
+  updateBooks(cid, bids) {
+    const byId = this.getById();
+    const collection = byId[cid];
+    const updatedCollection = { ...collection, book_ids: List(collection.book_ids).concat(bids).sort().toJS() };
+    this._data.collections.byId = { ...byId, [cid]: updatedCollection };
+    return updatedCollection;
   }
 }
 

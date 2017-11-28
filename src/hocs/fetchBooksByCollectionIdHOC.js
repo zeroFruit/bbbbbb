@@ -16,14 +16,6 @@ export const fetchBooksByCollectionIdHOC = (WrappedComponent) => {
     }
 
     componentWillReceiveProps(nextProps) {
-      // if (
-      //   this._isCollectionIdFetched(nextProps.id) &&
-      //   !this.state.isBooksForCollectionFetching
-      // ) {
-      //   console.log('fetching books by cid');
-      //   this._setStateIsBooksForCollectionFetching(true);
-      //   this._fetchBooksByCollection(this.props.id);
-      // }
       if (nextProps.isBooksForCollectionFetched_) {
         this._setStateIsBooksForCollectionFetching(false);
       }
