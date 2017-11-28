@@ -15,6 +15,7 @@ export const selectType = {
 
   SELECT_FROM_BOOKMARK_CLICKED_IMAGE: 'selectType/select_from_bookmark_clicked_image',
 
+  SELECT_FROM_COLLECTION_LIST_BUTTON: 'selectType/select_from_collection_list_button',
   SELECT_FROM_COLLECTION_ADD_BUTTON: 'selectType/select_from_collection_add_button',
   SELECT_FROM_COLLECTION_NEXT_BUTTON: 'selectType/select_from_collection_next_button',
   SELECT_FROM_COLLECTION_COMPLETE_BUTTON: 'selectType/select_from_collection_complete_button',

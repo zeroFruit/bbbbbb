@@ -12,14 +12,33 @@ export const types = {
 
   REMOVE_COLLECTION_REQUEST: 'collection/remove_collection_request',
   REMOVE_COLLECTION_READY: 'collection/remove_collection_ready',
-  REMOVE_COLLECTION_SUCCESS: 'collection/remove_collection_success'
+  REMOVE_COLLECTION_SUCCESS: 'collection/remove_collection_success',
+
+  LOAD_COLLECTION_READY: 'collection/load_collection_ready',
+  LOAD_COLLECTION_SUCCESS: 'collection/load_collection_success'
 };
 
 export const initialState = {
   isCollectionFetched_: false,
   myCollections_: List().toJS(),
   isCollectionAdded_: false,
-  isCollectionRemoved_: false
+  isCollectionRemoved_: false,
+  isCollectionLoading_: false
+};
+
+export const load = {
+  [types.LOAD_COLLECTION_READY]: (state, action) => {
+    return {
+      ...state,
+      isCollectionLoading_: true
+    };
+  },
+  [types.LOAD_COLLECTION_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isCollectionLoading_: false
+    };
+  }
 };
 
 export const fetch = {
@@ -78,5 +97,6 @@ export const selectors = {
   GetIsCollectionFetched: state => state.collection.isCollectionFetched_,
   GetMyCollections: state => state.collection.myCollections_,
   GetIsCollectionAdded: state => state.collection.isCollectionAdded_,
-  GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_
+  GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_,
+  GetIsCollectionLoading: state => state.collection.isCollectionLoading_
 };

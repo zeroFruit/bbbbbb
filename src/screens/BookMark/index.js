@@ -19,28 +19,27 @@ import {
   navigateTo
 } from '../../Router';
 import { selectType } from '../../config';
-import { hasPath, isEmpty } from '../../utils/ObjectUtils';
+import { hasPath, isEmpty, omit } from '../../utils/ObjectUtils';
 
 const renderHeader = (params) => {
+  if (isHeaderOnListBookMode(params)) {
+    return HeaderOnListMode(params);
+  }
+
   if (isHeaderDeletingMode(params)) {
     return HeaderOnDeletingMode(params);
   }
-
-  if (isHeaderCollectionBookListMode(params)) {
-    return HeaderOnCollectionBookListMode(params);
-  }
-
   return HeaderDefault(params);
 };
+
+isHeaderOnListBookMode = params => (
+  hasPath(params, 'selectType') &&
+  params.selectType === selectType.SELECT_FROM_COLLECTION_CARD
+);
 
 const isHeaderDeletingMode = params => (
   hasPath(params, 'isDeletingCollectionMode') &&
   params.isDeletingCollectionMode
-);
-
-const isHeaderCollectionBookListMode = params => (
-  hasPath(params, 'isCollectionBookListMode') &&
-  params.isCollectionBookListMode
 );
 
 const HeaderDefault = params => (
@@ -63,8 +62,8 @@ const HeaderOnDeletingMode = params => (
   </Header>
 );
 
-const HeaderOnCollectionBookListMode = params => (
-  <Header headerStyle={ StyleSheet.flatten(styles.collectionListModeHeaderContainer) }>
+const HeaderOnListMode = params => (
+  <Header headerStyle={ StyleSheet.flatten(styles.listModeHeaderContainer) }>
     <HeaderBarWithIcons
       title={ params.title }
       leftIconName="arrow-back"
@@ -91,11 +90,16 @@ class BookMark extends PureComponent {
     isDeletingCollectionMode: false,
     isCollectionBookListMode: false,
     isCollectionDeleteButtonClicked: false,
+    isCollectionLoading: false,
     collectionId: -1
   };
-
+  componentWillMount() {
+    this._initNavProps();
+  }
   componentDidMount() {
-    if (this._isNavigationParamHasSelectType(this.props)) {
+    console.log('bookmark props', this.props);
+
+    if (this._isNavigationParamHasCollectionCompleteSelectType(this.props)) {
       this._setStateScreenType(screenTypes.COLLECTIONS);
     }
   }
@@ -104,7 +108,12 @@ class BookMark extends PureComponent {
     if (nextProps.isCollectionRemoved_ && this.state.isCollectionDeleteButtonClicked) {
       this._setStateCollectionDeleteButtonClicked(false);
     }
+
+    // if (nextProps.isCollectionLoading_) {
+    //   this.setState({ isCollectionLoading: false });
+    // }
   }
+
 
   render() {
     const { screenType } = this.state;
@@ -121,9 +130,22 @@ class BookMark extends PureComponent {
           <BookmarkButtonGroups
             onClickBooklistButton={ this._onClickBooklistButton }
             onClickCollectionButton={ this._onClickCollectionButton } />
+          { this._renderBookmarkComponent(screenType) }
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
+
+  _renderBookmarkComponent = (screenType) => {
+    switch(screenType) {
+      case screenTypes.BOOK_LIST:
+        return (
           <BookmarkBookGallery
             isShown={ screenType === screenTypes.BOOK_LIST }
             onClickGalleryCard={ this._onClickGalleryCard } />
+        );
+      case screenTypes.COLLECTIONS:
+        return (
           <BookmarkCollectionGallery
             isShown={ screenType === screenTypes.COLLECTIONS }
             isDeletingMode={ this.state.isDeletingCollectionMode }
@@ -131,13 +153,22 @@ class BookMark extends PureComponent {
             onClickCollectionDeleteButton={ this._onClickCollectionDeleteButton }
             onClickCollectionCard={ this._onClickCollectionCard }
             onLongClickCollectionCard={ this._onLongClickCollectionCard } />
+        );
+      case screenTypes.COLLECTION_BOOK_LIST:
+        return (
           <BookmarkCollectionBookGallery
             isShown={ screenType === screenTypes.COLLECTION_BOOK_LIST }
             id={ this.state.collectionId }
-            onClickGalleryCard={ this._onClickGalleryCard } />
-        </View>
-      </TouchableWithoutFeedback>
-    );
+            onClickCollectionBookGalleryCard={ this._onClickCollectionBookGalleryCard } />
+        );
+      default:
+        return null;
+    }
+  }
+
+  _initNavProps = () => {
+    this.props.navigation.state.params = undefined;
+    this.props = omit(this.props, ['selectType', 'onClickHeaderLeftButton', 'onClickHeaderRightButton', 'title']);
   }
 
   _setStateScreenType = (screenType) => {
@@ -160,12 +191,6 @@ class BookMark extends PureComponent {
     this.setState({ collectionId: state });
   }
 
-  // _onClickScreen = () => {
-  //   const { screenType, isDeletingCollectionMode } = this.state;
-  //   if (screenType === screenTypes.COLLECTIONS && isDeletingCollectionMode) {
-  //     console.log('screen clicked');
-  //   }
-  // }
 
   _onClickBooklistButton = () => {
     this._setStateScreenType(screenTypes.BOOK_LIST);
@@ -199,17 +224,21 @@ class BookMark extends PureComponent {
     });
   }
 
-  _onClickCollectionCard = async (id, label) => {
-    await this._setStateCollectionBookListMode(true);
-    await setParamsToNavigation(this.props, {
+
+  _onClickCollectionCard = (id, label) => {
+    // const key = 'collection';
+    // const params = { id, label, selectType: selectType.SELECT_FROM_COLLECTION_CARD };
+    // navigateTo(this.props, key, params);
+    this._setStateCollectionBookListMode(true);
+    this.props.navigation.setParams({
       selectType: selectType.SELECT_FROM_COLLECTION_CARD,
       title: label,
-      isCollectionBookListMode: this.state.isCollectionBookListMode,
+      isCollectionBookListMode: true,
       onClickHeaderRightButton: () => {},
       onClickHeaderLeftButton: () => {}
     });
-    await this._setStateCollectionId(id);
-    await this._setStateScreenType(screenTypes.COLLECTION_BOOK_LIST);
+    this._setStateScreenType(screenTypes.COLLECTION_BOOK_LIST);
+    this._setStateCollectionId(id);
   }
 
   _onLongClickCollectionCard = async () => {
@@ -222,13 +251,21 @@ class BookMark extends PureComponent {
     });
   }
 
-  _onClickGalleryCard = (id, user) => {
-    console.log('id', id, 'user', user);
+  _onClickCollectionBookGalleryCard = (id, user) => {
+    const key = 'Post';
+    const params = { id, user, selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE };
+    navigateTo(this.props, key, params);
   }
 
-  _isNavigationParamHasSelectType = (props) => {
+  _isNavigationParamHasCollectionCompleteSelectType = (props) => {
     const { state } = props.navigation;
-    return hasPath(state, 'params') && hasPath(state, 'params.selectType');
+    return hasPath(state, 'params') &&
+      hasPath(state, 'params.selectType') &&
+      state.params.selectType === selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON;
+  }
+
+  _initNavigationParams = (props) => {
+
   }
 }
 
@@ -253,7 +290,7 @@ const styles = StyleSheet.create({
     marginTop: 25,
     backgroundColor: 'white'
   },
-  collectionListModeHeaderContainer: {
+  listModeHeaderContainer: {
     marginTop: 25,
     backgroundColor: 'white'
   }

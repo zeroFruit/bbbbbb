@@ -30,10 +30,13 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
           return this._getTagsWhenSelectFromNewsfeedClickedImage();
         case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
           return this._getPropsWhenSelectFromMyPageClickedImage();
+
         case SelectType.SELECT_FROM_COLLECTION_ADD_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_DELETE_BUTTON:
           return this._getPropsWhenSelectFromCollectionButton();
+
+        case SelectType.SELECT_FROM_COLLECTION_LIST_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_CARD:
           return this._getPropsForHeaderWithIcons();
         default:
@@ -92,8 +95,6 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
 
     _getPropsForHeaderWithIcons = () => {
       const { leftIconName, rightIconName, title } = this.props;
-      console.log('leftIconName', leftIconName);
-      console.log('rightIconName', rightIconName);
       return {
         type: headerType.TEXT,
         text: textTitlePropFormatter('id', title, HeaderTextType.NONE),

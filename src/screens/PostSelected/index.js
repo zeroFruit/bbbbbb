@@ -60,6 +60,10 @@ class PostSelected extends Component {
     }
   }
 
+  componentWillUnmount() {
+    console.log('Post selected unmount');
+  }
+
   render() {
     const {
       bookInfo, userInfo, selectType, id,

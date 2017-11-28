@@ -34,7 +34,7 @@ class BookmarkCollectionBookGallery extends GalleryParentComponent {
   }
 
   _onClickGalleryCard = (id, user) => {
-    this.props.onClickGalleryCard(id, user);
+    this.props.onClickCollectionBookGalleryCard(id, user);
   }
 }
 
