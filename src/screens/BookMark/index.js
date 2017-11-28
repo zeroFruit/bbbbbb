@@ -56,7 +56,7 @@ const HeaderOnDeletingMode = params => (
     <HeaderBarWithTexts
       title="삭제"
       leftLabel="뒤로"
-      rightLabel="편집"
+      rightLabel="완료"
       onClickHeaderRightButton={ params.onClickHeaderRightButton }
       onClickHeaderLeftButton={ params.onClickHeaderLeftButton }
       selectType={ params.selectType } />
@@ -133,7 +133,8 @@ class BookMark extends PureComponent {
             onLongClickCollectionCard={ this._onLongClickCollectionCard } />
           <BookmarkCollectionBookGallery
             isShown={ screenType === screenTypes.COLLECTION_BOOK_LIST }
-            id={ this.state.collectionId } />
+            id={ this.state.collectionId }
+            onClickGalleryCard={ this._onClickGalleryCard } />
         </View>
       </TouchableWithoutFeedback>
     );
@@ -219,6 +220,10 @@ class BookMark extends PureComponent {
       onClickHeaderRightButton: this._onClickRemoveCompleteCollectionButton,
       onClickHeaderLeftButton: () => {}
     });
+  }
+
+  _onClickGalleryCard = (id, user) => {
+    console.log('id', id, 'user', user);
   }
 
   _isNavigationParamHasSelectType = (props) => {

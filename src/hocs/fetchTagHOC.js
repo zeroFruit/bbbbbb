@@ -71,7 +71,6 @@ export const fetchTagHOC = (WrappedComponent) => {
 
     _fetchTags = async (props) => {
       const { id, user } = props;
-      console.log('fetchTagHOC', id, user);
       await this.props.AsyncFetchTagRequestAction(user, id);
       await this._setStateIsSelectedBookTagFetching(true);
     }

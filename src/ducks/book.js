@@ -16,6 +16,7 @@ export const types = {
   FETCH_BOOKS_BY_TAG_REQUEST: 'book/fetch_books_by_tag_request',
   FETCH_BOOKS_BY_TAG_READY: 'book/fetch_books_by_tag_ready',
   FETCH_BOOKS_BY_TAG_SUCCESS: 'book/fetch_books_by_tag_success',
+  FETCH_BOOKS_BY_TAG_UNMOUNT: 'book/fetch_books_by_tag_unmount',
 
   FETCH_BOOKS_FOR_COLLECTION_REQUEST: 'book/fetch_books_for_collection_request',
   FETCH_BOOKS_FOR_COLLECTION_READY: 'book/fetch_books_for_collection_ready',
@@ -79,10 +80,17 @@ const fetchBooksByTag = {
     };
   },
   [types.FETCH_BOOKS_BY_TAG_SUCCESS]: (state, action) => {
+    console.log('reducer book', action.payload);
     return {
       ...state,
       isBooksByTagFetched_: true,
       selectedBooksByTag_: List(state.selectedBooksByTag_).concat(action.payload).toJS()
+    };
+  },
+  [types.FETCH_BOOKS_BY_TAG_UNMOUNT]: (state, action) => {
+    return {
+      ...state,
+      selectedBooksByTag_: List().toJS()
     };
   }
 };
@@ -119,21 +127,7 @@ export default book = createReducer(initialState, {
 });
 
 export const actions = {
-  LoadNewsfeed: () => {
-    return {
-      type: types.LOAD_NEWSFEED_REQUEST
-    };
-  },
-  ResetNewsfeed: () => {
-    return {
-      type: types.RESET_NEWSFFED_STATE
-    };
-  },
-  UnmountSelectedBook: () => {
-    return {
-      type: types.UNMOUNT_BOOK
-    };
-  }
+  UnmountFetchedBooksByTag: () => ({ type: types.FETCH_BOOKS_BY_TAG_UNMOUNT })
 };
 
 export const selectors = {
