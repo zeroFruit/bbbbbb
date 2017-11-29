@@ -15,6 +15,8 @@ import BookmarkCollectionBookGallery from '../../components/BookmarkCollectionBo
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 import { mapNavigateParamsToProps } from '../../hocs/mapNavigateParamsToProps';
 
+import BookmarkBook from '../Bookmark_Book';
+
 import {
   renderHeaderWithNavigation,
   setParamsToNavigation,
@@ -170,9 +172,7 @@ class BookMark extends PureComponent {
     switch(screenType) {
       case screenTypes.BOOK_LIST:
         return (
-          <BookmarkBookGallery
-            isShown={ screenType === screenTypes.BOOK_LIST }
-            onClickGalleryCard={ this._onClickGalleryCard } />
+          <BookmarkBook parentNavigation={ this.props.navigation } />
         );
       case screenTypes.COLLECTIONS:
         return (
@@ -246,11 +246,11 @@ class BookMark extends PureComponent {
     BookmarkBookGallery
     ********************************* */
 
-  _onClickGalleryCard = (id, user) => {
-    const key = 'Post';
-    const params = { id, user, selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE };
-    navigateTo(this.props, key, params);
-  }
+  // _onClickGalleryCard = (id, user) => {
+  //   const key = 'Post';
+  //   const params = { id, user, selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE };
+  //   navigateTo(this.props, key, params);
+  // }
 
   /*
     BookmarkCollectionGallery
