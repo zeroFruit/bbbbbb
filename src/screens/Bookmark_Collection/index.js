@@ -40,7 +40,7 @@ class BookmarkCollection extends PureComponent {
       onClickHeaderRightButton: () => {},
       onClickHeaderLeftButton: () => {}
     });
-    this.props.setStateScreenType(this.props.SCREEN_TYPE);
+    this.props.setStateScreenType(this.props.SCREEN_TYPE.COLLECTION_BOOK_LIST);
     this.props.setStateCollectionId(id);
   }
 
