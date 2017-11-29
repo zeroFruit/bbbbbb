@@ -56,9 +56,22 @@ export function* AsyncAddBooksToCollectionRequest(action) {
   });
 }
 
+export function* AsyncDeleteCollectionBookRequest(action) {
+  yield put({
+    type: types.REMOVE_COLLECTION_BOOKS_READY
+  });
+  const { id, bookIds } = action.payload;
+  const collection = yield call(agent.Collection.deleteCollectionBooks, id, bookIds);
+  console.log('saga', collection);
+  yield put({
+    type: types.REMOVE_COLLECTION_BOOKS_SUCCESS
+  });
+}
+
 export default function* rootSaga() {
   yield takeLatest(types.FETCH_COLLECTION_REQUEST, AsyncFetchCollectionRequest);
   yield takeLatest(types.ADD_COLLECTION_REQUEST, AsyncAddCollectionRequest);
   yield takeLatest(types.REMOVE_COLLECTION_REQUEST, AsyncDeleteCollectionRequest);
   yield takeLatest(types.ADD_BOOKS_TO_COLLECTION_REQUEST, AsyncAddBooksToCollectionRequest);
+  yield takeLatest(types.REMOVE_COLLECTION_BOOKS_REQUEST, AsyncDeleteCollectionBookRequest);
 }

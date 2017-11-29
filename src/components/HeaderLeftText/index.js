@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 });
 
 HeaderLeftText.propTypes = {
-  iconName: string.isRequired,
   onClickLeftText: func.isRequired
 };
 HeaderLeftText.defaultProps = {

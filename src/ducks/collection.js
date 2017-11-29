@@ -16,7 +16,11 @@ export const types = {
 
   ADD_BOOKS_TO_COLLECTION_REQUEST: 'collection/add_books_to_collection_request',
   ADD_BOOKS_TO_COLLECTION_READY: 'collection/add_books_to_collection_ready',
-  ADD_BOOKS_TO_COLLECTION_SUCCESS: 'collection/add_books_to_collection_success'
+  ADD_BOOKS_TO_COLLECTION_SUCCESS: 'collection/add_books_to_collection_success',
+
+  REMOVE_COLLECTION_BOOKS_REQUEST: 'collection/remove_collection_books_request',
+  REMOVE_COLLECTION_BOOKS_READY: 'collection/remove_collection_books_ready',
+  REMOVE_COLLECTION_BOOKS_SUCCESS: 'collection/remove_collection_books_success'
 };
 
 export const initialState = {
@@ -25,7 +29,8 @@ export const initialState = {
   isCollectionAdded_: false,
   isCollectionRemoved_: false,
   isCollectionLoading_: false,
-  isBooksAreAddingToCollection_: false
+  isBooksAreAddingToCollection_: false,
+  isCollectionBooksRemoved_: false
 };
 
 export const fetch = {
@@ -89,11 +94,27 @@ export const addBooks = {
   }
 };
 
+export const removeBooks = {
+  [types.REMOVE_COLLECTION_BOOKS_READY]: (state, action) => {
+    return {
+      ...state,
+      isCollectionBooksRemoved_: false
+    };
+  },
+  [types.REMOVE_COLLECTION_BOOKS_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isCollectionBooksRemoved_: true
+    };
+  }
+};
+
 export default collection = createReducer(initialState, {
   ...fetch,
   ...add,
   ...remove,
-  ...addBooks
+  ...addBooks,
+  ...removeBooks
 });
 
 export const selectors = {
@@ -102,5 +123,6 @@ export const selectors = {
   GetIsCollectionAdded: state => state.collection.isCollectionAdded_,
   GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_,
   GetIsCollectionLoading: state => state.collection.isCollectionLoading_,
-  GetIsBooksAreAddingToCollection: state => state.collection.isBooksAreAddingToCollection_
+  GetIsBooksAreAddingToCollection: state => state.collection.isBooksAreAddingToCollection_,
+  GetIsCollectionBooksRemoved: state => state.collection.isCollectionBooksRemoved_
 };

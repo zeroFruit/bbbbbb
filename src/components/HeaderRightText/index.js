@@ -31,7 +31,6 @@ const styles = StyleSheet.create({
 });
 
 HeaderRightText.propTypes = {
-  iconName: string.isRequired,
   onClickRightText: func.isRequired
 };
 HeaderRightText.defaultProps = {

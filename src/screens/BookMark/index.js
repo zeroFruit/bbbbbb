@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet, TouchableWithoutFeedback } from 'react-native';
 import { compose } from 'recompose';
+import { List } from 'immutable';
 import logger from '../../utils/LogUtils';
 
 import ProgressBar from '../../components/ProgressBar';
@@ -27,13 +28,13 @@ const renderHeader = (params) => {
     return HeaderOnListMode(params);
   }
 
-  if (isHeaderDeletingMode(params)) {
+  if (isHeaderDeletingMode(params) || isHeaderDeletingBookMode(params)) {
     return HeaderOnDeletingMode(params);
   }
   return HeaderDefault(params);
 };
 
-isHeaderOnListBookMode = params => (
+const isHeaderOnListBookMode = params => (
   hasPath(params, 'selectType') &&
   params.selectType === selectType.SELECT_FROM_COLLECTION_CARD
 );
@@ -41,6 +42,11 @@ isHeaderOnListBookMode = params => (
 const isHeaderDeletingMode = params => (
   hasPath(params, 'isDeletingCollectionMode') &&
   params.isDeletingCollectionMode
+);
+
+const isHeaderDeletingBookMode = params => (
+  hasPath(params, 'isDeletingCollectionBookMode') &&
+  params.isDeletingCollectionBookMode
 );
 
 const HeaderDefault = params => (
@@ -89,9 +95,10 @@ class BookMark extends PureComponent {
   state = {
     screenType: screenTypes.BOOK_LIST,
     isDeletingCollectionMode: false,
-    isCollectionBookListMode: false,
+    isDeletingCollectionBookMode: false,
     isCollectionDeleteButtonClicked: false,
-    isCollectionLoading: false,
+    isCollectionBookDeleteButtonClicked: false,
+    isCollectionBookListMode: false,
     collectionId: -1
   };
   componentWillMount() {
@@ -113,13 +120,17 @@ class BookMark extends PureComponent {
     if (nextProps.isCollectionRemoved_ && this.state.isCollectionDeleteButtonClicked) {
       this._setStateCollectionDeleteButtonClicked(false);
     }
+
+    if (nextProps.isCollectionBooksRemoved_ && this.state.isCollectionBookDeleteButtonClicked) {
+      this._setStateCollectionBookDeleteButtonClicked(false);
+    }
   }
 
 
   render() {
     const { screenType } = this.state;
 
-    if (this.state.isCollectionDeleteButtonClicked) {
+    if (this.state.isCollectionDeleteButtonClicked || this.state.isCollectionBookDeleteButtonClicked) {
       return <ProgressBar />;
     }
 
@@ -178,8 +189,11 @@ class BookMark extends PureComponent {
           <BookmarkCollectionBookGallery
             isShown={ screenType === screenTypes.COLLECTION_BOOK_LIST }
             id={ this.state.collectionId }
+            isDeletingMode={ this.state.isDeletingCollectionBookMode }
             onClickCollectionBookGalleryCard={ this._onClickCollectionBookGalleryCard }
-            onClickAddCollectionBookButton={ this._onClickAddCollectionBookButton } />
+            onLongClickCollectionBookCard={ this._onLongClickCollectionBookCard }
+            onClickAddCollectionBookButton={ this._onClickAddCollectionBookButton }
+            onClickCollectionBookDeleteButton={ this._onClickCollectionBookDeleteButton } />
         );
       default:
         logger.log('invalid selectType');
@@ -195,12 +209,20 @@ class BookMark extends PureComponent {
     this.setState({ isDeletingCollectionMode: state });
   }
 
+  _setStateBookDeletingMode = (state) => {
+    this.setState({ isDeletingCollectionBookMode: state });
+  }
+
   _setStateCollectionBookListMode = (state) => {
     this.setState({ isCollectionBookListMode: state });
   }
 
   _setStateCollectionDeleteButtonClicked = (state) => {
     this.setState({ isCollectionDeleteButtonClicked: state });
+  }
+
+  _setStateCollectionBookDeleteButtonClicked = (state) => {
+    this.setState({ isCollectionBookDeleteButtonClicked: state });
   }
 
   _setStateCollectionId = (state) => {
@@ -247,10 +269,10 @@ class BookMark extends PureComponent {
 
   _onClickCollectionCard = (id, label) => {
     this._setStateCollectionBookListMode(true);
-    this.props.navigation.setParams({
+    setParamsToNavigation(this.props, {
       selectType: selectType.SELECT_FROM_COLLECTION_CARD,
       title: label,
-      isCollectionBookListMode: true,
+      isCollectionBookListMode: this.state.isCollectionBookListMode,
       onClickHeaderRightButton: () => {},
       onClickHeaderLeftButton: () => {}
     });
@@ -285,10 +307,32 @@ class BookMark extends PureComponent {
     navigateTo(this.props, key, params);
   }
 
+  _onLongClickCollectionBookCard = async () => {
+    await this._setStateBookDeletingMode(true);
+    await setParamsToNavigation(this.props, {
+      selectType: selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
+      isDeletingCollectionBookMode: this.state.isDeletingCollectionBookMode,
+      onClickHeaderRightButton: this._onClickRemoveCompleteCollectionBookButton,
+      onClickHeaderLeftButton: () => {}
+    });
+  }
+
+  _onClickRemoveCompleteCollectionBookButton = async () => {
+    await this._setStateBookDeletingMode(false);
+    await setParamsToNavigation(this.props, {
+      isDeletingCollectionBookMode: this.state.isDeletingCollectionBookMode
+    });
+  }
+
   _onClickAddCollectionBookButton = () => {
     const key = 'collectionBookSelect';
     const params = { id: this.state.collectionId, selectType: selectType.SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON };
     navigateTo(this.props, key, params);
+  }
+
+  _onClickCollectionBookDeleteButton = async (bid) => {
+    this._setStateCollectionBookDeleteButtonClicked(true);
+    await this.props.AsyncDeleteCollectionBookRequestAction(this.state.collectionId, List([bid]).toJS());
   }
 }
 

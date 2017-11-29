@@ -40,12 +40,30 @@ class Collection {
     return this._data.collections.allIds;
   }
 
+  setCollectionToById(cid, collection) {
+    const byId = this.getById();
+    this._data.collections.byId = { ...byId, [cid]: collection };
+  }
+
+  omitCollectionById(cid) {
+    const byId = this.getById();
+    this._data.collections.byId = _.omit(byId, cid);
+  }
+
+  pushIdToAllIds(cid) {
+    this._data.collections.allIds.push(cid);
+  }
+
+  spliceIdToAllIds(index) {
+    const allIds = this.getAllIds();
+    this._data.collections.allIds = allIds.splice(index, 1);
+  }
+
   insert(label, bookIds) {
     const id = this.getId();
     const newCollection = { id, label, book_ids: bookIds };
-    const byId = this.getById();
-    this._data.collections.byId = { ...byId, [id]: newCollection };
-    this._data.collections.allIds.push(id);
+    this.setCollectionToById(id, newCollection);
+    this.pushIdToAllIds(cid);
     return newCollection;
   }
 
@@ -54,8 +72,16 @@ class Collection {
     const allIds = this.getAllIds();
     const index = allIds.indexOf(id);
     const removedCollection = byId[id];
-    this._data.collections.byId = _.omit(byId, id);
-    this._data.collections.allIds = allIds.splice(index, 1);
+    this.omitCollectionById(id);
+    this.spliceIdToAllIds(index);
+    return removedCollection;
+  }
+
+  deleteBooks(id, bookIds) {
+    const byId = this.getById();
+    const collection = byId[id];
+    const removedCollection = { ...collection, book_ids: _.difference(collection.book_ids, bookIds) };
+    this.setCollectionToById(id, removedCollection);
     return removedCollection;
   }
 
@@ -63,7 +89,7 @@ class Collection {
     const byId = this.getById();
     const collection = byId[cid];
     const updatedCollection = { ...collection, book_ids: List(collection.book_ids).concat(bids).sort().toJS() };
-    this._data.collections.byId = { ...byId, [cid]: updatedCollection };
+    this.setCollectionToById(cid, updatedCollection);
     return updatedCollection;
   }
 }

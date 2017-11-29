@@ -9,7 +9,6 @@ import { postTitleType } from '../../config';
 const { string, oneOfType, arrayOf } = PropTypes;
 
 const propTypes = {
-  text: oneOfType([string, arrayOf(string)]).isRequired,
   type: string.isRequired
 };
 const defaultProps = {

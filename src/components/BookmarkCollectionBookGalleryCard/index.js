@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Image, StyleSheet, TouchableHighlight, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
@@ -21,20 +22,46 @@ const defaultProps = {
 
 class BookmarkCollectionBookGalleryCard extends Component {
   render() {
-    const { bookInfo: { img_src, id, user_id } } = this.props;
+    const { bookInfo: { img_src, id, user_id }, isDeletingMode } = this.props;
     return (
       <TouchableHighlight
         style={ styles.container }
-        onPress={ () => { this._onClickGalleryCard(id, user_id); } }>
-        <Image
-          style={ styles.image }
-          source={ { uri: img_src } } />
+        onPress={ () => { this._onClickGalleryCard(id, user_id); } }
+        onLongPress={ this._onLongPressCard }>
+        <View>
+          <Image
+            style={ styles.image }
+            source={ { uri: img_src } } />
+          {
+            this._renderDeleteButton(isDeletingMode)
+          }
+        </View>
+
       </TouchableHighlight>
     );
   }
 
   _onClickGalleryCard = (id, user) => {
     this.props.onClickGalleryCard(id, user);
+  }
+
+  _onLongPressCard = () => {
+    this.props.onLongClickCollectionBookCard();
+  }
+
+  _renderDeleteButton = (isDeletingMode) => {
+    const { bookInfo: { id } } = this.props;
+    return isDeletingMode ?
+      <Icon
+        name="remove-circle-outline"
+        size={ 25 }
+        style={ styles.deleteButtonContainer }
+        onPress={ () => this._onClickDeleteButton(id) } /> :
+      null;
+  }
+
+  _onClickDeleteButton = (id) => {
+    this.props.onClickDeleteButton(id);
   }
 }
 
@@ -49,6 +76,11 @@ const styles = StyleSheet.create({
     resizeMode: 'contain',
     alignSelf: 'stretch',
     backgroundColor: 'white'
+  },
+  deleteButtonContainer: {
+    position: 'absolute',
+    bottom: 5,
+    right: 5
   }
 });
 
