@@ -63,7 +63,7 @@ class Collection {
     const id = this.getId();
     const newCollection = { id, label, book_ids: bookIds };
     this.setCollectionToById(id, newCollection);
-    this.pushIdToAllIds(cid);
+    this.pushIdToAllIds(id);
     return newCollection;
   }
 

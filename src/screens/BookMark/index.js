@@ -16,6 +16,7 @@ import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultView
 import { mapNavigateParamsToProps } from '../../hocs/mapNavigateParamsToProps';
 
 import BookmarkBook from '../Bookmark_Book';
+import BookmarkCollection from '../Bookmark_Collection';
 
 import {
   renderHeaderWithNavigation,
@@ -172,17 +173,23 @@ class BookMark extends PureComponent {
     switch(screenType) {
       case screenTypes.BOOK_LIST:
         return (
-          <BookmarkBook parentNavigation={ this.props.navigation } />
+          <BookmarkBook
+            SCREEN_TYPE={ screenTypes.BOOK_LIST }
+            parentNavigation={ this.props.navigation } />
         );
       case screenTypes.COLLECTIONS:
         return (
-          <BookmarkCollectionGallery
-            isShown={ screenType === screenTypes.COLLECTIONS }
+          <BookmarkCollection
+            SCREEN_TYPE={ screenTypes.COLLECTION_BOOK_LIST }
+            parentNavigation={ this.props.navigation }
             isDeletingMode={ this.state.isDeletingCollectionMode }
-            onClickAddCollectionButton={ this._onClickAddCollectionButton }
-            onClickCollectionDeleteButton={ this._onClickCollectionDeleteButton }
-            onClickCollectionCard={ this._onClickCollectionCard }
-            onLongClickCollectionCard={ this._onLongClickCollectionCard } />
+            isCollectionBookListMode={ this.state.isCollectionBookListMode }
+            AsyncDeleteCollectionRequestAction={ this.props.AsyncDeleteCollectionRequestAction }
+            setStateCollectionDeleteButtonClicked={ this._setStateCollectionDeleteButtonClicked }
+            setStateCollectionBookListMode={ this._setStateCollectionBookListMode }
+            setStateScreenType={ this._setStateScreenType }
+            setStateCollectionId={ this._setStateCollectionId }
+            setStateDeletingMode={ this._setStateDeletingMode } />
         );
       case screenTypes.COLLECTION_BOOK_LIST:
         return (
@@ -243,59 +250,9 @@ class BookMark extends PureComponent {
   }
 
   /*
-    BookmarkBookGallery
-    ********************************* */
-
-  // _onClickGalleryCard = (id, user) => {
-  //   const key = 'Post';
-  //   const params = { id, user, selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE };
-  //   navigateTo(this.props, key, params);
-  // }
-
-  /*
     BookmarkCollectionGallery
     ********************************* */
 
-  _onClickAddCollectionButton = () => {
-    const key = 'collectionAdd';
-    const params = { selectType: selectType.SELECT_FROM_COLLECTION_ADD_BUTTON };
-    navigateTo(this.props, key, params);
-  }
-
-  _onClickCollectionDeleteButton = async (id) => {
-    this._setStateCollectionDeleteButtonClicked(true);
-    await this.props.AsyncDeleteCollectionRequestAction(id);
-  }
-
-  _onClickCollectionCard = (id, label) => {
-    this._setStateCollectionBookListMode(true);
-    setParamsToNavigation(this.props, {
-      selectType: selectType.SELECT_FROM_COLLECTION_CARD,
-      title: label,
-      isCollectionBookListMode: this.state.isCollectionBookListMode,
-      onClickHeaderRightButton: () => {},
-      onClickHeaderLeftButton: () => {}
-    });
-    this._setStateScreenType(screenTypes.COLLECTION_BOOK_LIST);
-    this._setStateCollectionId(id);
-  }
-
-  _onLongClickCollectionCard = async () => {
-    await this._setStateDeletingMode(true);
-    await setParamsToNavigation(this.props, {
-      selectType: selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
-      isDeletingCollectionMode: this.state.isDeletingCollectionMode,
-      onClickHeaderRightButton: this._onClickRemoveCompleteCollectionButton,
-      onClickHeaderLeftButton: () => {}
-    });
-  }
-
-  _onClickRemoveCompleteCollectionButton = async () => {
-    await this._setStateDeletingMode(false);
-    await setParamsToNavigation(this.props, {
-      isDeletingCollectionMode: this.state.isDeletingCollectionMode
-    });
-  }
 
   /*
     BookmarkCollectionBookGallery
