@@ -20,6 +20,7 @@ import {
 import { selectType } from '../../config';
 import { hasPath, isEmpty, omit } from '../../utils/ObjectUtils';
 
+
 const renderHeader = (params) => {
   if (isHeaderOnListBookMode(params)) {
     return HeaderOnListMode(params);
@@ -45,6 +46,7 @@ const isHeaderDeletingBookMode = params => (
   hasPath(params, 'isDeletingCollectionBookMode') &&
   params.isDeletingCollectionBookMode
 );
+
 
 const HeaderDefault = params => (
   <Header headerStyle={ StyleSheet.flatten(styles.defaultHeaderContainer) }>

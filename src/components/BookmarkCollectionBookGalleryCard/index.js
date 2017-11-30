@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
+import GalleryCardParentComponent from '../GalleryCardParentComponent';
 import { fetchBookByBookIdHOC } from '../../hocs/fetchBookByBookIdHOC';
 
 import { SCREEN_WIDTH } from '../../config';
@@ -20,7 +21,7 @@ const defaultProps = {
   bookInfo: {}
 };
 
-class BookmarkCollectionBookGalleryCard extends Component {
+class BookmarkCollectionBookGalleryCard extends GalleryCardParentComponent {
   render() {
     const { bookInfo: { img_src, id, user_id }, isDeletingMode } = this.props;
     return (
@@ -39,10 +40,6 @@ class BookmarkCollectionBookGalleryCard extends Component {
 
       </TouchableHighlight>
     );
-  }
-
-  _onClickGalleryCard = (id, user) => {
-    this.props.onClickGalleryCard(id, user);
   }
 
   _onLongPressCard = () => {

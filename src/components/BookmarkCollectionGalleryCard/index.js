@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
+import GalleryCardParentComponent from '../GalleryCardParentComponent';
 import { SCREEN_WIDTH } from '../../config';
 
 const { string } = PropTypes;
@@ -15,13 +16,13 @@ const propTypes = {
 const defaultProps = {
 };
 
-class BookmarkCollectionGalleryCard extends PureComponent {
+class BookmarkCollectionGalleryCard extends GalleryCardParentComponent {
   render() {
     const { label, isDeletingMode, id } = this.props;
     return (
       <TouchableHighlight
         style={ styles.container }
-        onPress={ () => this._onClickCard(id, label) }
+        onPress={ () => this._onClickGalleryCard(id, label) }
         onLongPress={ this._onLongPressCard }>
         <View style={ styles.textContainer }>
           <Text>
@@ -35,7 +36,7 @@ class BookmarkCollectionGalleryCard extends PureComponent {
     );
   }
 
-  _onClickCard = (id, label) => {
+  _onClickGalleryCard = (id, label) => {
     this.props.onClickCollectionCard(id, label);
   }
 

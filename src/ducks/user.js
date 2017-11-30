@@ -9,6 +9,7 @@ export const types = {
   FETCH_SELECTED_USER_READY: 'user/fetch_selected_user_ready',
   FETCH_SELECTED_USER_REQUEST: 'user/fetch_selected_user_request',
   FETCH_SELECTED_USER_SUCCESS: 'user/fetch_selected_user_success',
+  FETCH_SELECTED_USER_UNMOUNT: 'user/fetch_selected_user_unmount',
 
   FETCH_SELECTED_POST_LIST_USERS_READY: 'user/fetch_selected_post_list_users_ready',
   FETCH_SELECTED_POST_LIST_USERS_REQUEST: 'user/fetch_selected_post_list_users_request',
@@ -24,6 +25,7 @@ export const initialState = {
   myDisplayName_: '',
   isSelectedUserInfoFetched_: false,
   selectedUserDisplayName_: '',
+  selectedUser_: {},
   isSelectedUsersFetched_: false,
   selectedUsers_: List([]).toJS(),
   isSelectedPostListUsersFetched_: false,
@@ -45,13 +47,22 @@ const me = {
 const selectedUser = {
   [types.FETCH_SELECTED_USER_READY]: (state, action) => ({
     ...state,
-    isSelectedUserInfoFetched_: true
+    isSelectedUserInfoFetched_: false
   }),
   [types.FETCH_SELECTED_USER_SUCCESS]: (state, action) => ({
     ...state,
-    isSelectedUserInfoFetched_: false,
-    selectedUserDisplayName_: action.payload.display_name
-  })
+    isSelectedUserInfoFetched_: true,
+    selectedUserDisplayName_: action.payload.display_name,
+    selectedUser_: { ...action.payload }
+  }),
+  [types.FETCH_SELECTED_USER_UNMOUNT]: (state, action) => {
+    console.log('reducer unmount');
+    return {
+      isSelectedUserInfoFetched_: false,
+      selectedUserDisplayName_: initialState.selectedUserDisplayName_,
+      selectedUser_: initialState.selectedUser_
+    };
+  }
 };
 
 const fetchUsers = {
@@ -74,7 +85,7 @@ const fetchPostListUsers = {
     isSelectedPostListUsersFetched_: false
   }),
   [types.FETCH_SELECTED_POST_LIST_USERS_SUCCESS]: (state, action) => {
-    console.log('reducer', action.payload);
+    // console.log('reducer', action.payload);
     return ({
       ...state,
       selectedPostListUsers_: List(state.selectedPostListUsers_).concat(action.payload).toJS(),
@@ -97,6 +108,7 @@ export const actions = {
 export const selectors = {
   GetMyDisplayName: state => state.user.myDisplayName_,
   GetSelectedUserDisplayName: state => state.user.selectedUserDisplayName_,
+  GetSelectedUser: state => state.user.selectedUser_,
   GetIsSelectedUserInfoFetched: state => state.user.isSelectedUserInfoFetched_,
   GetIsSelectedUsersFetched: state => state.user.isSelectedUsersFetched_,
   GetSelectedUsers: state => state.user.selectedUsers_,

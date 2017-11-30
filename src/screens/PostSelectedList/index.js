@@ -18,7 +18,7 @@ import {
   renderHeaderWithNavigation,
   navigateTo
 } from '../../Router';
-import { selectType } from '../../config';
+import { selectType, USER_ID } from '../../config';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType } = params;
@@ -89,8 +89,7 @@ class PostSelectedList extends Component {
   }
 
   _onClickNicknameTextOfPostTitle = (userId) => {
-    console.log('PostSelectedList', userId);
-    const key = 'Other';
+    const key = userId === USER_ID ? 'MyPage' : 'Other';
     const params = { userId };
     navigateTo(this.props, key, params);
   }

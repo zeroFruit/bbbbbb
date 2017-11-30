@@ -4,8 +4,17 @@ import { types as pageTypes } from '../ducks/page';
 import agent from '../Agent';
 
 import bookmark from './bookmark';
-import user, { AsyncFetchUsersByUserIds, AsyncFetchUsersByUserIdsForPostList } from './user';
-import book, { AsyncFetchBooksByTagId, AsyncFetchBooks, AsyncFetchBooksByIds } from './book';
+import user, {
+  AsyncFetchUsersByUserIds,
+  AsyncFetchUsersByUserIdsForPostList,
+  AsyncFetchSelectedUserInfoRequest
+} from './user';
+import book, {
+  AsyncFetchBooksByTagId,
+  AsyncFetchBooks,
+  AsyncFetchBooksByIds,
+  AsyncFetchBooksByUserId
+} from './book';
 import tag from './tag';
 import collection from './collection';
 
@@ -57,10 +66,22 @@ export function* AsyncFetchBooksWithCollection(action) {
   });
 }
 
+export function* AsyncFetchBooksByUser(action) {
+  yield put({
+    type: types.FETCH_BOOKS_BY_USER_READY
+  });
+  const User = yield* AsyncFetchSelectedUserInfoRequest(action);
+  const books = yield* AsyncFetchBooksByUserId({ payload: User.books });
+  yield put({
+    type: types.FETCH_BOOKS_BY_USER_SUCCESS
+  });
+}
+
 const index =  function* indexSaga() {
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_REQUEST, AsyncFetchBooksAndUsersRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_TAG_REQUEST, AsyncFetchBooksAndUsersByTagRequest);
   yield takeLatest(types.FETCH_BOOKS_BY_COLLECTION_REQUEST, AsyncFetchBooksWithCollection);
+  yield takeLatest(types.FETCH_BOOKS_BY_USER_REQUEST, AsyncFetchBooksByUser);
 };
 
 export default function* rootSaga() {

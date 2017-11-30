@@ -82,5 +82,8 @@ const mapDispatchToProps = dispatch => bindActionCreators({
       type: userTypes.FETCH_SELECTED_USER_REQUEST,
       payload: userId
     });
-  }
+  },
+  UnmountSelectedUserAction: () => ({
+    type: userTypes.FETCH_SELECTED_USER_UNMOUNT
+  })
 }, dispatch);

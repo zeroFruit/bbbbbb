@@ -4,6 +4,7 @@ import { Icon } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
+import GalleryCardParentComponent from '../GalleryCardParentComponent';
 import { fetchBookByBookIdHOC } from '../../hocs/fetchBookByBookIdHOC';
 
 import { SCREEN_WIDTH } from '../../config';
@@ -20,7 +21,7 @@ const defaultProps = {
   bookInfo: {}
 };
 
-class BookmarkSelectGalleryCard extends PureComponent {
+class BookmarkSelectGalleryCard extends GalleryCardParentComponent {
   state = {
     selected: false
   };

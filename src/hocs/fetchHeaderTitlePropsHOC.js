@@ -25,11 +25,17 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
       switch(selectType) {
         case SelectType.FETCHED_FROM_NEWSFEED:
           return this._getPropsWhenFetchedFromNewsfeed();
+
         case SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE:
         case SelectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE:
-          return this._getTagsWhenSelectFromNewsfeedClickedImage();
+          return this._getTagsWhenClickedImage();
+
         case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
-          return this._getPropsWhenSelectFromMyPageClickedImage();
+        case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_IMAGE:
+          return this._getPropsWhenClickedImage();
+
+        case SelectType.SELECT_FROM_POSTLIST_CLICKED_NICKNAME:
+          return this._getPropsWhenSelectFromPostListClickedNickname();
 
         case SelectType.SELECT_FROM_COLLECTION_ADD_BUTTON:
         case SelectType.SELECT_FROM_COLLECTION_NEXT_BUTTON:
@@ -52,7 +58,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
       };
     }
 
-    _getTagsWhenSelectFromNewsfeedClickedImage = () => {
+    _getTagsWhenClickedImage = () => {
       const {
         selectedBookTitleTag_,
         selectedBookAuthorTag_,
@@ -70,7 +76,14 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
       return { type: headerType.TAG, text: [] };
     }
 
-    _getPropsWhenSelectFromMyPageClickedImage = () => {
+    _getPropsWhenSelectFromPostListClickedNickname = () => {
+      return {
+        type: headerType.TEXT,
+        text: textTitlePropFormatter(-1, this.props.headerTitle, HeaderTextType.NONE)
+      };
+    }
+
+    _getPropsWhenClickedImage = () => {
       const { selectedUserDisplayName_, selectedBook_: { user_id } } = this.props;
       return {
         type: headerType.TEXT,
@@ -107,7 +120,6 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
     }
     _getPropsDefault = (selectType) => {
       logger.warn('fetchHeaderTitlePropsHOC, invalid select type:', selectType);
-
     }
   }
 

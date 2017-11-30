@@ -23,6 +23,10 @@ export const types = {
   FETCH_BOOKS_FOR_COLLECTION_FETCHING: 'book/fetch_books_for_collection_fetching',
   FETCH_BOOKS_FOR_COLLECTION_SUCCESS: 'book/fetch_books_for_collection_success',
 
+  FETCH_BOOKS_FOR_USER_REQUEST: 'book/fetch_books_for_user_request',
+  FETCH_BOOKS_FOR_USER_READY: 'book/fetch_books_for_user_ready',
+  FETCH_BOOKS_FOR_USER_SUCCESS: 'book/fetch_books_for_user_success',
+
   UNMOUNT_BOOK: 'book/unmount_book'
 };
 
@@ -37,7 +41,9 @@ export const initialState = {
   isBooksByTagFetched_: false,
   selectedBooksByTag_: List().toJS(),
   isBooksForCollectionFetched_: false,
-  selectedBooksForCollection_: List().toJS()
+  selectedBooksForCollection_: List().toJS(),
+  isBooksForUserFetched_: false,
+  selectedBooksForUser_: List().toJS()
 };
 
 const fetchMyBooks = {
@@ -81,7 +87,7 @@ const fetchBooksByTag = {
     };
   },
   [types.FETCH_BOOKS_BY_TAG_SUCCESS]: (state, action) => {
-    console.log('reducer book', action.payload);
+    // console.log('reducer book', action.payload);
     return {
       ...state,
       isBooksByTagFetched_: true,
@@ -117,19 +123,28 @@ const fetchBooksForCollection = {
   }
 };
 
-const unmountSeletedBook = {
-  [types.UNMOUNT_BOOK]: (state, action) => ({
-    ...state,
-    selectedBook_: initialState.selectedBook_
-  })
-}
-
+const fetchBooksByUser = {
+  [types.FETCH_BOOKS_FOR_USER_READY]: (state, action) => {
+    return {
+      ...state,
+      isBooksForUserFetched_: false
+    };
+  },
+  [types.FETCH_BOOKS_FOR_USER_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBooksForUserFetched_: true,
+      selectedBooksForUser_: List(action.payload).toJS()
+    };
+  }
+};
 export default book = createReducer(initialState, {
   ...fetchMyBooks,
   ...fetchSelectedBook,
   ...fetchBooks,
   ...fetchBooksByTag,
-  ...fetchBooksForCollection
+  ...fetchBooksForCollection,
+  ...fetchBooksByUser
 });
 
 export const actions = {
@@ -147,5 +162,7 @@ export const selectors = {
   GetIsBooksByTagFetched: state => state.book.isBooksByTagFetched_,
   GetSelectedBooksByTag: state => state.book.selectedBooksByTag_,
   GetIsBooksForCollectionFetched: state => state.book.isBooksForCollectionFetched_,
-  GetSelectedBooksForCollection: state => state.book.selectedBooksForCollection_
+  GetSelectedBooksForCollection: state => state.book.selectedBooksForCollection_,
+  GetIsBooksForUserFetched: state => state.book.isBooksForUserFetched_,
+  GetSelectedBooksForUser: state => state.book.selectedBooksForUser_
 };

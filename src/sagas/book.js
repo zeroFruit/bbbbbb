@@ -54,9 +54,22 @@ export function* AsyncFetchBooksByIds(action) {
   yield put({
     type: types.FETCH_BOOKS_FOR_COLLECTION_FETCHING,
     payload: books
-  })
+  });
   yield put({
     type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS
+  });
+
+  return books;
+}
+
+export function* AsyncFetchBooksByUserId(action) {
+  yield put({
+    type: types.FETCH_BOOKS_FOR_USER_READY
+  });
+  const books = yield call(agent.Book.fetchByBookIds, action.payload);
+  yield put({
+    type: types.FETCH_BOOKS_FOR_USER_SUCCESS,
+    payload: books
   });
 
   return books;
@@ -67,4 +80,5 @@ export default function* rootSaga() {
   yield takeLatest(types.FETCH_BOOKS_REQUEST, AsyncFetchBooks);
   yield takeLatest(types.FETCH_BOOKS_BY_TAG_REQUEST, AsyncFetchBooksByTagId);
   yield takeLatest(types.FETCH_BOOKS_FOR_COLLECTION_REQUEST, AsyncFetchBooksByIds);
+  yield takeLatest(types.FETCH_BOOKS_FOR_USER_REQUEST, AsyncFetchBooksByUserId);
 }

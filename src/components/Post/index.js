@@ -86,6 +86,7 @@ class Post extends React.Component {
         };
       }
       case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
+      case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_IMAGE:
       {
         const { bookTitleTag, bookAuthorTag, bookInfo } = this.props;
         return {
@@ -97,7 +98,7 @@ class Post extends React.Component {
         };
       }
       default:
-        return logger.error('Invalid select type');
+        return logger.error('Post, Invalid select type');
     }
   }
 

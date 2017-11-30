@@ -3,6 +3,8 @@ import { View, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import autobind from 'autobind-decorator';
 import PropTypes from 'prop-types';
 
+import GalleryCardParentComponent from '../GalleryCardParentComponent';
+
 const { string, func, number } = PropTypes;
 
 const propTypes = {
@@ -15,7 +17,7 @@ const propTypes = {
 const defaultProps = {
 };
 
-class MyPageBookGalleryCard extends Component {
+class MyPageBookGalleryCard extends GalleryCardParentComponent {
   render() {
     const { imgSrc, id, user } = this.props;
     return (
@@ -26,10 +28,6 @@ class MyPageBookGalleryCard extends Component {
           source={ { uri: imgSrc } } />
       </TouchableHighlight>
     );
-  }
-
-  _onClickGalleryCard = (id, user) => {
-    this.props.onClickGalleryCard(id, user);
   }
 }
 

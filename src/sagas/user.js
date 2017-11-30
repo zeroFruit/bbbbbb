@@ -30,6 +30,8 @@ export function* AsyncFetchSelectedUserInfoRequest(action) {
     type: userTypes.FETCH_SELECTED_USER_SUCCESS,
     payload: me
   });
+
+  return me;
 }
 export function* AsyncFetchUsersByUserIds(action) {
   const { users } = action.payload;
