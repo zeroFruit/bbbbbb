@@ -32,6 +32,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
 
         case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
         case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_IMAGE:
+        case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_COLLECTION_BOOK:
           return this._getPropsWhenClickedImage();
 
         case SelectType.SELECT_FROM_POSTLIST_CLICKED_NICKNAME:

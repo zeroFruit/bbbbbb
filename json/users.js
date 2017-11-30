@@ -14,7 +14,7 @@ const users = {
         id: 2,
         display_name: '안경 쓴 주형',
         books: [4, 5],
-        collections: []
+        collections: [2]
       },
       3: {
         id: 3,

@@ -62,9 +62,20 @@ export function* AsyncDeleteCollectionBookRequest(action) {
   });
   const { id, bookIds } = action.payload;
   const collection = yield call(agent.Collection.deleteCollectionBooks, id, bookIds);
-  console.log('saga', collection);
   yield put({
     type: types.REMOVE_COLLECTION_BOOKS_SUCCESS
+  });
+}
+
+export function* AsyncFetchOtherUserCollectionRequest(action) {
+  yield put({
+    type: types.FETCH_OTHER_USER_COLLECTION_READY
+  });
+  const user = yield call(agent.User.fetchByUserId, action.payload);
+  const collections = yield call(agent.Collection.fetchByIds, user.collections);
+  yield put({
+    type: types.FETCH_OTHER_USER_COLLECTION_SUCCESS,
+    payload: collections
   });
 }
 
@@ -74,4 +85,5 @@ export default function* rootSaga() {
   yield takeLatest(types.REMOVE_COLLECTION_REQUEST, AsyncDeleteCollectionRequest);
   yield takeLatest(types.ADD_BOOKS_TO_COLLECTION_REQUEST, AsyncAddBooksToCollectionRequest);
   yield takeLatest(types.REMOVE_COLLECTION_BOOKS_REQUEST, AsyncDeleteCollectionBookRequest);
+  yield takeLatest(types.FETCH_OTHER_USER_COLLECTION_REQUEST, AsyncFetchOtherUserCollectionRequest);
 }

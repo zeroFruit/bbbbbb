@@ -8,9 +8,14 @@ const collections = {
         id: 1,
         label: 'Collection1',
         book_ids: [1, 2]
+      },
+      2: {
+        id: 2,
+        label: 'Collection2',
+        book_ids: [8, 9]
       }
     },
-    allIds: [1]
+    allIds: [1, 2]
   }
 };
 

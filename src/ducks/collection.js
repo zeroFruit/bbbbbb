@@ -20,7 +20,11 @@ export const types = {
 
   REMOVE_COLLECTION_BOOKS_REQUEST: 'collection/remove_collection_books_request',
   REMOVE_COLLECTION_BOOKS_READY: 'collection/remove_collection_books_ready',
-  REMOVE_COLLECTION_BOOKS_SUCCESS: 'collection/remove_collection_books_success'
+  REMOVE_COLLECTION_BOOKS_SUCCESS: 'collection/remove_collection_books_success',
+
+  FETCH_OTHER_USER_COLLECTION_REQUEST: 'collection/fetch_other_user_collection_request',
+  FETCH_OTHER_USER_COLLECTION_READY: 'collection/fetch_other_user_collection_ready',
+  FETCH_OTHER_USER_COLLECTION_SUCCESS: 'collection/fetch_other_user_collection_success'
 };
 
 export const initialState = {
@@ -30,7 +34,9 @@ export const initialState = {
   isCollectionRemoved_: false,
   isCollectionLoading_: false,
   isBooksAreAddingToCollection_: false,
-  isCollectionBooksRemoved_: false
+  isCollectionBooksRemoved_: false,
+  isOtherUserCollectionsFetched_: false,
+  otherUserCollections_: List().toJS()
 };
 
 export const fetch = {
@@ -109,12 +115,29 @@ export const removeBooks = {
   }
 };
 
+export const fetchOtherUser = {
+  [types.FETCH_OTHER_USER_COLLECTION_READY]: (state, action) => {
+    return {
+      ...state,
+      isOtherUserCollectionsFetched_: false
+    };
+  },
+  [types.FETCH_OTHER_USER_COLLECTION_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isOtherUserCollectionsFetched_: false,
+      otherUserCollections_: action.payload
+    };
+  }
+};
+
 export default collection = createReducer(initialState, {
   ...fetch,
   ...add,
   ...remove,
   ...addBooks,
-  ...removeBooks
+  ...removeBooks,
+  ...fetchOtherUser
 });
 
 export const selectors = {
@@ -124,5 +147,7 @@ export const selectors = {
   GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_,
   GetIsCollectionLoading: state => state.collection.isCollectionLoading_,
   GetIsBooksAreAddingToCollection: state => state.collection.isBooksAreAddingToCollection_,
-  GetIsCollectionBooksRemoved: state => state.collection.isCollectionBooksRemoved_
+  GetIsCollectionBooksRemoved: state => state.collection.isCollectionBooksRemoved_,
+  GetIsOtherUserCollectionsFetched: state => state.collection.isOtherUserCollectionsFetched_,
+  GetOtherUserCollections: state => state.collection.otherUserCollections_
 };

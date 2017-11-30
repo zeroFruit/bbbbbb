@@ -7,6 +7,7 @@ import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import OtherPageButtonGroups from '../../components/OtherPageButtonGroups';
 import OtherPageBook from '../OtherPage_Book';
 import OtherPageCollection from '../OtherPage_Collection';
+import OtherPageCollectionBook from '../OtherPage_CollectionBook';
 import { fetchUserByIdHOC } from '../../hocs/fetchUserByIdHOC';
 import {
   renderHeaderWithNavigation,
@@ -30,7 +31,8 @@ const renderHeader = (params) => {
 
 const screenTypes = {
   BOOK_LIST: 'BOOK_LIST',
-  COLLECTIONS: 'COLLECTIONS'
+  COLLECTIONS: 'COLLECTIONS',
+  COLLECTION_BOOK_LIST: 'COLLECTION_BOOK_LIST'
 };
 
 class OtherPage extends PureComponent {
@@ -39,7 +41,8 @@ class OtherPage extends PureComponent {
   }
 
   state = {
-    screenType: screenTypes.BOOK_LIST
+    screenType: screenTypes.BOOK_LIST,
+    selectedCollectionId: -1
   };
 
   componentDidMount() {
@@ -82,7 +85,19 @@ class OtherPage extends PureComponent {
             id={ this.props.userId }
             parentNavigation={ this.props.navigation } />);
       case screenTypes.COLLECTIONS:
-        return <OtherPageCollection />;
+        return (
+          <OtherPageCollection
+            id={ this.props.userId }
+            SCREEN_TYPE={ screenTypes }
+            setStateSelectedCollectionId={ this._setStateSelectedCollectionId }
+            setStateScreenType={ this._setStateScreenType } />
+        );
+      case screenTypes.COLLECTION_BOOK_LIST:
+        return (
+          <OtherPageCollectionBook
+            parentNavigation={ this.props.navigation }
+            collectionId={ this.state.selectedCollectionId } />
+        )
       default:
         logger.warn('invalid screen type');
     }
@@ -90,6 +105,10 @@ class OtherPage extends PureComponent {
 
   _setStateScreenType = (type) => {
     this.setState({ screenType: type });
+  }
+
+  _setStateSelectedCollectionId = (id) => {
+    this.setState({ selectedCollectionId: id });
   }
 
   _onClickBooklistButton = () => {

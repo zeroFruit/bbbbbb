@@ -87,6 +87,7 @@ class Post extends React.Component {
       }
       case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
       case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_IMAGE:
+      case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_COLLECTION_BOOK:
       {
         const { bookTitleTag, bookAuthorTag, bookInfo } = this.props;
         return {

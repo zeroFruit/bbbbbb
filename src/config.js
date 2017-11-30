@@ -11,6 +11,7 @@ export const selectType = {
   SELECT_FROM_MYPAGE_CLICKED_NICKNAME: 'selectType/select_from_mypage_clicked_nickname',
   /* 유저페이지 */
   SELECT_FROM_OTHERPAGE_CLICKED_IMAGE: 'selectType/select_from_otherpage_clicked_image',
+  SELECT_FROM_OTHERPAGE_CLICKED_COLLECTION_BOOK: 'selectType/select_from_otherpage_clicked_collection_book',
   /* 뉴스피드 */
   SELECT_FROM_NEWSFEED_CLICKED_IMAGE: 'selectType/select_from_newsfeed_clicked_image',
   SELECT_FROM_NEWSFEED_CLICKED_NICKNAME: 'selectType/select_from_newsfeed_clicked_nickname',
