@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
 import SearchBar from '../SearchBar';
+import SearchList from '../SearchList';
 import HeaderTitleBar from '../HeaderTitleBar';
 import HeaderRightIcon from '../HeaderRightIcon';
 import { fetchHeaderTitlePropsHOC } from '../../hocs/fetchHeaderTitlePropsHOC';
@@ -31,19 +32,26 @@ class HeaderBarBasic extends PureComponent {
 
     return (
       <View style={ styles.container }>
+        <View style={ styles.searchBarContainer }>
+          {
+            !this.state.isFocus ?
+              <HeaderTitleBar
+                type={ headerTitleProps.type }
+                text={ headerTitleProps.text } /> :
+              <SearchBar
+                searchText={ searchText }
+                onChangeSearchText={ this._onChangeSearchText }
+                onBlurSearchbar={ this._onBlurSearchbar } />
+          }
+          <HeaderRightIcon
+            iconName="search"
+            onClickRightIcon={ this._onClickRightIcon } />
+        </View>
+
         {
-          !this.state.isFocus ?
-            <HeaderTitleBar
-              type={ headerTitleProps.type }
-              text={ headerTitleProps.text } /> :
-            <SearchBar
-              searchText={ searchText }
-              onChangeSearchText={ this._onChangeSearchText }
-              onBlurSearchbar={ this._onBlurSearchbar } />
+          this.state.isFocus ?
+            <SearchList /> : null
         }
-        <HeaderRightIcon
-          iconName="search"
-          onClickRightIcon={ this._onClickRightIcon } />
       </View>
     );
   }
@@ -63,6 +71,9 @@ class HeaderBarBasic extends PureComponent {
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'column'
+  },
+  searchBarContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end'
   }

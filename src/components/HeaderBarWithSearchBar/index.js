@@ -46,6 +46,9 @@ class HeaderBarWithSearchBar extends PureComponent {
     );
   }
 
+  _renderHeaderComponent = (isFocus) => {
+  }
+
   _onClickLeftIcon = () => {
   }
 

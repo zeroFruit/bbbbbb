@@ -10,48 +10,32 @@ import logger from '../../utils/LogUtils';
 const { shape, string } = PropTypes;
 
 const propTypes = {
-  bookInfo: shape({
-    tags: string
-  }),
-  userInfo: shape({
-    display_name: string
-  }),
   selectType: string
 };
 const defaultProps = {
-  bookInfo: {
-    tags: ''
-  },
-  userInfo: {
-    display_name: ''
-  },
   selectType: ''
 };
 
 class SearchBar extends PureComponent {
-  state = {
-    searchText: '',
-    isTextInit: false
-  };
-
-  componentWillReceiveProps() {
-    if (this.shouldInitSearchText()) {
-      this.fetchInitSearchText();
-    }
+  componentWillMount() {
+    this._initSearchText();
   }
 
   render() {
-    const { searchText } = this.state;
-    const { bookInfo: { tags }, headerFlex } = this.props;
     return (
       <View style={ styles.container }>
         <TextInput
+          underlineColorAndroid="transparent"
           style={ styles.searchbarText }
           onChangeText={ this._onChangeText }
           onBlur={ this._onBlur }
           value={ this.props.searchText } />
       </View>
     );
+  }
+
+  _initSearchText = () => {
+    this.props.onChangeSearchText('');
   }
 
   _onChangeText = (text) => {
@@ -61,24 +45,13 @@ class SearchBar extends PureComponent {
   _onBlur = () => {
     this.props.onBlurSearchbar();
   }
-
-  shouldInitSearchText = () => {
-    const { searchText, isTextInit } = this.state;
-    const { bookInfo, userInfo } = this.props;
-    return (
-      searchText === '' &&
-      !isTextInit &&
-      bookInfo.tags !== '' &&
-      userInfo.display_name !== ''
-    );
-  }
 }
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: 'white',
     flex: 1,
-    justifyContent: 'center'
+    justifyContent: 'center',
+    height: 50
   },
   searchbarText: {
     fontSize: 20,

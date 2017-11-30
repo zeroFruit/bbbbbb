@@ -10,7 +10,6 @@ import {
 
 import Header from '../../components/Header';
 import NewsFeedList from '../../components/NewsFeedList/container';
-import PostAddingPanel from '../../components/PostAddingPanel';
 import HeaderBarBasic from '../../components/HeaderBarBasic';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
@@ -31,7 +30,6 @@ const renderHeader = (params) => {
       <View>
         <HeaderBarBasic
           selectType={ selectType.FETCHED_FROM_NEWSFEED } />
-        <PostAddingPanel />
       </View>
     </Header>
   );
@@ -90,7 +88,6 @@ const styles = StyleSheet.create({
     flex: 1
   },
   header: {
-    height: 100,
     marginTop: 25,
     alignItems: 'stretch',
     backgroundColor: 'white'
