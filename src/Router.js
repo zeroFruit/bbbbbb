@@ -15,6 +15,7 @@ import { mapNavigateParamsToProps } from './hocs/mapNavigateParamsToProps';
 import Splash from './screens/Splash';
 import BookMark from './screens/BookMark/container';
 import MyPage from './screens/MyPage';
+import NewPost from './screens/NewPost';
 import NewsFeed from './screens/NewsFeed/container';
 import PostSelected from './screens/PostSelected';
 import PostSelectedList from './screens/PostSelectedList/container';
@@ -34,6 +35,9 @@ class RouterComponent extends Component {
         screen: StackNavigator({
           tabs: {
             screen: CustomTabNavigator
+          },
+          NewPost: {
+            screen: NewPost
           },
           collectionAdd: {
             screen: mapNavigateParamsToProps(CollectionAddPage)

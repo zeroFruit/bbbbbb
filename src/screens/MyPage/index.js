@@ -70,7 +70,8 @@ class MyPage extends Component {
         </View>
 
         <View style={ styles.body }>
-          <PostAddingPanel />
+          <PostAddingPanel
+            onClickAddPost={ this._onClickAddPost } />
           <MyPageBookGallery
             galleryCardsProps={ myGalleryCardsProps }
             onClickGalleryCard={ this._onClickGalleryCard } />
@@ -109,6 +110,11 @@ class MyPage extends Component {
     const key = 'Post';
     const params = { id, user, selectType: selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE };
     navigateTo(this.props, key, params);
+  }
+
+  _onClickAddPost = () => {
+    const key = 'NewPost';
+    navigateTo(this.props, key, {});
   }
 
   getCardInfo = (card) => {

@@ -6,7 +6,7 @@ class PostAddingPanel extends Component {
   render() {
     return (
       <TouchableHighlight
-        onPress={ () => { console.log('click'); } }>
+        onPress={ this._onClickAddPost }>
         <View style={ styles.container }>
           <Icon
             name="photo-camera"
@@ -18,6 +18,10 @@ class PostAddingPanel extends Component {
         </View>
       </TouchableHighlight>
     );
+  }
+
+  _onClickAddPost = () => {
+    this.props.onClickAddPost();
   }
 }
 

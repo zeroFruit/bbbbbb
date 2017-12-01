@@ -12,7 +12,7 @@ import { withDefaultHeaderHOC } from '../../hocs/withDefaultHeaderHOC';
 const propTypes = {};
 const defaultProps = {};
 
-class HeaderBarWithBackTexts extends PureComponent {
+class HeaderBarWithTexts extends PureComponent {
   render() {
     const { headerTitleProps, leftLabel, rightLabel } = this.props;
 
@@ -48,10 +48,10 @@ const styles = StyleSheet.create({
   }
 });
 
-HeaderBarWithBackTexts.propTypes = propTypes;
-HeaderBarWithBackTexts.defaultProps = defaultProps;
+HeaderBarWithTexts.propTypes = propTypes;
+HeaderBarWithTexts.defaultProps = defaultProps;
 
 export default compose(
   fetchHeaderTitlePropsHOC,
   withDefaultHeaderHOC
-)(HeaderBarWithBackTexts);
+)(HeaderBarWithTexts);
