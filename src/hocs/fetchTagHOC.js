@@ -10,6 +10,7 @@ import { selectors as tagSelectors, types as tagTypes } from '../ducks/tag';
 import { selectors as bookSelectors } from '../ducks/book';
 import { selectors as userSelectors } from '../ducks/user';
 import { isEmpty, isObjectHasProperty } from '../utils/ObjectUtils';
+import logger from '../utils/LogUtils';
 
 const { bool, shape, func, number, string } = PropTypes;
 
@@ -71,6 +72,7 @@ export const fetchTagHOC = (WrappedComponent) => {
 
     _fetchTags = async (props) => {
       const { id, user } = props;
+      logger.log('fetchTagHOC: selectedUserDisplayName_:', this.props.selectedUserDisplayName_)
       await this.props.AsyncFetchTagRequestAction(user, id);
       await this._setStateIsSelectedBookTagFetching(true);
     }

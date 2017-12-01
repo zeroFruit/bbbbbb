@@ -1,22 +1,24 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
 import {
   navigateTo,
-  renderHeaderWithNavigation
+  renderHeaderWithNavigation,
+  setParamsToNavigation
 } from '../../Router';
 
+import ScreenWithSearchBarHeader from '../../components/ScreenWithSearchBarHeader';
 import Header from '../../components/Header';
 import NewsFeedList from '../../components/NewsFeedList/container';
 import HeaderBarBasic from '../../components/HeaderBarBasic';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
-import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import logger from '../../utils/LogUtils';
-import { selectType } from '../../config';
+import { hasPath } from '../../utils/ObjectUtils';
+import { selectType, USER_ID } from '../../config';
 
 const { func } = PropTypes;
 
@@ -25,19 +27,24 @@ const propTypes = {
 const defaultProps = {};
 
 const renderHeader = (params) => {
+  const onClickSearchListItem = hasPath(params, 'onClickSearchListItem') ?
+    params.onClickSearchListItem :
+    () => {};
+
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <View>
         <HeaderBarBasic
-          selectType={ selectType.FETCHED_FROM_NEWSFEED } />
+          selectType={ selectType.FETCHED_FROM_NEWSFEED }
+          onClickSearchListItem={ onClickSearchListItem } />
       </View>
     </Header>
   );
 };
 
-class NewsFeed extends Component {
+class NewsFeed extends ScreenWithSearchBarHeader {
   static navigationOptions = {
-    header: ({ navigation }) => { return renderHeaderWithNavigation(navigation)(renderHeader); }
+    header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
   };
 
   componentWillUnmount() {

@@ -28,7 +28,9 @@ export const selectType = {
   SELECT_FROM_COLLECTION_CARD: 'selectType/select_from_collection_card',
   /* 북마크 - 컬렉션 - 책 */
   SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON: 'selectType/select_from_collection_book_add_button',
-  SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON: 'selectType/select_from_collection_book_complete_button'
+  SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON: 'selectType/select_from_collection_book_complete_button',
+  /* 검색창 */
+  SELECT_FROM_SEARCH_LIST: 'selectType/select_from_search_list'
 };
 
 export const headerType = {

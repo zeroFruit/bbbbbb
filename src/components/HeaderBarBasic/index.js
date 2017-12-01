@@ -68,7 +68,8 @@ class HeaderBarBasic extends PureComponent {
     // this.setState({ isFocus: false });
   }
 
-  _onClickSearchListItem = () => {
+  _onClickSearchListItem = (bookId) => {
+    this.props.onClickSearchListItem(bookId);
   }
 }
 

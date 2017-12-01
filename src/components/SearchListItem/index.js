@@ -7,7 +7,7 @@ class SearchListItem extends PureComponent {
     return (
       <TouchableHighlight
         style={ styles.container }
-        onPress={ () => { console.log('click!'); }}>
+        onPress={ this._onClickItem }>
         <Text style={ styles.text }>
           { `${author}/${bookTitle}` }
         </Text>
@@ -16,7 +16,8 @@ class SearchListItem extends PureComponent {
   }
 
   _onClickItem = () => {
-    this.props.onClickItem();
+    const { bookIds } = this.props;
+    this.props.onClickItem(bookIds[0]);
   }
 }
 

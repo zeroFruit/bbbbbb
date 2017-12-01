@@ -28,6 +28,7 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
 
         case SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE:
         case SelectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE:
+        case SelectType.SELECT_FROM_SEARCH_LIST:
           return this._getTagsWhenClickedImage();
 
         case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:

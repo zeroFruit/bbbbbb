@@ -76,6 +76,7 @@ class Post extends React.Component {
   _fetchPostTitle(selectType) {
     switch(selectType) {
       case SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE:
+      case SelectType.SELECT_FROM_SEARCH_LIST:
       case SelectType.FETCHED_FROM_NEWSFEED:
       case SelectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE:
       {

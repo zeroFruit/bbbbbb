@@ -27,8 +27,8 @@ class SearchList extends PureComponent {
     );
   }
 
-  _onClickItem = () => {
-    this.props.onClickSearchListItem();
+  _onClickItem = (bookId) => {
+    this.props.onClickSearchListItem(bookId);
   }
 }
 
