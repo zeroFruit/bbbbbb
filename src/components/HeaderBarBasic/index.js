@@ -17,10 +17,6 @@ const propTypes = {};
 const defaultProps = {};
 
 
-/*
-  TODO: 여기다가 Header 타이틀 랜더하는 함수만들기
-*/
-
 class HeaderBarBasic extends PureComponent {
   state = {
     isFocus: false,
@@ -45,12 +41,14 @@ class HeaderBarBasic extends PureComponent {
                 onBlurSearchbar={ this._onBlurSearchbar } />
           }
           <HeaderRightIcon
-            iconName="search"
+            iconName={ !this.state.isFocus ? 'search' : 'close' }
             onClickRightIcon={ this._onClickRightIcon } />
         </View>
         {
           (this.state.isFocus && !this.props.isSearching_) ?
-            <SearchList /> : null
+            <SearchList
+              searchResults={ this.props.searchResults_ }
+              onClickSearchListItem={ this._onClickSearchListItem } /> : null
         }
 
       </View>
@@ -67,7 +65,10 @@ class HeaderBarBasic extends PureComponent {
   }
 
   _onBlurSearchbar = () => {
-    this.setState({ isFocus: false });
+    // this.setState({ isFocus: false });
+  }
+
+  _onClickSearchListItem = () => {
   }
 }
 

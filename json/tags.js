@@ -6,26 +6,26 @@ const tags = {
     byId: {
       1: {
         id: 1,
-        book_title: 'wonder',
-        book_ids: [],
+        book_title: 'Wonder',
+        book_ids: [1, 3, 4, 7, 9, 10],
         map_ids: [1]
       },
       2: {
         id: 2,
-        book_title: 'obama:anintimateportrait',
-        book_ids: [],
+        book_title: 'Obama : An Intimate Portrait',
+        book_ids: [2, 8],
         map_ids: [2]
       },
       3: {
         id: 3,
-        book_title: 'auggie&me',
-        book_ids: [],
+        book_title: 'Auggie & Me',
+        book_ids: [5],
         map_ids: [1]
       },
       4: {
         id: 4,
-        book_title: 'harrypotterandtheprisonerofazkaban',
-        book_ids: [],
+        book_title: 'Harry Potter and the Prisoner of azkaban',
+        book_ids: [6],
         map_ids: [4]
       }
     },
@@ -35,20 +35,17 @@ const tags = {
     byId: {
       1: {
         id: 1,
-        book_author: 'r.j.palacio',
-        book_ids: [],
+        book_author: 'R. J. Palacio',
         map_ids: [1, 3]
       },
       2: {
         id: 2,
-        book_author: 'petesouza',
-        book_ids: [],
+        book_author: 'Pete Souza',
         map_ids: [2]
       },
       3: {
         id: 3,
-        book_author: 'j.k.rowling',
-        book_ids: [],
+        book_author: 'J. K. Rowling',
         map_ids: [4]
       }
     },
@@ -112,43 +109,51 @@ class Tag {
   }
 
   findTagsByAuthor(author) {
+    const result = [];
     const refined = author.replace(/\s/g, '').toLowerCase();
     const authorTags = this.getBookAuthorTags();
     const titleTags = this.getBookTitleTags();
     const tagMaps = this.getTagMaps();
 
     const filteredAuthorTags = refined === '' ? [] : _.filter(authorTags, (authorTag) => {
-      return authorTag.book_author.indexOf(refined) !== -1;
-    });
-    const mappedAuthorTags = _.map(filteredAuthorTags, (authorTag) => {
-      const childTitleTags = authorTag.map_ids.map(id => titleTags[tagMaps[id].title]);
-      return {
-        author: [authorTag],
-        titles: childTitleTags
-      };
+      const refinedTag = authorTag.book_author.replace(/\s/g, '').toLowerCase();
+      return refinedTag.indexOf(refined) !== -1;
     });
 
-    return mappedAuthorTags;
+    _.forEach(filteredAuthorTags, (authorTag) => {
+      authorTag.map_ids.forEach((id) => {
+        result.push({
+          author: authorTag,
+          title: titleTags[tagMaps[id].title]
+        });
+      });
+    });
+
+    return result;
   }
 
   findTagsByBookTitle(title) {
+    const result = [];
     const refined = title.replace(/\s/g, '').toLowerCase();
     const authorTags = this.getBookAuthorTags();
     const titleTags = this.getBookTitleTags();
     const tagMaps = this.getTagMaps();
 
     const filteredTitleTags = refined === '' ? [] : _.filter(titleTags, (titleTag) => {
-      return titleTag.book_title.indexOf(refined) !== -1;
-    });
-    const mappedTitleTags = _.map(filteredTitleTags, (titleTag) => {
-      const childAuthorTags = titleTag.map_ids.map(id => authorTags[tagMaps[id].author]);
-      return {
-        author: childAuthorTags,
-        titles: [titleTag]
-      };
+      const refinedTag = titleTag.book_title.replace(/\s/g, '').toLowerCase();
+      return refinedTag.indexOf(refined) !== -1;
     });
 
-    return mappedTitleTags;
+    _.forEach(filteredTitleTags, (titleTag) => {
+      titleTag.map_ids.forEach((id) => {
+        result.push({
+          author: authorTags[tagMaps[id].author],
+          title: titleTag
+        });
+      });
+    });
+
+    return result;
   }
 }
 

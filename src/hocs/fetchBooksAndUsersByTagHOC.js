@@ -55,16 +55,6 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
       this.setState({ isBooksAndUsersFetching: state });
     }
 
-    // _setStateBooksInfo = (state) => {
-    //   this.setState({ booksInfo: state });
-    // }
-    //
-    // _setStateUsersInfo = (state) => {
-    //   this.setState({ usersInfo: state });
-    // }
-
-    /*
-      TODO: 현재 blockOnMomentumScrollEndHOC에서 사용되고 있다. 컴포넌트 안으로 옮기기 */
     _requestBooksAndUsers = async () => {
       const { booksInfo } = this.state;
       const { id, numOfFeedsPerLoad_, selectedListPage_ } = this.props;

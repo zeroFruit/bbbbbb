@@ -1,37 +1,34 @@
 import React, { PureComponent } from 'react';
 import { FlatList, View, Text, StyleSheet } from 'react-native';
-import { SCREEN_WIDTH } from '../../config';
+import SearchListItem from '../SearchListItem';
 
 class SearchList extends PureComponent {
   render() {
-    const testItems = [{
-      id: 1,
-      text: 'test-1'
-    }, {
-      id: 2,
-      text: 'test-2'
-    }, {
-      id: 3,
-      text: 'test-3'
-    }];
     return (
       <View style={ styles.container }>
         <FlatList
-          data={ testItems }
+          data={ this.props.searchResults }
           keyExtractor={ this._keyExtractor }
           renderItem={ this._renderItem } />
       </View>
     );
   }
 
-  _keyExtractor = item => item.id;
+  _keyExtractor = item => item.title.id;
 
   _renderItem = ({ item }) => {
+    const { author, title } = item;
     return (
-      <View>
-        <Text>{ item.text }</Text>
-      </View>
+      <SearchListItem
+        author={ author.book_author }
+        bookTitle={ title.book_title }
+        bookIds={ title.book_ids }
+        onClickItem={ this._onClickItem } />
     );
+  }
+
+  _onClickItem = () => {
+    this.props.onClickSearchListItem();
   }
 }
 
