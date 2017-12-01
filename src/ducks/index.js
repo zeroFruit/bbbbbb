@@ -8,6 +8,7 @@ import user from './user';
 import tag from './tag';
 import collection from './collection';
 import page from './page';
+import search from './search';
 
 export const selectors = {
   BookAndBookmarkSelector: createSelector(
@@ -111,5 +112,6 @@ export default combineReducers({
   user,
   tag,
   collection,
-  page
+  page,
+  search
 });

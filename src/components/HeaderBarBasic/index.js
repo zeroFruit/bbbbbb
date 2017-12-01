@@ -9,6 +9,7 @@ import HeaderTitleBar from '../HeaderTitleBar';
 import HeaderRightIcon from '../HeaderRightIcon';
 import { fetchHeaderTitlePropsHOC } from '../../hocs/fetchHeaderTitlePropsHOC';
 import { withDefaultHeaderHOC } from '../../hocs/withDefaultHeaderHOC';
+import { requestSearchTextHOC } from '../../hocs/requestSearchTextHOC';
 
 import { headerType } from '../../config';
 
@@ -32,7 +33,7 @@ class HeaderBarBasic extends PureComponent {
 
     return (
       <View style={ styles.container }>
-        <View style={ styles.searchBarContainer }>
+        <View style={ styles.searchContainer }>
           {
             !this.state.isFocus ?
               <HeaderTitleBar
@@ -47,11 +48,11 @@ class HeaderBarBasic extends PureComponent {
             iconName="search"
             onClickRightIcon={ this._onClickRightIcon } />
         </View>
-
         {
-          this.state.isFocus ?
+          (this.state.isFocus && !this.props.isSearching_) ?
             <SearchList /> : null
         }
+
       </View>
     );
   }
@@ -62,6 +63,7 @@ class HeaderBarBasic extends PureComponent {
 
   _onChangeSearchText = (searchText) => {
     this.setState({ searchText });
+    this.props.requestSearch(searchText);
   }
 
   _onBlurSearchbar = () => {
@@ -73,7 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column'
   },
-  searchBarContainer: {
+  searchContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end'
   }
@@ -84,5 +86,6 @@ HeaderBarBasic.defaultProps = defaultProps;
 
 export default compose(
   fetchHeaderTitlePropsHOC,
-  withDefaultHeaderHOC
+  withDefaultHeaderHOC,
+  requestSearchTextHOC
 )(HeaderBarBasic);

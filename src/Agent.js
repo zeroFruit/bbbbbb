@@ -129,10 +129,21 @@ const Collection = {
   }
 };
 
+const Search = {
+  fetchBookLabelByText: async (searchText) => {
+    const tag = new TagData();
+    const results = await Promise.all([tag.findTagsByAuthor(searchText), tag.findTagsByBookTitle(searchText)]);
+    console.log('results', _.union(results[0], results[1]));
+
+    return _.union(results[0], results[1]);
+  }
+};
+
 export default {
   Book,
   User,
   Bookmark,
   Tag,
-  Collection
+  Collection,
+  Search
 };
