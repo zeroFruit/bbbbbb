@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Vibration, CameraRoll } from 'react-native';
 import { FileSystem } from 'expo';
 import {
   renderHeaderWithNavigation,
@@ -32,9 +32,8 @@ class NewPost extends PureComponent {
   }
 
   state = {
-    photoUri: null,
-    photoId: 0
-  };
+    
+  }
 
   componentWillMount() {
     setParamsToNavigation(this.props, {
@@ -43,29 +42,33 @@ class NewPost extends PureComponent {
     });
   }
 
-  componentDidMount() {
-  }
-
   render() {
     return (
       <View style={ styles.container }>
         <CameraComponent
-          setStatePhotoId={ this._setStatePhotoId }
-          setStatePhotoUri={ this._setStatePhotoUri }
-          photoId={ this.state.photoId } />
-        <View style={ { justifyContent: 'center', alignItems: 'center' } }>
-          <Text>{ this.state.photoUri }</Text>
-        </View>
+          setCameraRef={ this._setCameraRef } />
+        <CameraButtonPanel
+          onPressButton={ this._takePicture } />
+        <NewPostButtonGroups />
       </View>
     );
   }
 
-  _setStatePhotoUri = (uri) => {
-    this.setState({ photoUri: uri });
+  _setCameraRef = (camera) => {
+    this.camera = camera;
   }
 
-  _setStatePhotoId = (id) => {
-    this.setState({ photoId: id });
+  _takePicture = async () => {
+    // if (this.camera) {
+    //   const photo = await this.camera.takePictureAsync();
+    //   try {
+    //     const result = await CameraRoll.saveToCameraRoll(photo.uri);
+    //     Vibration.vibrate();
+    //   } catch (e) {
+    //     console.log(e);
+    //   }
+    // }
+    console.log('clicked!');
   }
 }
 

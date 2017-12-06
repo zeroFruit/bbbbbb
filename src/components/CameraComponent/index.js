@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Vibration, CameraRoll } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import { SCREEN_WIDTH } from '../../config';
 
@@ -32,36 +32,10 @@ class CameraComponent extends PureComponent {
       return (
         <Camera
           style={ styles.preview }
-          ref={ (ref) => { this.camera = ref; } }
+          ref={ (ref) => { this.props.setCameraRef(ref); } }
           ratio="4:3"
-          type={ this.state.type }>
-          <TouchableOpacity
-            style={ {
-              alignSelf: 'center',
-              alignItems: 'center'
-            } }
-            onPress={ this._takePicture }>
-            <Text
-              style={ { fontSize: 18, marginBottom: 10, color: 'black' } }>
-              {' '}capture{' '}
-            </Text>
-          </TouchableOpacity>
-        </Camera>
+          type={ this.state.type } />
       );
-    }
-  }
-
-  _takePicture = async () => {
-    if (this.camera) {
-      const photo = await this.camera.takePictureAsync();
-      try {
-        const result = await CameraRoll.saveToCameraRoll(photo.uri);
-      } catch (e) {
-        console.log(e);
-      } finally {
-        await this.props.setStatePhotoId(this.props.photoId + 1);
-        Vibration.vibrate();
-      }
     }
   }
 }

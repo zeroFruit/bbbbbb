@@ -40,11 +40,16 @@ class NewPostButtonGroups extends Col2ParentButtonGroups {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    height: 50,
+    flexDirection: 'row'
+  },
   buttonContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'white',
+    borderTopWidth: 1,
     borderBottomWidth: 1,
     borderRightWidth: .5,
     borderLeftWidth: .5,
@@ -52,8 +57,7 @@ const styles = StyleSheet.create({
   },
   button: {
     justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#d3d3d3'
+    alignItems: 'center'
   },
   buttonText: {
     fontSize: 18
