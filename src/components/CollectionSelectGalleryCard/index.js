@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { MaterialIcons as Icon } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 

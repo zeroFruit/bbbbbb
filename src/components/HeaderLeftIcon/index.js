@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableHighlight, View, StyleSheet } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { MaterialIcons as Icon } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 
 const { string, func } = PropTypes;

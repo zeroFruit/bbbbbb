@@ -1,58 +1,45 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, TouchableHighlight } from 'react-native';
-import PropTypes from 'prop-types';
-import { MaterialIcons as Icon } from '@expo/vector-icons';
+import Col2ParentButtonGroups from '../Col2ParentButtonGroups';
 
-const { func } = PropTypes;
-
-const propTypes = {
-  onClickBooklistButton: func.isRequired,
-  onClickCollectionButton: func.isRequired
-};
-
-const defaultProps = {};
-
-class Col2ParentButtonGroups extends PureComponent {
+class NewPostButtonGroups extends Col2ParentButtonGroups {
   render() {
     return (
       <View style={ styles.container }>
         <TouchableHighlight
           style={ styles.buttonContainer }
           onPress={ this._onClickBooklistButton }>
-          <View>
-            <Icon
-              name="apps"
-              size={ 30 } />
+          <View style={ styles.button }>
+            <Text style={ styles.buttonText }>
+              라이브러리
+            </Text>
           </View>
         </TouchableHighlight>
         <TouchableHighlight
           style={ styles.buttonContainer }
           onPress={ this._onClickBookCollectionButton }>
-          <View>
-            <Icon
-              name="collections"
-              size={ 30 } />
+          <View style={ styles.button }>
+            <Text style={ styles.buttonText }>
+              촬영
+            </Text>
           </View>
         </TouchableHighlight>
       </View>
     );
   }
-  /* TODO: 메소드 이름 일반화 하기 */
+
+  /* TODO: 메소드 이름 바꾸기 */
   _onClickBooklistButton = () => {
-    this.props.onClickBooklistButton();
+
   }
 
-  /* TODO: 메소드 이름 일반화 하기 */
+  /* TODO: 메소드 이름 바꾸기 */
   _onClickBookCollectionButton = () => {
-    this.props.onClickCollectionButton();
+
   }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    height: 50,
-    flexDirection: 'row'
-  },
   buttonContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -62,10 +49,15 @@ const styles = StyleSheet.create({
     borderRightWidth: .5,
     borderLeftWidth: .5,
     borderColor: 'black'
+  },
+  button: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#d3d3d3'
+  },
+  buttonText: {
+    fontSize: 18
   }
 });
 
-Col2ParentButtonGroups.propTypes = propTypes;
-Col2ParentButtonGroups.defaultProps = defaultProps;
-
-export default Col2ParentButtonGroups;
+export default NewPostButtonGroups;

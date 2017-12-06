@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
+import { View, Text, Button, StyleSheet } from 'react-native';
 import logger from '../../utils/LogUtils';
 import { headerType } from '../../config';
 
@@ -52,10 +51,7 @@ class HeaderTitleBar extends PureComponent {
       <Button
         key={ tag.value }
         title={ `${tag.value}` }
-        backgroundColor="#d3d3d3"
-        borderRadius={ 5 }
-        color="black"
-        buttonStyle={ styles.tagButton }
+        color="#d3d3d3"
         onPress={ () => this._onClickTagButton(tag.id, tag.type) } />
     ));
   }
