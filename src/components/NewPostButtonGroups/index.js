@@ -30,12 +30,12 @@ class NewPostButtonGroups extends Col2ParentButtonGroups {
 
   /* TODO: 메소드 이름 바꾸기 */
   _onClickBooklistButton = () => {
-
+    this.props.setStateScreenType(this.props.SCREEN_TYPES.LIBRARY);
   }
 
   /* TODO: 메소드 이름 바꾸기 */
   _onClickBookCollectionButton = () => {
-
+    this.props.setStateScreenType(this.props.SCREEN_TYPES.PICTURE);
   }
 }
 
