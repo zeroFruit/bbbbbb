@@ -59,3 +59,5 @@ export const NUM_OF_ROW = 3;
 
 export const SCREEN_WIDTH = Dimensions.get('window').width;
 export const SCREEN_HEIGHT = Dimensions.get('window').height;
+
+export const ROTATE = ['0deg', '90deg', '180deg', '270deg'];

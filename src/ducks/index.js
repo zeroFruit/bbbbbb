@@ -42,9 +42,9 @@ export const types = {
   FETCH_BOOKS_BY_COLLECTION_READY: 'index/fetch_books_by_collection_ready',
   FETCH_BOOKS_BY_COLLECTION_SUCCESS: 'index/fetch_books_by_collection_success',
 
-  FETCH_BOOKS_BY_USER_REQUEST: 'book/fetch_books_by_user_request',
-  FETCH_BOOKS_BY_USER_READY: 'book/fetch_books_by_user_ready',
-  FETCH_BOOKS_BY_USER_SUCCESS: 'book/fetch_books_by_user_success',
+  FETCH_BOOKS_BY_USER_REQUEST: 'index/fetch_books_by_user_request',
+  FETCH_BOOKS_BY_USER_READY: 'index/fetch_books_by_user_ready',
+  FETCH_BOOKS_BY_USER_SUCCESS: 'index/fetch_books_by_user_success'
 };
 
 export const initialState = {

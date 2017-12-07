@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { List } from 'immutable';
 
 const books = {
   books: {
@@ -123,8 +124,26 @@ class Book {
     this._data = newbooks;
   }
 
+  setAllIds(allIds) {
+    this._data.books.allIds = allIds;
+  }
+
+  setBookToById(bid, book) {
+    const byId = this.getById();
+    this._data.books.byId = { ...byId, [bid]: book };
+  }
+
+  pushIdToAllIds(bid) {
+    const allIds = List(this._data.books.allIds).push(bid).sort();
+    this.setAllIds(allIds.toJS());
+  }
+
   get() {
     return this._data;
+  }
+
+  getId() {
+    return _.takeRight(this._data.books.allIds)[0] + 1;
   }
 
   getById() {
@@ -152,6 +171,14 @@ class Book {
       );
     });
     return _.slice(filteredBook, page * numOfFeeds, (page + 1) * numOfFeeds);
+  }
+
+  insert(book) {
+    const id = this.getId();
+    const newBook = { ...book, id };
+    this.setBookToById(id, newBook);
+    this.pushIdToAllIds(id);
+    return newBook;
   }
 }
 export { Book };

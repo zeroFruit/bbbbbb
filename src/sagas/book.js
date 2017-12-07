@@ -1,6 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { types } from '../ducks/book';
 import agent from '../Agent';
+import { USER_ID } from '../config';
 
 export function* AsyncFetchBookRequest(action) {
   yield put({
@@ -75,10 +76,25 @@ export function* AsyncFetchBooksByUserId(action) {
   return books;
 }
 
+export function* AsyncAddBook(action) {
+  yield put({
+    type: types.ADD_BOOK_READY
+  });
+  const book = yield call(agent.Book.insert, action.payload);
+  const me = yield call(agent.User.insertBook, USER_ID, book.id);
+
+  yield put({
+    type: types.ADD_BOOK_SUCCESS
+  });
+
+  return book;
+}
+
 export default function* rootSaga() {
   yield takeLatest(types.FETCH_BOOK_REQUEST, AsyncFetchBookRequest);
   yield takeLatest(types.FETCH_BOOKS_REQUEST, AsyncFetchBooks);
   yield takeLatest(types.FETCH_BOOKS_BY_TAG_REQUEST, AsyncFetchBooksByTagId);
   yield takeLatest(types.FETCH_BOOKS_FOR_COLLECTION_REQUEST, AsyncFetchBooksByIds);
   yield takeLatest(types.FETCH_BOOKS_FOR_USER_REQUEST, AsyncFetchBooksByUserId);
+  yield takeLatest(types.ADD_BOOK_REQUEST, AsyncAddBook);
 }

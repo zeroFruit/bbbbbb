@@ -61,11 +61,15 @@ class User {
     return Users;
   }
 
-  setCollection(userId, collectionId) {
+  getByUserId(userId) {
     const byId = this.getById();
-    const user = _.filter(byId, (user) => {
+    return _.filter(byId, (user) => {
       return user.id === userId;
     })[0];
+  }
+
+  setCollection(userId, collectionId) {
+    const user = this.getByUserId(userId);
     const newUser = {
       ...user,
       collections: [...user.collections, collectionId]
@@ -75,14 +79,21 @@ class User {
   }
 
   deleteCollection(userId, collectionId) {
-    const byId = this.getById();
-    const user = _.filter(byId, (user) => {
-      return user.id === userId;
-    })[0];
+    const user = this.getByUserId(userId);
     const index = user.collections.indexOf(collectionId);
     const newUser = {
       ...user,
       collections: List(user.collections).delete(index).toJS()
+    };
+    this._data.users.byId[userId] = newUser;
+    return newUser;
+  }
+
+  setBook(userId, bookId) {
+    const user = this.getByUserId(userId);
+    const newUser = {
+      ...user,
+      books: [...user.books, bookId]
     };
     this._data.users.byId[userId] = newUser;
     return newUser;

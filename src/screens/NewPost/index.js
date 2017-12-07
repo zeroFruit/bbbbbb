@@ -1,11 +1,13 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Vibration, CameraRoll, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Vibration, CameraRoll, ScrollView, Alert } from 'react-native';
 import { FileSystem } from 'expo';
 import {
   renderHeaderWithNavigation,
-  setParamsToNavigation
+  setParamsToNavigation,
+  navigateTo
 } from '../../Router';
 import { selectType } from '../../config';
+import logger from '../../utils/LogUtils';
 
 import Header from '../../components/Header';
 import HeaderBarWithTexts from '../../components/HeaderBarWithTexts';
@@ -15,18 +17,23 @@ import NewPostButtonGroups from '../../components/NewPostButtonGroups';
 import NewPostSelectedCameraRoll from '../../components/NewPostSelectedCameraRoll';
 import NewPostCameraRollThumbnail from '../../components/NewPostCameraRollThumbnail';
 
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
-const renderHeader = params => (
-  <Header headerStyle={ StyleSheet.flatten(styles.header) }>
-    <HeaderBarWithTexts
-      title="페이지 업로드"
-      leftLabel="취소"
-      rightLabel="다음"
-      onClickHeaderRightButton={ params.onClickHeaderRightButton ? params.onClickHeaderRightButton : () => {} }
-      onClickHeaderLeftButton={ params.onClickHeaderLeftButton ? params.onClickHeaderLeftButton : () => {} }
-      selectType={ selectType.SELECT_FROM_COLLECTION_CARD } />
-  </Header>
-);
+
+const renderHeader = defaultViewWhileNoParams((params) => {
+  console.log('NewPost', params);
+  return (
+    <Header headerStyle={ StyleSheet.flatten(styles.header) }>
+      <HeaderBarWithTexts
+        title="페이지 업로드"
+        leftLabel="취소"
+        rightLabel="다음"
+        onClickHeaderRightButton={ params.onClickHeaderRightButton ? params.onClickHeaderRightButton : () => {} }
+        onClickHeaderLeftButton={ params.onClickHeaderLeftButton ? params.onClickHeaderLeftButton : () => {} }
+        selectType={ selectType.SELECT_FROM_COLLECTION_CARD } />
+    </Header>
+  );
+});
 
 
 const screenTypes = {
@@ -40,12 +47,13 @@ class NewPost extends PureComponent {
 
   state = {
     screenType: screenTypes.PICTURE,
-    selectedThumbnail: null
+    selectedPhoto: null,
+    photoUri: null
   };
 
   componentWillMount() {
     setParamsToNavigation(this.props, {
-      onClickHeaderRightButton: () => {},
+      onClickHeaderRightButton: this._onClickHeaderNextButton,
       onClickHeaderLeftButton: () => {}
     });
   }
@@ -69,6 +77,7 @@ class NewPost extends PureComponent {
         return (
           <View>
             <CameraComponent
+              photoTakenUri={ this.state.photoUri }
               setCameraRef={ this._setCameraRef } />
             <CameraButtonPanel
               onPressButton={ this._takePicture } />
@@ -78,7 +87,7 @@ class NewPost extends PureComponent {
         return (
           <View>
             <NewPostSelectedCameraRoll
-              selectedThumbnail={ this.state.selectedThumbnail } />
+              selectedThumbnail={ this.state.selectedPhoto } />
             <NewPostCameraRollThumbnail
               onClickThumbnail={ this._onClickThumbnail } />
           </View>
@@ -94,12 +103,14 @@ class NewPost extends PureComponent {
 
   _takePicture = async () => {
     if (this.camera) {
-      const photo = await this.camera.takePictureAsync();
       try {
-        const result = await CameraRoll.saveToCameraRoll(photo.uri);
+        const photo = await this.camera.takePictureAsync();
+        const uri = await CameraRoll.saveToCameraRoll(photo.uri);
+        this._setStatePhotoUri(uri);
+
         Vibration.vibrate();
       } catch (e) {
-        console.log(e);
+        logger.log(e, 'Take picture failed');
       }
     }
   }
@@ -108,8 +119,26 @@ class NewPost extends PureComponent {
     this.setState({ screenType: type });
   }
 
+  _setStateSelectedPhoto = (photo) => {
+    this.setState({ selectedPhoto: photo });
+  }
+
+  _setStatePhotoUri = (uri) => {
+    this.setState({ photoUri: uri });
+  }
+
   _onClickThumbnail = (item) => {
-    this.setState({ selectedThumbnail: item });
+    this._setStateSelectedPhoto(item);
+  }
+
+  _onClickHeaderNextButton = () => {
+    const { selectedPhoto, photoUri } = this.state;
+    if (!selectedPhoto && !photoUri) {
+      Alert.alert('등록할 사진을 선택해주세요.');
+    } else {
+      const key = 'NewPostWrite';
+      navigateTo(this.props, key, { photo: photoUri || selectedPhoto });
+    }
   }
 }
 

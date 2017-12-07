@@ -23,6 +23,7 @@ import { selectType, USER_ID } from '../../config';
 const NUM_OF_CARDS_IN_GALLERY = 7;
 
 const renderHeader = (params) => {
+  console.log('MyPage', params);
   const headerTitle = isObjectHasProperty(params, 'my') ? params.my.display_name : 'Loading';
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
@@ -35,10 +36,11 @@ const renderHeader = (params) => {
 
 class MyPage extends Component {
   static navigationOptions = {
-    header: ({ navigation }) => { return renderHeaderWithNavigation(navigation)(renderHeader); }
+    header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
   }
   state = {
-    myGalleryCardsProps: []
+    myGalleryCardsProps: [],
+    my: null
   };
 
   async componentDidMount() {
@@ -90,6 +92,7 @@ class MyPage extends Component {
   fetchMyInfo = async (userId) => {
     const my = await agent.User.fetchByUserId(userId);
     setParamsToNavigation(this.props, { my });
+    this.setState({ my });
   }
 
   arrangeGalleryCards = (cards) => {
@@ -114,7 +117,10 @@ class MyPage extends Component {
 
   _onClickAddPost = () => {
     const key = 'NewPost';
-    navigateTo(this.props, key, {});
+    const params = {
+      my: this.state.my
+    };
+    navigateTo(this.props, key, params);
   }
 
   getCardInfo = (card) => {

@@ -17,12 +17,13 @@ export const types = {
 
   FETCH_SELECTED_USERS_REQUEST: 'user/fetch_selected_users_request',
   FETCH_SELECTED_USERS_READY: 'user/fetch_selected_users_ready',
-  FETCH_SELECTED_USERS_SUCCESS: 'user/fetch_selected_users_success',
+  FETCH_SELECTED_USERS_SUCCESS: 'user/fetch_selected_users_success'
 };
 
 export const initialState = {
   isMyInfoFetched_: false,
   myDisplayName_: '',
+  me_: {},
   isSelectedUserInfoFetched_: false,
   selectedUserDisplayName_: '',
   selectedUser_: {},
@@ -40,7 +41,8 @@ const me = {
   [types.FETCH_ME_SUCCESS]: (state, action) => ({
     ...state,
     isMyInfoFetched_: false,
-    myDisplayName_: action.payload.display_name
+    myDisplayName_: action.payload.display_name,
+    me_: action.payload
   })
 };
 
@@ -56,7 +58,6 @@ const selectedUser = {
     selectedUser_: { ...action.payload }
   }),
   [types.FETCH_SELECTED_USER_UNMOUNT]: (state, action) => {
-    console.log('reducer unmount');
     return {
       isSelectedUserInfoFetched_: false,
       selectedUserDisplayName_: initialState.selectedUserDisplayName_,

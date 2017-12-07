@@ -46,6 +46,10 @@ const Book = {
   fetchByBookIds: async (bookIds) => {
     const books = await new BookData().getByBookIds(bookIds);
     return books;
+  },
+  insert: async (book) => {
+    const insertedBook = await new BookData().insert(book);
+    return insertedBook;
   }
 };
 
@@ -66,6 +70,10 @@ const User = {
   },
   deleteCollection: async (userId, collectionId) => {
     const newUser = await new UserData().deleteCollection(userId, collectionId);
+    return newUser;
+  },
+  insertBook: async (userId, bookId) => {
+    const newUser = await new UserData().setBook(userId, bookId);
     return newUser;
   }
 };

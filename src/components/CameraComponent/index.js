@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
 import { Camera, Permissions } from 'expo';
 import { SCREEN_WIDTH } from '../../config';
 
@@ -10,6 +10,7 @@ class CameraComponent extends PureComponent {
   };
 
   async componentWillMount() {
+    await Permissions.askAsync(Permissions.LOCATION);
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     await this.setState({ hasCameraPermission: status === 'granted' });
   }
@@ -27,6 +28,10 @@ class CameraComponent extends PureComponent {
         <View style={ styles.errContainer }>
           <Text>No access to camera</Text>
         </View>
+      );
+    } else if (this.props.photoTakenUri) {
+      return (
+        <Image style={ styles.preview } source={ { uri: this.props.photoTakenUri } } />
       );
     } else {
       return (

@@ -16,6 +16,7 @@ import Splash from './screens/Splash';
 import BookMark from './screens/BookMark/container';
 import MyPage from './screens/MyPage';
 import NewPost from './screens/NewPost';
+import NewPostWrite from './screens/NewPostWrite/container';
 import NewsFeed from './screens/NewsFeed/container';
 import PostSelected from './screens/PostSelected';
 import PostSelectedList from './screens/PostSelectedList/container';
@@ -38,6 +39,9 @@ class RouterComponent extends Component {
           },
           NewPost: {
             screen: NewPost
+          },
+          NewPostWrite: {
+            screen: mapNavigateParamsToProps(NewPostWrite)
           },
           collectionAdd: {
             screen: mapNavigateParamsToProps(CollectionAddPage)

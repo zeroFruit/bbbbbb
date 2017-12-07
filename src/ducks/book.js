@@ -27,6 +27,10 @@ export const types = {
   FETCH_BOOKS_FOR_USER_READY: 'book/fetch_books_for_user_ready',
   FETCH_BOOKS_FOR_USER_SUCCESS: 'book/fetch_books_for_user_success',
 
+  ADD_BOOK_REQUEST: 'book/add_book_request',
+  ADD_BOOK_READY: 'book/add_book_ready',
+  ADD_BOOK_SUCCESS: 'book/add_book_success',
+
   UNMOUNT_BOOK: 'book/unmount_book'
 };
 
@@ -43,7 +47,8 @@ export const initialState = {
   isBooksForCollectionFetched_: false,
   selectedBooksForCollection_: List().toJS(),
   isBooksForUserFetched_: false,
-  selectedBooksForUser_: List().toJS()
+  selectedBooksForUser_: List().toJS(),
+  isBookAdd_: false
 };
 
 const fetchMyBooks = {
@@ -138,13 +143,30 @@ const fetchBooksByUser = {
     };
   }
 };
+
+const add = {
+  [types.ADD_BOOK_READY]: (state, action) => {
+    return {
+      ...state,
+      isBookAdd_: false
+    };
+  },
+  [types.ADD_BOOK_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBookAdd_: true
+    };
+  }
+};
+
 export default book = createReducer(initialState, {
   ...fetchMyBooks,
   ...fetchSelectedBook,
   ...fetchBooks,
   ...fetchBooksByTag,
   ...fetchBooksForCollection,
-  ...fetchBooksByUser
+  ...fetchBooksByUser,
+  ...add
 });
 
 export const actions = {
@@ -164,5 +186,6 @@ export const selectors = {
   GetIsBooksForCollectionFetched: state => state.book.isBooksForCollectionFetched_,
   GetSelectedBooksForCollection: state => state.book.selectedBooksForCollection_,
   GetIsBooksForUserFetched: state => state.book.isBooksForUserFetched_,
-  GetSelectedBooksForUser: state => state.book.selectedBooksForUser_
+  GetSelectedBooksForUser: state => state.book.selectedBooksForUser_,
+  GetIsBookAdd: state => state.book.isBookAdd_
 };
