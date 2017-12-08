@@ -243,10 +243,7 @@ class Tag {
 
     const filteredTitleTags = this.getFilteredTitleTags(refinedTitleText);
     const filteredAuthorTags = this.getFilteredAuthorTags(refinedAuthorText);
-    console.log('insertTag > filteredTitleTags', filteredTitleTags);
-    console.log('insertTag > filteredAuthorTags', filteredAuthorTags);
     const flag = this.getFlag(filteredTitleTags, filteredAuthorTags);
-    console.log('flag', flag);
     switch(flag) {
       case this._flag.TITLE_EX_AUTHOR_EX:
         return this.insertTagTitleExAuthorEx(filteredTitleTags, filteredAuthorTags, bookId);
@@ -255,8 +252,6 @@ class Tag {
       case this._flag.TITLE_EX_AUTHOR_NEX:
       case this._flag.TITLE_NEX_AUTHOR_NEX:
         return this.insertTagTitleNexAuthorNex(bookId, title, author);
-      default:
-        console.log('default!!');
     }
   }
 
@@ -275,9 +270,6 @@ class Tag {
       book_ids: List(titleTag.book_ids).push(bookId).sort().toJS()
     };
     this.setTitleTagById(newTitleTag);
-    console.log('TITLE_EX_AUTHOR_EX > bookTitleTags', this.getBookTitleTags());
-    console.log('TITLE_EX_AUTHOR_EX > bookAuthorTags', this.getBookAuthorTags());
-    console.log('TITLE_EX_AUTHOR_EX > tagMap', this.getTagMaps());
 
     return {
       title_tag_id: titleTag.id,
@@ -310,10 +302,6 @@ class Tag {
     this.setAuthorTagById(newAuthorTag);
     this.setTagMapById(newTagMap);
 
-    console.log('TITLE_NEX_AUTHOR_EX > bookTitleTags', this.getBookTitleTags());
-    console.log('TITLE_NEX_AUTHOR_EX > bookAuthorTags', this.getBookAuthorTags());
-    console.log('TITLE_NEX_AUTHOR_EX > tagMap', this.getTagMaps());
-
     return {
       title_tag_id: newTitleTagId,
       author_tag_id: authorTag.id
@@ -322,11 +310,8 @@ class Tag {
 
   insertTagTitleNexAuthorNex(bookId, title, author) {
     const newTagMapId = this.getTagMapId();
-    console.log('newTagMapId', newTagMapId);
     const newTitleTagId = this.getTitleTagId();
-    console.log('newTitleTagId', newTitleTagId);
     const newAuthorTagId = this.getAuthorTagId();
-    console.log('newAuthorTagId', newAuthorTagId);
 
     const newTitleTag = {
       id: newTitleTagId,
@@ -349,10 +334,6 @@ class Tag {
     this.setTitleTagById(newTitleTag);
     this.setAuthorTagById(newAuthorTag);
     this.setTagMapById(newTagMap);
-
-    console.log('TITLE_NEX_AUTHOR_NEX > bookTitleTags', this.getBookTitleTags());
-    console.log('TITLE_NEX_AUTHOR_NEX > bookAuthorTags', this.getBookAuthorTags());
-    console.log('TITLE_NEX_AUTHOR_NEX > tagMap', this.getTagMaps());
 
     return {
       title_tag_id: newTitleTagId,

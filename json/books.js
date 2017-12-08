@@ -191,7 +191,6 @@ class Book {
     const book = this.getByBookId(bookId);
     const newBook = { ...book, title_tag_id: titleTagId, author_tag_id: authorTagId };
     this.setBookToById(bookId, newBook);
-    console.log('byId', this.getById());
     return newBook;
   }
 }
