@@ -154,6 +154,12 @@ class Book {
     return this._data.books.allIds;
   }
 
+  getByBookId(bookId) {
+    const byId = this.getById();
+    return _.filter(byId, (book) => {
+      return book.id === bookId;
+    })[0];
+  }
   getByBookIds(bookIds) {
     const byId = this.getById();
     const filteredBooks = _.map(bookIds, (bookId) => {
@@ -178,6 +184,14 @@ class Book {
     const newBook = { ...book, id };
     this.setBookToById(id, newBook);
     this.pushIdToAllIds(id);
+    return newBook;
+  }
+
+  updateTagIds(bookId, { titleTagId, authorTagId }) {
+    const book = this.getByBookId(bookId);
+    const newBook = { ...book, title_tag_id: titleTagId, author_tag_id: authorTagId };
+    this.setBookToById(bookId, newBook);
+    console.log('byId', this.getById());
     return newBook;
   }
 }

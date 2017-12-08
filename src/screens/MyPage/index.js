@@ -23,7 +23,6 @@ import { selectType, USER_ID } from '../../config';
 const NUM_OF_CARDS_IN_GALLERY = 7;
 
 const renderHeader = (params) => {
-  console.log('MyPage', params);
   const headerTitle = isObjectHasProperty(params, 'my') ? params.my.display_name : 'Loading';
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>

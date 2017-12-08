@@ -2,6 +2,7 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { types } from '../ducks/book';
 import agent from '../Agent';
 import { USER_ID } from '../config';
+import { pickByKey } from '../utils/ObjectUtils';
 
 export function* AsyncFetchBookRequest(action) {
   yield put({
@@ -80,7 +81,15 @@ export function* AsyncAddBook(action) {
   yield put({
     type: types.ADD_BOOK_READY
   });
-  const book = yield call(agent.Book.insert, action.payload);
+
+  const book = yield call(agent.Book.insert, pickByKey(action.payload, ['img_src', 'content', 'user_id']));
+  const { bookTitle, bookAuthor } = action.payload;
+  const tag = yield call(agent.Search.fetchBookTagIdAndAuthorTagIdByText, book.id, bookTitle, bookAuthor);
+  const bookWithTagId = yield call(
+    agent.Book.updateTagIds,
+    book.id,
+    { titleTagId: tag.title_tag_id, authorTagId: tag.author_tag_id }
+  );
   const me = yield call(agent.User.insertBook, USER_ID, book.id);
 
   yield put({

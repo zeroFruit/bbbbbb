@@ -177,7 +177,6 @@ export const getParamsFromNavigationState = (state) => {
 
 export const renderHeaderWithNavigation = (navigation) => {
   const params = getParamsFromNavigationState(navigation.state);
-  console.log('params', params);
   return (renderHeaderMethod) => {
     return renderHeaderMethod(params);
   };

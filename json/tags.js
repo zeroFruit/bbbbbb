@@ -82,6 +82,12 @@ class Tag {
   constructor() {
     if (!Tag.instance) {
       this._data = tags;
+      this._flag = {
+        TITLE_EX_AUTHOR_EX: 'TITLE_EX_AUTHOR_EX',
+        TITLE_NEX_AUTHOR_EX: 'TITLE_NEX_AUTHOR_EX',
+        TITLE_EX_AUTHOR_NEX: 'TITLE_EX_AUTHOR_NEX',
+        TITLE_NEX_AUTHOR_NEX: 'TITLE_NEX_AUTHOR_NEX'
+      };
       Tag.instance = this;
     }
 
@@ -92,33 +98,132 @@ class Tag {
     this._data = newTags;
   }
 
-  get() {
-    return this._data;
+  setTitleTagById(newTitleTag) {
+    const titleTags = this.getBookTitleTags();
+    this._data.book_title_tags.byId = { ...titleTags, [newTitleTag.id]: { ...newTitleTag } };
   }
 
-  getBookAuthorTags() {
-    return this._data.book_author_tags.byId;
+  setAuthorTagById(newAuthorTag) {
+    const authorTags = this.getBookAuthorTags();
+    this._data.book_author_tags.byId = { ...authorTags, [newAuthorTag.id]: { ...newAuthorTag } };
+  }
+
+  setTagMapById(newTagMap) {
+    const tagMaps = this.getTagMaps();
+    this._data.title_author_tag_map.byId = { ...tagMaps, [newTagMap.id]: { ...newTagMap } };
+  }
+
+
+  setTitleTagAllIds(id) {
+    this._data.book_title_tags.allIds = List(this._data.book_title_tags.allIds).push(id).sort().toJS();
+  }
+
+  setAuthorTagAllIds(id) {
+    this._data.book_author_tags.allIds = List(this._data.book_author_tags.allIds).push(id).sort().toJS();
+  }
+
+  setTagMapAllIds(id) {
+    this._data.title_author_tag_map.allIds = List(this._data.title_author_tag_map.allIds).push(id).sort().toJS();
+  }
+
+
+  get() {
+    return this._data;
   }
 
   getBookTitleTags() {
     return this._data.book_title_tags.byId;
   }
 
+  getBookAuthorTags() {
+    return this._data.book_author_tags.byId;
+  }
+
   getTagMaps() {
     return this._data.title_author_tag_map.byId;
   }
 
+  getRefinedText(str) {
+    return str.replace(/\s/g, '').toLowerCase();
+  }
+
+  getFilteredTitleTags(refinedTitleText) {
+    const titleTags = this.getBookTitleTags();
+
+    return _.filter(titleTags, (titleTag) => {
+      const refinedTag = this.getRefinedText(titleTag.book_title);
+      return refinedTag === refinedTitleText;
+    });
+  }
+
+  getFilteredAuthorTags(refinedAuthorText) {
+    const authorTags = this.getBookAuthorTags();
+
+    return _.filter(authorTags, (authorTag) => {
+      const refinedTag = this.getRefinedText(authorTag.book_author);
+      return refinedTag === refinedAuthorText;
+    });
+  }
+
+
+  getTagMapId() {
+    return _.takeRight(this._data.title_author_tag_map.allIds)[0] + 1;
+  }
+
+  getTitleTagId() {
+    return _.takeRight(this._data.book_title_tags.allIds)[0] + 1;
+  }
+
+  getAuthorTagId() {
+    return _.takeRight(this._data.book_author_tags.allIds)[0] + 1;
+  }
+
+
+  findFilteredTitleTags(refinedTitleText) {
+    const titleTags = this.getBookTitleTags();
+
+    return refinedTitleText === '' ? [] : _.filter(titleTags, (titleTag) => {
+      const refinedTag = this.getRefinedText(titleTag.book_title);
+      return refinedTag.indexOf(refinedTitleText) !== -1;
+    });
+  }
+
+  findFilteredAuthorTags(refinedAuthorText) {
+    const authorTags = this.getBookAuthorTags();
+
+    return refinedAuthorText === '' ? [] : _.filter(authorTags, (authorTag) => {
+      const refinedTag = this.getRefinedText(authorTag.book_author);
+      return refinedTag.indexOf(refinedAuthorText) !== -1;
+    });
+  }
+
+  findTagsByBookTitle(title) {
+    const result = [];
+    const refined = this.getRefinedText(title);
+    const authorTags = this.getBookAuthorTags();
+    const tagMaps = this.getTagMaps();
+
+    const filteredTitleTags = this.findFilteredTitleTags(refined);
+
+    _.forEach(filteredTitleTags, (titleTag) => {
+      titleTag.map_ids.forEach((id) => {
+        result.push({
+          author: authorTags[tagMaps[id].author],
+          title: titleTag
+        });
+      });
+    });
+
+    return result;
+  }
+
   findTagsByAuthor(author) {
     const result = [];
-    const refined = author.replace(/\s/g, '').toLowerCase();
-    const authorTags = this.getBookAuthorTags();
+    const refined = this.getRefinedText(author);
     const titleTags = this.getBookTitleTags();
     const tagMaps = this.getTagMaps();
 
-    const filteredAuthorTags = refined === '' ? [] : _.filter(authorTags, (authorTag) => {
-      const refinedTag = authorTag.book_author.replace(/\s/g, '').toLowerCase();
-      return refinedTag.indexOf(refined) !== -1;
-    });
+    const filteredAuthorTags = this.findFilteredAuthorTags(refined);
 
     _.forEach(filteredAuthorTags, (authorTag) => {
       authorTag.map_ids.forEach((id) => {
@@ -132,28 +237,127 @@ class Tag {
     return result;
   }
 
-  findTagsByBookTitle(title) {
-    const result = [];
-    const refined = title.replace(/\s/g, '').toLowerCase();
-    const authorTags = this.getBookAuthorTags();
-    const titleTags = this.getBookTitleTags();
-    const tagMaps = this.getTagMaps();
+  insertTag({ bookId, title, author }) {
+    const refinedTitleText = this.getRefinedText(title);
+    const refinedAuthorText = this.getRefinedText(author);
 
-    const filteredTitleTags = refined === '' ? [] : _.filter(titleTags, (titleTag) => {
-      const refinedTag = titleTag.book_title.replace(/\s/g, '').toLowerCase();
-      return refinedTag.indexOf(refined) !== -1;
-    });
+    const filteredTitleTags = this.getFilteredTitleTags(refinedTitleText);
+    const filteredAuthorTags = this.getFilteredAuthorTags(refinedAuthorText);
+    console.log('insertTag > filteredTitleTags', filteredTitleTags);
+    console.log('insertTag > filteredAuthorTags', filteredAuthorTags);
+    const flag = this.getFlag(filteredTitleTags, filteredAuthorTags);
+    console.log('flag', flag);
+    switch(flag) {
+      case this._flag.TITLE_EX_AUTHOR_EX:
+        return this.insertTagTitleExAuthorEx(filteredTitleTags, filteredAuthorTags, bookId);
+      case this._flag.TITLE_NEX_AUTHOR_EX:
+        return this.insertTagTitleNexAuthorEx(filteredAuthorTags, bookId, title);
+      case this._flag.TITLE_EX_AUTHOR_NEX:
+      case this._flag.TITLE_NEX_AUTHOR_NEX:
+        return this.insertTagTitleNexAuthorNex(bookId, title, author);
+      default:
+        console.log('default!!');
+    }
+  }
 
-    _.forEach(filteredTitleTags, (titleTag) => {
-      titleTag.map_ids.forEach((id) => {
-        result.push({
-          author: authorTags[tagMaps[id].author],
-          title: titleTag
-        });
-      });
-    });
+  getFlag(titleArr, authorArr) {
+    if (titleArr.length !== 0) {
+      return (authorArr.length !== 0) ? this._flag.TITLE_EX_AUTHOR_EX : this._flag.TITLE_NEX_AUTHOR_NEX;
+    } else {
+      return (authorArr.length !== 0) ? this._flag.TITLE_NEX_AUTHOR_EX : this._flag.TITLE_NEX_AUTHOR_NEX;
+    }
+  }
 
-    return result;
+  insertTagTitleExAuthorEx(filteredTitleTags, filteredAuthorTags, bookId) {
+    const titleTag = filteredTitleTags[0];
+    const newTitleTag = {
+      ...titleTag,
+      book_ids: List(titleTag.book_ids).push(bookId).sort().toJS()
+    };
+    this.setTitleTagById(newTitleTag);
+    console.log('TITLE_EX_AUTHOR_EX > bookTitleTags', this.getBookTitleTags());
+    console.log('TITLE_EX_AUTHOR_EX > bookAuthorTags', this.getBookAuthorTags());
+    console.log('TITLE_EX_AUTHOR_EX > tagMap', this.getTagMaps());
+
+    return {
+      title_tag_id: titleTag.id,
+      author_tag_id: filteredAuthorTags[0].id
+    };
+  }
+
+  insertTagTitleNexAuthorEx(filteredAuthorTags, bookId, title) {
+    const authorTag = filteredAuthorTags[0];
+    const newTagMapId = this.getTagMapId();
+    const newTitleTagId = this.getTitleTagId();
+
+    const newTitleTag = {
+      id: newTitleTagId,
+      book_title: title,
+      book_ids: [bookId],
+      map_ids: [newTagMapId]
+    };
+    const newAuthorTag = {
+      ...authorTag,
+      map_ids: List(authorTag.map_ids).push(newTagMapId).sort().toJS()
+    };
+    const newTagMap = {
+      id: newTagMapId,
+      title: newTitleTagId,
+      author: authorTag.id
+    };
+
+    this.setTitleTagById(newTitleTag);
+    this.setAuthorTagById(newAuthorTag);
+    this.setTagMapById(newTagMap);
+
+    console.log('TITLE_NEX_AUTHOR_EX > bookTitleTags', this.getBookTitleTags());
+    console.log('TITLE_NEX_AUTHOR_EX > bookAuthorTags', this.getBookAuthorTags());
+    console.log('TITLE_NEX_AUTHOR_EX > tagMap', this.getTagMaps());
+
+    return {
+      title_tag_id: newTitleTagId,
+      author_tag_id: authorTag.id
+    };
+  }
+
+  insertTagTitleNexAuthorNex(bookId, title, author) {
+    const newTagMapId = this.getTagMapId();
+    console.log('newTagMapId', newTagMapId);
+    const newTitleTagId = this.getTitleTagId();
+    console.log('newTitleTagId', newTitleTagId);
+    const newAuthorTagId = this.getAuthorTagId();
+    console.log('newAuthorTagId', newAuthorTagId);
+
+    const newTitleTag = {
+      id: newTitleTagId,
+      book_title: title,
+      book_ids: List([bookId]).toJS(),
+      map_ids: List([newTagMapId]).toJS()
+    };
+    const newAuthorTag = {
+      id: newAuthorTagId,
+      book_author: author,
+      map_ids: List([newTagMapId]).toJS()
+    };
+
+    const newTagMap = {
+      id: newTagMapId,
+      title: newTitleTagId,
+      author: newAuthorTagId
+    };
+
+    this.setTitleTagById(newTitleTag);
+    this.setAuthorTagById(newAuthorTag);
+    this.setTagMapById(newTagMap);
+
+    console.log('TITLE_NEX_AUTHOR_NEX > bookTitleTags', this.getBookTitleTags());
+    console.log('TITLE_NEX_AUTHOR_NEX > bookAuthorTags', this.getBookAuthorTags());
+    console.log('TITLE_NEX_AUTHOR_NEX > tagMap', this.getTagMaps());
+
+    return {
+      title_tag_id: newTitleTagId,
+      author_tag_id: newAuthorTagId
+    };
   }
 }
 

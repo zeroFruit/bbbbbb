@@ -50,6 +50,10 @@ const Book = {
   insert: async (book) => {
     const insertedBook = await new BookData().insert(book);
     return insertedBook;
+  },
+  updateTagIds: async (bookId, { titleTagId, authorTagId }) => {
+    const updatedBook = await new BookData().updateTagIds(bookId, { titleTagId, authorTagId });
+    return updatedBook;
   }
 };
 
@@ -143,6 +147,10 @@ const Search = {
     const results = await Promise.all([tag.findTagsByAuthor(searchText), tag.findTagsByBookTitle(searchText)]);
 
     return _.union(results[0], results[1]);
+  },
+  fetchBookTagIdAndAuthorTagIdByText: async (bookId, titleText, authorText) => {
+    const tagIds = await new TagData().insertTag({ bookId, title: titleText, author: authorText });
+    return tagIds;
   }
 };
 

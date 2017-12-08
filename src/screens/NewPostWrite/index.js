@@ -53,7 +53,6 @@ class NewPostWrite extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isBookAdd_) {
-      console.log('nextProps', nextProps);
       navigateToNested(this.props, 'tabs', {}, 'MyPage', {});
     }
   }
@@ -95,11 +94,11 @@ class NewPostWrite extends PureComponent {
     } else {
       await this._setStateIsBookAdding(true);
       const book = {
+        bookTitle,
+        bookAuthor,
         content,
         img_src: this.props.photo.image.uri,
-        user_id: USER_ID,
-        title_tag_id: 1,
-        author_tag_id: 1
+        user_id: USER_ID
       };
       await this.props.AsyncAddBookAction(book);
     }
