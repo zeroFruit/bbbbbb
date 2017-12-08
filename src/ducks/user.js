@@ -108,6 +108,7 @@ export const actions = {
 
 export const selectors = {
   GetMyDisplayName: state => state.user.myDisplayName_,
+  GetMe: state => state.user.me_,
   GetSelectedUserDisplayName: state => state.user.selectedUserDisplayName_,
   GetSelectedUser: state => state.user.selectedUser_,
   GetIsSelectedUserInfoFetched: state => state.user.isSelectedUserInfoFetched_,

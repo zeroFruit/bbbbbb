@@ -14,7 +14,7 @@ import { mapNavigateParamsToProps } from './hocs/mapNavigateParamsToProps';
 
 import Splash from './screens/Splash';
 import BookMark from './screens/BookMark/container';
-import MyPage from './screens/MyPage';
+import MyPage from './screens/MyPage/container';
 import NewPost from './screens/NewPost';
 import NewPostWrite from './screens/NewPostWrite/container';
 import NewsFeed from './screens/NewsFeed/container';
@@ -27,6 +27,8 @@ import CollectionSelectPage from './screens/CollectionSelectPage/container';
 import CollectionBookSelectPage from './screens/CollectionBookSelectPage/container';
 
 import CustomTabBar from './components/TabBar';
+
+import { hasPath } from './utils/ObjectUtils';
 
 class RouterComponent extends Component {
   render() {
@@ -147,7 +149,7 @@ const CustomTabNavigator = createNavigator(CustomTabConfig)(CustomTabView);
 /*
   Helper functions
 */
-export const navigateTo = (props, to, params) => {
+export const navigateTo = (props, to, params = {}) => {
   props.navigation.navigate(to, params);
 };
 
@@ -164,21 +166,18 @@ export const navigateToNested = (props, to, params, nestedScreenKey, nestedScree
 };
 
 export const getParamsFromNavigationState = (state) => {
-  const stackNavIdx = state.index;
-  const stackNavRoutes = state.routes[stackNavIdx];
-  // Nav Tree 구조에 따라 달라진다.
-  if (stackNavIdx === 0) {
-    const { index, routes } = stackNavRoutes;
-    const { params } = routes[index];
-    return params;
+  if (hasPath(state, 'index')) {
+    const { index, routes } = state;
+
+    return getParamsFromNavigationState(routes[index]);
   } else {
-    return stackNavRoutes.params;
+    return hasPath(state, 'params') ? state.params : null;
   }
 };
 
 export const renderHeaderWithNavigation = (navigation) => {
   const params = getParamsFromNavigationState(navigation.state);
-
+  console.log('params', params);
   return (renderHeaderMethod) => {
     return renderHeaderMethod(params);
   };

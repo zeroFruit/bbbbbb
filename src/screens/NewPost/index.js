@@ -21,7 +21,6 @@ import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultView
 
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  console.log('NewPost', params);
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
@@ -148,6 +147,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'white'
   },
   container: {
+    justifyContent: 'space-between'
   }
 });
 

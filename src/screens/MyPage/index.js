@@ -44,9 +44,10 @@ class MyPage extends Component {
   };
 
   async componentDidMount() {
+    // console.log('me?', this.props.me_);
     try {
-      await this.fetchMyGalleryCards(USER_ID);
-      await this.fetchMyInfo(USER_ID);
+      await this.fetchMyGalleryCards();
+      await this.fetchMyInfo();
     } catch (e) {
       logger.error(e);
     }
@@ -82,18 +83,22 @@ class MyPage extends Component {
     );
   }
 
-  fetchMyGalleryCards = async (userId) => {
-    const images = await agent.Book.fetchByUserId(userId);
+  fetchMyGalleryCards = async () => {
+    const images = await agent.Book.fetchByUserId(USER_ID);
     const fetchedCards = takeFromArray(images, NUM_OF_CARDS_IN_GALLERY);
     const myGalleryCardsProps = this.arrangeGalleryCards(fetchedCards);
     this.setState({ myGalleryCardsProps });
   }
 
-  fetchMyInfo = async (userId) => {
+  fetchMyInfo = () => {
+    setParamsToNavigation(this.props, { my: this.props.me_ });
+    this.setState({ my: this.props.me_ });
+  }
+  /*
     const my = await agent.User.fetchByUserId(userId);
     setParamsToNavigation(this.props, { my });
     this.setState({ my });
-  }
+  */
 
   arrangeGalleryCards = (cards) => {
     return cards.map((card) => {

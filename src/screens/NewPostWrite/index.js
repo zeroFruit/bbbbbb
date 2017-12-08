@@ -18,7 +18,6 @@ import ProgressBar from '../../components/ProgressBar';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  console.log('NewPostWrite', params);
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
@@ -54,6 +53,7 @@ class NewPostWrite extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isBookAdd_) {
+      console.log('nextProps', nextProps);
       navigateToNested(this.props, 'tabs', {}, 'MyPage', {});
     }
   }
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center'
   },
   preview: {
