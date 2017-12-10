@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
 import Post from '../../components/Post';
-import { blockOnMomentumScrollEndHOC } from '../../hocs/blockOnMomentumScrollEndHOC';
 
 import { indexOfValueInArray } from '../../utils/ArrayUtils';
 

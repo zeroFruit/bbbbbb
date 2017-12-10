@@ -31,8 +31,6 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
       );
     }
 
-    /*
-      TODO: 현재 blockOnMomentumScrollEndHOC에서 사용되고 있다. 컴포넌트 안으로 옮기기 */
     _requestBooksAndUsers = async () => {
       const { numOfFeedsPerLoad_, newsfeedPage_, selectedBooks_ } = this.props;
       if (selectedBooks_.length >= newsfeedPage_ * numOfFeedsPerLoad_) {
