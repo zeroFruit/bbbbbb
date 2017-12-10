@@ -67,7 +67,6 @@ class NewsFeedList extends PureComponent {
   }
 
   _onClickNewsfeedCard = (bookId, userId) => {
-    console.log('NewsFeedList', bookId, userId);
     this.props.onClickNewsfeedCard(bookId, userId);
   }
 

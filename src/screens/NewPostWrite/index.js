@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import { View, Text, StyleSheet, Image, Alert } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import {
   renderHeaderWithNavigation,
@@ -64,26 +65,28 @@ class NewPostWrite extends PureComponent {
 
     const { photo } = this.props;
     return (
-      <View style={ styles.container }>
-        <View style={ styles.preview }>
-          <Image
-            style={ styles.previewImage }
-            source={ { uri: photo.image.uri } } />
+      <KeyboardAwareScrollView>
+        <View style={ styles.container }>
+          <View style={ styles.preview }>
+            <Image
+              style={ styles.previewImage }
+              source={ { uri: photo.image.uri } } />
+          </View>
+          <PostEditPanel
+            label="책 제목"
+            placeholder="책 제목을 입력해주세요."
+            textValue={ this.state.bookTitle }
+            onChangeText={ this._onChangeBookTitle } />
+          <PostEditPanel
+            label="작가 이름"
+            placeholder="작가 이름을 입력해주세요."
+            textValue={ this.state.bookAuthor }
+            onChangeText={ this._onChangeBookAuthor } />
+          <PostEditTextArea
+            textValue={ this.state.content }
+            onChangeText={ this._onChangeContent } />
         </View>
-        <PostEditPanel
-          label="책 제목"
-          placeholder="책 제목을 입력해주세요."
-          textValue={ this.state.bookTitle }
-          onChangeText={ this._onChangeBookTitle } />
-        <PostEditPanel
-          label="작가 이름"
-          placeholder="작가 이름을 입력해주세요."
-          textValue={ this.state.bookAuthor }
-          onChangeText={ this._onChangeBookAuthor } />
-        <PostEditTextArea
-          textValue={ this.state.content }
-          onChangeText={ this._onChangeContent } />
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 

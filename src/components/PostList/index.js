@@ -56,12 +56,13 @@ class PostList extends PureComponent {
   }
 
   _onMomentumScrollEnd = () => {
+    console.log('_onMomentumScrollEnd');
     this.props.requestBooksAndUsers();
   }
 
   _onClickNewsfeedCard = (bookId, userId) => {
     // this.props.onClickNewsfeedCard(bookId, userId);
-    console.log('clicked!!');
+    ToastAndroid.show(`뉴스피드 카드를 눌렀습니다. book id: ${bookId}, user id: ${userId}`, ToastAndroid.SHORT);
   }
 
   _onClickAuthorTagOfPostTitle = (tagId) => {

@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { PureComponent } from 'react';
+import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
@@ -31,7 +31,7 @@ const renderHeader = defaultViewWhileNoParams((params) => {
   );
 });
 
-class PostSelectedList extends Component {
+class PostSelectedList extends PureComponent {
   static navigationOptions = {
     header: ({ navigation }) => {
       return renderHeaderWithNavigation(navigation)(renderHeader);
@@ -44,7 +44,7 @@ class PostSelectedList extends Component {
     );
   }
   componentWillUnmount() {
-    this.props.resetPage();
+    this.props.resetBooksAndPage();
   }
 
   render() {
@@ -53,7 +53,7 @@ class PostSelectedList extends Component {
       usersInfo,
       selectedListPage_,
       numOfFeedsPerLoad_,
-      bookmarksAndBooks
+      bookmarksAndBooks,
     } = this.props;
     // console.log('PostSelectedList booksInfo', booksInfo);
     // console.log('==========================================');
@@ -79,7 +79,7 @@ class PostSelectedList extends Component {
   }
 
   _onClickAuthorTagOfPostTitle = (tagId) => {
-    console.log('PostSelectedList', tagId);
+    ToastAndroid.show(`작가 태그가 클릭되었습니다. tag id: ${tagId}`, ToastAndroid.SHORT);
   }
 
   _onClickAuthorTagOfHeader = (tagId) => {

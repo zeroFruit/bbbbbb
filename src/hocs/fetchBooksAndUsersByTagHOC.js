@@ -1,7 +1,6 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import agent from '../Agent';
 
 import ProgressBar from '../components/ProgressBar';
 
@@ -15,55 +14,31 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
   class WithBooksAndUsers extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
-    state = {
-      isBooksAndUsersFetching: true
-    };
-
     async componentDidMount() {
-      const { id, numOfFeedsPerLoad_, page_ } = this.props;
-      await this.props.AsyncFetchBooksAndUsersByTagRequestAction(id, numOfFeedsPerLoad_, page_);
-    }
-
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.isBooksAndUsersFetchedByTag_) {
-        this._setStateIsBooksAndUsersFetching(false);
-      }
-    }
-
-    componentWillUnmount() {
-      this.props.UnmountFetchedBooksByTagAction();
+      await this._requestBooksAndUsers();
     }
 
     render() {
       const { selectedBooksByTag_, selectedPostListUsers_ } = this.props;
-
-      if (this.state.isBooksAndUsersFetching) {
-        return <ProgressBar />;
-      }
-
       return (
         <WrappedComponent
           { ...this.props }
           booksInfo={ selectedBooksByTag_ }
           usersInfo={ selectedPostListUsers_ }
           requestBooksAndUsers={ this._requestBooksAndUsers }
-          resetPage={ this._resetPage } />
+          resetBooksAndPage={ this._resetBooksAndPage } />
       );
     }
 
-    _setStateIsBooksAndUsersFetching = (state) => {
-      this.setState({ isBooksAndUsersFetching: state });
-    }
-
     _requestBooksAndUsers = async () => {
-      const { booksInfo } = this.state;
-      const { id, numOfFeedsPerLoad_, selectedListPage_ } = this.props;
-      if (booksInfo.length >= selectedListPage_ * numOfFeedsPerLoad_) {
+      const { id, numOfFeedsPerLoad_, selectedListPage_, selectedBooksByTag_ } = this.props;
+      if (selectedBooksByTag_.length >= selectedListPage_ * numOfFeedsPerLoad_) {
         await this.props.AsyncFetchBooksAndUsersByTagRequestAction(id, numOfFeedsPerLoad_, selectedListPage_);
       }
     }
 
-    _resetPage = () => {
+    _resetBooksAndPage = () => {
+      this.props.UnmountFetchedBooksByTagAction();
       this.props.ResetSelectedListPageAction();
     }
   }

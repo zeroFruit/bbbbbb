@@ -18,9 +18,10 @@ class NewPostCameraRollThumbnail extends PureComponent {
       const { edges, page_info } = await CameraRoll.getPhotos({
         first: 20
       });
+      this._setStatePhotos(edges.map(photo => photo.node));
     } catch (e) {
       logger.log(e, 'CameraRoll getPhotos failed');
-      this._setStatePhotos(mockPhotos);
+      this._setStatePhotos(mockPhotos.map(photo => photo.node));
     }
   }
 
