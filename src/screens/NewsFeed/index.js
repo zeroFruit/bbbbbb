@@ -48,7 +48,7 @@ class NewsFeed extends ScreenWithSearchBarHeader {
   };
 
   componentWillUnmount() {
-    this.props.resetPage();
+    this.props.resetBooksAndPage();
   }
 
   render() {

@@ -12,6 +12,7 @@ export const types = {
   FETCH_BOOKS_READY: 'book/fetch_books_ready',
   FETCH_BOOKS_REQUEST: 'book/fetch_books_request',
   FETCH_BOOKS_SUCCESS: 'book/fetch_books_success',
+  FETCH_BOOKS_UNMOUNT: 'book/fetch_books_unmount',
 
   FETCH_BOOKS_BY_TAG_REQUEST: 'book/fetch_books_by_tag_request',
   FETCH_BOOKS_BY_TAG_READY: 'book/fetch_books_by_tag_ready',
@@ -80,7 +81,13 @@ const fetchBooks = {
       ...state,
       isBooksFetched_: true,
       selectedBooks_: List(state.selectedBooks_).concat(action.payload).toJS()
-    })
+    });
+  },
+  [types.FETCH_BOOKS_UNMOUNT]: (state, action) => {
+    return ({
+      ...state,
+      selectedBooks_: List().toJS()
+    });
   }
 };
 
@@ -92,7 +99,6 @@ const fetchBooksByTag = {
     };
   },
   [types.FETCH_BOOKS_BY_TAG_SUCCESS]: (state, action) => {
-    // console.log('reducer book', action.payload);
     return {
       ...state,
       isBooksByTagFetched_: true,
@@ -170,6 +176,7 @@ export default book = createReducer(initialState, {
 });
 
 export const actions = {
+  UnmountFetchedBooks: () => ({ type: types.FETCH_BOOKS_UNMOUNT }),
   UnmountFetchedBooksByTag: () => ({ type: types.FETCH_BOOKS_BY_TAG_UNMOUNT })
 };
 

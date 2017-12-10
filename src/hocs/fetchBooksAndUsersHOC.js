@@ -14,67 +14,34 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
   class WithUsers extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
-    state = {
-      booksInfo: [],
-      usersInfo: [],
-      isBooksAndUsersFetching: true
-    };
-
     async componentDidMount() {
-      // const { numOfFeedsPerLoad_, newsfeedPage_ } = this.props;
       await this._requestBooksAndUsers();
     }
 
-    componentWillReceiveProps(nextProps) {
-      if (nextProps.isBooksAndUsersFetched_) {
-        const { selectedBooks_, selectedUsers_ } = nextProps;
-        this._setStateBooksInfo(selectedBooks_);
-        this._setStateUsersInfo(selectedUsers_);
-        this._setStateIsBooksAndUsersFetching(false);
-      }
-    }
-
     render() {
-      if (this.state.isBooksAndUsersFetching) {
-        return <ProgressBar />;
-      }
-      const { booksInfo, usersInfo } = this.state;
-      // console.log('1', booksInfo.map(b => b.id));
-      // console.log('2', usersInfo.map(u => u.id));
-      // console.log('===================================\n');
+      const { selectedBooks_, selectedUsers_ } = this.props;
+
       return (
         <WrappedComponent
           { ...this.props }
-          booksInfo={ booksInfo }
-          usersInfo={ usersInfo }
+          booksInfo={ selectedBooks_ }
+          usersInfo={ selectedUsers_ }
           requestBooksAndUsers={ this._requestBooksAndUsers }
-          resetPage={ this._resetPage } />
+          resetBooksAndPage={ this._resetBooksAndPage } />
       );
-    }
-
-    _setStateIsBooksAndUsersFetching = (state) => {
-      this.setState({ isBooksAndUsersFetching: state });
-    }
-
-    _setStateBooksInfo = (state) => {
-      this.setState({ booksInfo: state });
-    }
-
-    _setStateUsersInfo = (state) => {
-      this.setState({ usersInfo: state });
     }
 
     /*
       TODO: 현재 blockOnMomentumScrollEndHOC에서 사용되고 있다. 컴포넌트 안으로 옮기기 */
     _requestBooksAndUsers = async () => {
-      const { booksInfo } = this.state;
-      const { numOfFeedsPerLoad_, newsfeedPage_ } = this.props;
-      if (booksInfo.length >= newsfeedPage_ * numOfFeedsPerLoad_) {
+      const { numOfFeedsPerLoad_, newsfeedPage_, selectedBooks_ } = this.props;
+      if (selectedBooks_.length >= newsfeedPage_ * numOfFeedsPerLoad_) {
         await this.props.AsyncFetchBooksAndUsersRequestAction(numOfFeedsPerLoad_, newsfeedPage_);
       }
     }
 
-    _resetPage = () => {
+    _resetBooksAndPage = () => {
+      this.props.UnmountFetchedBooksAction();
       this.props.ResetNewsfeedPageAction();
     }
   }
@@ -83,7 +50,6 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
 };
 
 const mapStateToProps = state => ({
-  isBooksAndUsersFetched_: selectors.GetIsBooksAndUsersFetched(state),
   selectedBooks_: bookSelectors.GetSelectedBooks(state),
   selectedUsers_: userSelectors.GetSelectedUsers(state),
   newsfeedPage_: pageSelectors.GetNewsfeedPage(state)
@@ -96,5 +62,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   }),
   ResetNewsfeedPageAction: () => ({
     type: pageTypes.RESET_NEWSFEED_PAGE
-  })
+  }),
+  UnmountFetchedBooksAction: bookActions.UnmountFetchedBooks
 }, dispatch);
