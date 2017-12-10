@@ -5,24 +5,26 @@ import { compose } from 'recompose';
 
 import Post from '../../components/Post';
 
+
 import { indexOfValueInArray } from '../../utils/ArrayUtils';
+import { pickByKey } from '../../utils/ObjectUtils';
 
 class PostList extends PureComponent {
   render() {
-    const { booksInfo, myBookmarksAndBooks_ } = this.props;
-    // console.log('PostList', booksInfo);
-    // console.log('==============================');
+    const extraData = this._getExtraData(this.props);
     return (
       <View style={ { flex: 1 } } >
         <FlatList
-          data={ booksInfo }
-          extraData={ myBookmarksAndBooks_ }
+          data={ this.props.booksInfo }
+          extraData={ extraData }
           keyExtractor={ this._keyExtractor }
           renderItem={ this._renderItem }
           onMomentumScrollEnd={ this._onMomentumScrollEnd } />
       </View>
     )
   }
+
+  _getExtraData = props => pickByKey(props, ['booksInfo']);
 
   _keyExtractor = item => item.id;
 
@@ -38,7 +40,6 @@ class PostList extends PureComponent {
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
         selectType={ this.props.selectType }
-        isMyBookmark={ isMyBookmark }
         isMyBook={ isMyBook }
         isBookmarked={ isMyBookmark } />
     );
@@ -55,7 +56,6 @@ class PostList extends PureComponent {
   }
 
   _onMomentumScrollEnd = () => {
-    console.log('_onMomentumScrollEnd');
     this.props.requestBooksAndUsers();
   }
 

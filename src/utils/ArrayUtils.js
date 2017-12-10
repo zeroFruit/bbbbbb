@@ -15,3 +15,5 @@ export const uniqWithArray = (arr, comp) => _.uniqWith(arr, comp);
 export const sortByArray = (arr, comp) => _.sortBy(arr, comp);
 
 export const differenceWith = (target, comp, fn) => _.differenceWith(target, comp, fn);
+
+export const findIndex = (arr, predicate) => _.findIndex(arr, predicate);

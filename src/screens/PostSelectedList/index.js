@@ -10,6 +10,7 @@ import PostList from '../../components/PostList/container';
 import { fetchBooksAndUsersByTagHOC } from '../../hocs/fetchBooksAndUsersByTagHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
+import { mapSelectedPostFirstHOC } from '../../hocs/mapSelectedPostFirstHOC';
 import { withLoaderHOC } from '../../hocs/withLoaderHOC';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
@@ -55,8 +56,6 @@ class PostSelectedList extends PureComponent {
       numOfFeedsPerLoad_,
       bookmarksAndBooks,
     } = this.props;
-    // console.log('PostSelectedList booksInfo', booksInfo);
-    // console.log('==========================================');
     return (
       <View style={ { flex: 1 } }>
         <PostList
@@ -105,6 +104,7 @@ const styles = StyleSheet.create({
 export default compose(
   fetchBookmarksHOC,
   fetchBooksAndUsersByTagHOC,
+  mapSelectedPostFirstHOC,
   fetchTagHOC,
   withLoaderHOC
 )(PostSelectedList);

@@ -41,10 +41,9 @@ export const fetchTagHOC = (WrappedComponent) => {
     }
 
     componentWillReceiveProps(nextProps) {
-      // console.log('cwrp', nextProps.isSelectedBookTagFetched_);
-      if (nextProps.isSelectedBookTagFetched_) {
-        this._setStateIsSelectedBookTagFetching(false);
-      }
+      // if (nextProps.isSelectedBookTagFetched_) {
+      //   this._setStateIsSelectedBookTagFetching(false);
+      // }
     }
 
     render() {
@@ -56,9 +55,9 @@ export const fetchTagHOC = (WrappedComponent) => {
         selectedBook_
       } = this.props;
 
-      if (this.state.isSelectedBookTagFetching) {
-        return <ProgressBar />;
-      }
+      // if (this.state.isSelectedBookTagFetching) {
+      //   return <ProgressBar />;
+      // }
       return (
         <WrappedComponent
           { ...this.props }
@@ -72,9 +71,8 @@ export const fetchTagHOC = (WrappedComponent) => {
 
     _fetchTags = async (props) => {
       const { id, user } = props;
-      logger.log('fetchTagHOC: selectedUserDisplayName_:', this.props.selectedUserDisplayName_)
       await this.props.AsyncFetchTagRequestAction(user, id);
-      await this._setStateIsSelectedBookTagFetching(true);
+      // await this._setStateIsSelectedBookTagFetching(true);
     }
 
     _setStateIsSelectedBookTagFetching = (state) => {

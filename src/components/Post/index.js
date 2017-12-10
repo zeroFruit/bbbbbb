@@ -49,7 +49,7 @@ const defaultProps = {
 
 class Post extends React.Component {
   render() {
-    const { bookInfo, selectType, isBookmarked, isMyBook, isMyBookmark } = this.props;
+    const { bookInfo, selectType, isBookmarked, isMyBook } = this.props;
     const titleProps = this._fetchPostTitle(selectType);
     return (
       <View>
@@ -65,7 +65,6 @@ class Post extends React.Component {
           likes={ bookInfo.likes }
           views={ bookInfo.views }
           isMyBook={ isMyBook }
-          isMyBookmark={ isMyBookmark }
           isBookmarked={ isBookmarked } />
         <PostContent
           content={ bookInfo.content } />
