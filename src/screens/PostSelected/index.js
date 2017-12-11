@@ -11,11 +11,13 @@ import { withLoaderHOC } from '../../hocs/withLoaderHOC';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
+  navigateTo,
   setParamsToNavigation,
   renderHeaderWithNavigation
 } from '../../Router';
 import { indexOfValueInArray } from '../../utils/ArrayUtils';
 import { pickByKey } from '../../utils/ObjectUtils';
+import { selectType } from '../../config';
 
 const { number, func, shape, string, bool } = PropTypes;
 const propTypes = {
@@ -100,7 +102,10 @@ class PostSelected extends Component {
   }
 
   _onClickAuthorTagOfPostTitle = (tagId) => {
-    ToastAndroid.show(`작가 태그가 클릭되었습니다. tag id: ${tagId}`, ToastAndroid.SHORT);
+    const { id, user } = this.props;
+    const key = 'PostList';
+    const params = { id, user, selectType: selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG };
+    navigateTo(this.props, key, params);
   }
 }
 

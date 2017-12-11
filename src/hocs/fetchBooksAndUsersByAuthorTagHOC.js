@@ -16,12 +16,11 @@ export const fetchBooksAndUsersByAuthorTagHOC = (WrappedComponent) => {
     }
 
     render() {
-      console.log('By Author Tag');
-      const { selectedBooksByTag_, selectedPostListUsers_ } = this.props;
+      const { selectedBooksByAuthorTag_, selectedPostListUsers_ } = this.props;
       return (
         <WrappedComponent
           { ...this.props }
-          booksInfo={ selectedBooksByTag_ }
+          booksInfo={ selectedBooksByAuthorTag_ }
           usersInfo={ selectedPostListUsers_ }
           requestBooksAndUsers={ this._requestBooksAndUsers }
           resetBooksAndPage={ this._resetBooksAndPage } />
@@ -29,8 +28,8 @@ export const fetchBooksAndUsersByAuthorTagHOC = (WrappedComponent) => {
     }
 
     _requestBooksAndUsers = async () => {
-      const { id, numOfFeedsPerLoad_, selectedListPage_, selectedBooksByTag_ } = this.props;
-      if (selectedBooksByTag_.length >= selectedListPage_ * numOfFeedsPerLoad_) {
+      const { id, numOfFeedsPerLoad_, selectedListPage_, selectedBooksByAuthorTag_ } = this.props;
+      if (selectedBooksByAuthorTag_.length >= selectedListPage_ * numOfFeedsPerLoad_) {
         await this.props.AsyncFetchBooksAndUsersByAuthorTagRequestAction(id, numOfFeedsPerLoad_, selectedListPage_);
       }
     }

@@ -16,7 +16,6 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
     }
 
     render() {
-      console.log('By Tag');
       const { selectedBooksByTag_, selectedPostListUsers_ } = this.props;
       return (
         <WrappedComponent
