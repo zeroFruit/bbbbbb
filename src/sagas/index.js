@@ -10,7 +10,8 @@ import user, {
   AsyncFetchSelectedUserInfoRequest
 } from './user';
 import book, {
-  AsyncFetchBooksByTagId,
+  AsyncFetchBook,
+  AsyncFetchBooksByIdForSameTag,
   AsyncFetchBooksByAuthorTagId,
   AsyncFetchBooks,
   AsyncFetchBooksByIds,
@@ -20,6 +21,19 @@ import tag from './tag';
 import collection from './collection';
 import search from './search';
 
+// 싱글 포스트
+export function* AsyncFetchBookAndUserRequest(action) {
+  yield put({
+    type: types.FETCH_BOOK_AND_USER_READY
+  });
+  const { bookId } = action.payload;
+  const Book = yield call(AsyncFetchBook, { payload: bookId });
+  const User = yield call(AsyncFetchSelectedUserInfoRequest, { payload: Book.user_id });
+
+  yield put({
+    type: types.FETCH_BOOK_AND_USER_SUCCESS
+  });
+}
 // 뉴스피드
 export function* AsyncFetchBooksAndUsersRequest(action) {
   yield put({
@@ -44,7 +58,7 @@ export function* AsyncFetchBooksAndUsersByTagRequest(action) {
     type: types.FETCH_BOOKS_AND_USERS_BY_TAG_READY
   });
 
-  const filteredBooks = yield* AsyncFetchBooksByTagId(action);
+  const filteredBooks = yield* AsyncFetchBooksByIdForSameTag(action);
 
   const users = filteredBooks.map(book => book.user_id);
   yield* AsyncFetchUsersByUserIdsForPostList({ payload: { users } });
@@ -97,6 +111,7 @@ export function* AsyncFetchBooksByUser(action) {
 }
 
 const index =  function* indexSaga() {
+  yield takeLatest(types.FETCH_BOOK_AND_USER_REQUEST, AsyncFetchBookAndUserRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_REQUEST, AsyncFetchBooksAndUsersRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_TAG_REQUEST, AsyncFetchBooksAndUsersByTagRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG_REQUEST, AsyncFetchBooksAndUsersByAuthorTagRequest);

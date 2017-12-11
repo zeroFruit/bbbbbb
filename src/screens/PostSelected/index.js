@@ -7,7 +7,7 @@ import Header from '../../components/Header';
 import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import Post from '../../components/Post';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
-import { withLoaderHOC } from '../../hocs/withLoaderHOC';
+import { fetchBookAndUserHOC } from '../../hocs/fetchBookAndUserHOC';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import {
@@ -16,7 +16,6 @@ import {
   renderHeaderWithNavigation
 } from '../../Router';
 import { indexOfValueInArray } from '../../utils/ArrayUtils';
-import { pickByKey } from '../../utils/ObjectUtils';
 import { selectType } from '../../config';
 
 const { number, func, shape, string, bool } = PropTypes;
@@ -43,8 +42,6 @@ const defaultProps = {
   userInfo: {}
 };
 
-const PARAMS_KEY = ['userInfo', 'bookInfo', 'selectType'];
-
 const renderHeader = defaultViewWhileNoParams((params) => {
   const { selectType } = params;
   return (
@@ -57,9 +54,13 @@ const renderHeader = defaultViewWhileNoParams((params) => {
 
 class PostSelected extends Component {
   static navigationOptions = {
-    header: ({ navigation }) => {
-      return renderHeaderWithNavigation(navigation)(renderHeader);
-    }
+    header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
+  }
+
+  componentDidMount() {
+    setParamsToNavigation(this.props, {
+      selectType: this.props.selectType
+    });
   }
 
   render() {
@@ -86,11 +87,6 @@ class PostSelected extends Component {
     );
   }
 
-  _setParamsToNavigation = async (props) => {
-    const paramsOfNav = pickByKey(props, PARAMS_KEY);
-    await setParamsToNavigation(props, paramsOfNav);
-  }
-
   _isMyBookmark = (id) => {
     const { myBookmarks_ } = this.props;
     return (indexOfValueInArray(myBookmarks_, id) !== -1);
@@ -104,7 +100,7 @@ class PostSelected extends Component {
   _onClickAuthorTagOfPostTitle = (tagId) => {
     const { id, user } = this.props;
     const key = 'PostList';
-    const params = { id, user, selectType: selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG };
+    const params = { id, selectType: selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG };
     navigateTo(this.props, key, params);
   }
 }
@@ -120,6 +116,6 @@ PostSelected.propTypes = propTypes;
 PostSelected.defaultProps = defaultProps;
 
 export default compose(
-  fetchTagHOC,
-  withLoaderHOC
+  fetchBookAndUserHOC, // bookId
+  fetchTagHOC
 )(PostSelected);

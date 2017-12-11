@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
@@ -47,6 +47,12 @@ class NewsFeed extends ScreenWithSearchBarHeader {
     header: ({ navigation }) => renderHeaderWithNavigation(navigation)(renderHeader)
   };
 
+  componentWillMount() {
+    setParamsToNavigation(this.props, {
+      onClickSearchListItem: this._onClickSearchListItem
+    });
+  }
+
   componentWillUnmount() {
     this.props.resetBooksAndPage();
   }
@@ -81,13 +87,17 @@ class NewsFeed extends ScreenWithSearchBarHeader {
 
   _onClickNewsfeedCard = (id, user) => {
     const key = 'PostList';
-    const params = { id, user, selectType: selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE };
+    const params = { id, selectType: selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE };
     navigateTo(this.props, key, params);
   }
 
   _onClickNicknameTextOfPostTitle = (userId) => {
     logger.log('At newsfeed, nickname clicked, userId:', userId);
   }
+
+  // extends ScreenWithSearchBarHeader
+  // _onClickSearchListItem = (bookId) => {
+  // }
 }
 
 const styles = StyleSheet.create({

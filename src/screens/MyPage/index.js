@@ -93,11 +93,6 @@ class MyPage extends Component {
     setParamsToNavigation(this.props, { my: this.props.me_ });
     this.setState({ my: this.props.me_ });
   }
-  /*
-    const my = await agent.User.fetchByUserId(userId);
-    setParamsToNavigation(this.props, { my });
-    this.setState({ my });
-  */
 
   arrangeGalleryCards = (cards) => {
     return cards.map((card) => {

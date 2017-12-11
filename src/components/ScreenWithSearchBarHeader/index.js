@@ -11,7 +11,7 @@ export default class ScreenWithSearchBarHeader extends PureComponent {
 
   _onClickSearchListItem = (bookId) => {
     const key = 'PostList';
-    const params = { id: bookId, user: USER_ID, selectType: selectType.SELECT_FROM_SEARCH_LIST };
+    const params = { id: bookId, selectType: selectType.SELECT_FROM_SEARCH_LIST };
     navigateTo(this.props, key, params);
   }
 }

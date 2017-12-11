@@ -38,11 +38,10 @@ class PostSelectedList extends PureComponent {
       return renderHeaderWithNavigation(navigation)(renderHeader);
     }
   }
-  componentWillMount() {
-    setParamsToNavigation(
-      this.props,
-      { onClickAuthorTagOfHeader: this._onClickAuthorTagOfHeader }
-    );
+  componentDidMount() {
+    setParamsToNavigation(this.props, {
+      onClickAuthorTagOfHeader: this._onClickAuthorTagOfHeader
+    });
   }
   componentWillUnmount() {
     this.props.resetBooksAndPage();
@@ -102,9 +101,8 @@ const styles = StyleSheet.create({
 });
 
 export default compose(
-  fetchBookmarksHOC,
-  selectFetchHOC,
+  fetchBookmarksHOC, // USER_ID
+  selectFetchHOC, // bookId
   mapSelectedPostFirstHOC,
-  fetchTagHOC,
-  withLoaderHOC
+  fetchTagHOC // bookId
 )(PostSelectedList);

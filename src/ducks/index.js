@@ -31,6 +31,10 @@ export const selectors = {
 };
 
 export const types = {
+  FETCH_BOOK_AND_USER_REQUEST: 'index/fetch_book_and_user_request',
+  FETCH_BOOK_AND_USER_READY: 'index/fetch_book_and_user_ready',
+  FETCH_BOOK_AND_USER_SUCCESS: 'index/fetch_book_and_user_success',
+
   FETCH_BOOKS_AND_USERS_REQUEST: 'index/fetch_books_and_users_request',
   FETCH_BOOKS_AND_USERS_READY: 'index/fetch_books_and_users_ready',
   FETCH_BOOKS_AND_USERS_SUCCESS: 'index/fetch_books_and_users_success',
@@ -53,11 +57,23 @@ export const types = {
 };
 
 export const initialState = {
+  isBookAndUserFetched_: false,
   isBooksAndUsersFetched_: false,
   isBooksAndUsersFetchedByTag_: false,
   isBooksAndUsersFetchedByAuthorTag_: false,
   isBooksFetchedByCollection_: false,
   isBooksFetchedByUser_: false
+};
+
+export const fetchBookAndUser = {
+  [types.FETCH_BOOK_AND_USER_READY]: (state, action) => ({
+    ...state,
+    isBookAndUserFetched_: false
+  }),
+  [types.FETCH_BOOK_AND_USER_SUCCESS]: (state, action) => ({
+    ...state,
+    isBookAndUserFetched_: true
+  })
 };
 
 export const fetchBooksAndUsers = {
@@ -116,6 +132,7 @@ export const fetchBooksByUser = {
 };
 
 const reducer = createReducer(initialState, {
+  ...fetchBookAndUser,
   ...fetchBooksAndUsers,
   ...fetchBooksAndUsersByTag,
   ...fetchBooksAndUsersByAuthorTag,

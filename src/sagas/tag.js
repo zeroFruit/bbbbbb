@@ -8,8 +8,8 @@ export function* AsyncFetchTagRequest(action) {
   yield put({
     type: tagTypes.FETCH_BOOK_TAG_READY
   });
-  const { user, id } = action.payload;
-  const me = yield call(agent.User.fetchByUserId, user);
+  const { id } = action.payload;
+
   const book = yield call(agent.Book.fetchByBookId, id);
   const response = yield call(
     agent.Tag.fetchByAuthorTagIdAndBookTagId,
@@ -18,18 +18,11 @@ export function* AsyncFetchTagRequest(action) {
   );
 
   yield put({
-    type: userTypes.FETCH_SELECTED_USER_SUCCESS,
-    payload: me
-  });
-  yield put({
-    type: bookTypes.FETCH_BOOK_SUCCESS,
-    payload: book
-  });
-
-  yield put({
     type: tagTypes.FETCH_BOOK_TAG_FETCHING,
     payload: response
   });
+
+
   yield put({
     type: tagTypes.FETCH_BOOK_TAG_SUCCESS
   });
