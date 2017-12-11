@@ -70,11 +70,8 @@ export function* AsyncFetchBooksByIds(action) {
   });
   const books = yield call(agent.Book.fetchByBookIds, action.payload);
   yield put({
-    type: types.FETCH_BOOKS_FOR_COLLECTION_FETCHING,
+    type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS,
     payload: books
-  });
-  yield put({
-    type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS
   });
 
   return books;

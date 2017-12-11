@@ -48,7 +48,7 @@ export function* AsyncAddBooksToCollectionRequest(action) {
   const updatedCollection = yield call(agent.Collection.updateBooksToCollection, id, bookIds);
 
   yield put({
-    type: bookTypes.FETCH_BOOKS_FOR_COLLECTION_FETCHING,
+    type: bookTypes.FETCH_BOOKS_FOR_COLLECTION_SUCCESS,
     payload: updatedCollection.book_ids
   });
   yield put({

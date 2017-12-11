@@ -34,7 +34,7 @@ class Collection {
   }
 
   getId() {
-    return _.takeRight(this._data.collections.allIds) + 1;
+    return _.takeRight(this._data.collections.allIds)[0] + 1;
   }
 
   getById() {
@@ -56,7 +56,7 @@ class Collection {
   }
 
   pushIdToAllIds(cid) {
-    this._data.collections.allIds.push(cid).sort();
+    this._data.collections.allIds = List(this._data.collections.allIds).push(cid).sort().toJS();
   }
 
   spliceIdToAllIds(index) {
