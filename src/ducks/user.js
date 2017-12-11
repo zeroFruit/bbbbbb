@@ -14,10 +14,12 @@ export const types = {
   FETCH_SELECTED_POST_LIST_USERS_READY: 'user/fetch_selected_post_list_users_ready',
   FETCH_SELECTED_POST_LIST_USERS_REQUEST: 'user/fetch_selected_post_list_users_request',
   FETCH_SELECTED_POST_LIST_USERS_SUCCESS: 'user/fetch_selected_post_list_users_success',
+  FETCH_SELECTED_POST_LIST_USERS_UNMOUNT: 'user/fetch_selected_post_list_users_unmount',
 
   FETCH_SELECTED_USERS_REQUEST: 'user/fetch_selected_users_request',
   FETCH_SELECTED_USERS_READY: 'user/fetch_selected_users_ready',
-  FETCH_SELECTED_USERS_SUCCESS: 'user/fetch_selected_users_success'
+  FETCH_SELECTED_USERS_SUCCESS: 'user/fetch_selected_users_success',
+  FETCH_SELECTED_USERS_UNMOUNT: 'user/fetch_selected_users_unmount'
 };
 
 export const initialState = {
@@ -77,6 +79,12 @@ const fetchUsers = {
       selectedUsers_: List(state.selectedUsers_).concat(action.payload).toJS(),
       isSelectedUsersFetched_: true
     });
+  },
+  [types.FETCH_SELECTED_USERS_UNMOUNT]: (state, action) => {
+    return ({
+      ...state,
+      selectedUsers_: List().toJS()
+    });
   }
 };
 
@@ -92,6 +100,12 @@ const fetchPostListUsers = {
       selectedPostListUsers_: List(state.selectedPostListUsers_).concat(action.payload).toJS(),
       isSelectedPostListUsersFetched_: true
     });
+  },
+  [types.FETCH_SELECTED_POST_LIST_USERS_UNMOUNT]: (state, action) => {
+    return ({
+      ...state,
+      selectedPostListUsers_: List().toJS()
+    });
   }
 };
 
@@ -103,7 +117,12 @@ export default user = createReducer(initialState, {
 });
 
 export const actions = {
-
+  UnmountSelectedPostListUsers: () => ({
+    type: types.FETCH_SELECTED_POST_LIST_USERS_UNMOUNT
+  }),
+  UnmountSelectedNewsfeedUsers: () => ({
+    type: types.FETCH_SELECTED_USERS_UNMOUNT
+  })
 };
 
 export const selectors = {

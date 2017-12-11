@@ -69,7 +69,7 @@ class PostTitle extends Component {
 
   _onClickTagButton = (tagId, tagType) => {
     if (this._isAuthorTag(tagType)) {
-      console.log('author tag clicked');
+      this.props.onClickAuthorTagOfPostTitle(tagId);
     }
   }
 

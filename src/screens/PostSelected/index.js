@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
 import PropTypes from 'prop-types';
 import { compose } from 'recompose';
 
@@ -60,10 +60,6 @@ class PostSelected extends Component {
     }
   }
 
-  componentWillUnmount() {
-    console.log('Post selected unmount');
-  }
-
   render() {
     const {
       bookInfo, userInfo, selectType, id,
@@ -71,6 +67,7 @@ class PostSelected extends Component {
     } = this.props;
     const isMyBookmark = this._isMyBookmark(id);
     const isMyBook = this._isMyBook(id);
+    console.log('id, usr', this.props.id, this.props.user);
     return (
       <View>
         <Post
@@ -81,7 +78,8 @@ class PostSelected extends Component {
           bookAuthorTag={ selectedBookAuthorTag }
           isMyBookmark={ isMyBookmark }
           isMyBook={ isMyBook }
-          isBookmarked={ isMyBookmark } />
+          isBookmarked={ isMyBookmark }
+          onClickAuthorTagOfPostTitle={ this._onClickAuthorTagOfPostTitle } />
       </View>
     );
   }
@@ -99,6 +97,10 @@ class PostSelected extends Component {
   _isMyBook = (id) => {
     const { myBooks_ } = this.props;
     return (indexOfValueInArray(myBooks_, id) !== -1);
+  }
+
+  _onClickAuthorTagOfPostTitle = (tagId) => {
+    ToastAndroid.show(`작가 태그가 클릭되었습니다. tag id: ${tagId}`, ToastAndroid.SHORT);
   }
 }
 

@@ -7,7 +7,7 @@ import ProgressBar from '../components/ProgressBar';
 import { types, selectors } from '../ducks';
 import { selectors as bookSelectors, actions as bookActions, types as bookTypes } from '../ducks/book';
 import { selectors as tagSelectors, types as tagTypes } from '../ducks/tag';
-import { selectors as userSelectors } from '../ducks/user';
+import { selectors as userSelectors, actions as userActions } from '../ducks/user';
 import { selectors as pageSelectors, actions as pageActions } from '../ducks/page';
 
 export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
@@ -20,6 +20,7 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
 
     render() {
       const { selectedBooksByTag_, selectedPostListUsers_ } = this.props;
+      console.log('selectedPostListUsers_', selectedPostListUsers_.map(u => u.id));
       return (
         <WrappedComponent
           { ...this.props }
@@ -39,6 +40,7 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
 
     _resetBooksAndPage = () => {
       this.props.UnmountFetchedBooksByTagAction();
+      this.props.UnmountSelectedPostListUsersAction();
       this.props.ResetSelectedListPageAction();
     }
   }
@@ -59,5 +61,6 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     payload: { id, numOfFeeds, page }
   }),
   UnmountFetchedBooksByTagAction: bookActions.UnmountFetchedBooksByTag,
+  UnmountSelectedPostListUsersAction: userActions.UnmountSelectedPostListUsers,
   ResetSelectedListPageAction: pageActions.ResetSelectedListPage
 }, dispatch);

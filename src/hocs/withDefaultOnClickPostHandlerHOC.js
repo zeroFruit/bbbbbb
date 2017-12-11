@@ -9,8 +9,8 @@ export const withDefaultOnClickPostHandlerHOC = (WrappedComponent) => {
       if (!this.props.onClickPost) {
         return (
           <WrappedComponent
-            onClickPost={ () => { logger.warn('onClick handler not defined'); } }
-            { ...this.props } />
+            { ...this.props }
+            onClickPost={ () => { logger.warn('onClick handler not defined'); } } />
         );
       }
 

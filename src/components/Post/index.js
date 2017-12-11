@@ -56,6 +56,7 @@ class Post extends React.Component {
         <PostTitle
           type={ titleProps.type }
           text={ titleProps.text }
+          onClickAuthorTagOfPostTitle={ this._onClickAuthorTagOfPostTitle }
           onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle } />
         <PostImage
           imgSrc={ bookInfo.img_src }
