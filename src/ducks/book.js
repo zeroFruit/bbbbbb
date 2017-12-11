@@ -19,6 +19,11 @@ export const types = {
   FETCH_BOOKS_BY_TAG_SUCCESS: 'book/fetch_books_by_tag_success',
   FETCH_BOOKS_BY_TAG_UNMOUNT: 'book/fetch_books_by_tag_unmount',
 
+  FETCH_BOOKS_BY_AUTHOR_TAG_REQUEST: 'book/fetch_books_by_author_tag_request',
+  FETCH_BOOKS_BY_AUTHOR_TAG_READY: 'book/fetch_books_by_author_tag_ready',
+  FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS: 'book/fetch_books_by_author_tag_success',
+  FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT: 'book/fetch_books_by_author_tag_unmount',
+
   FETCH_BOOKS_FOR_COLLECTION_REQUEST: 'book/fetch_books_for_collection_request',
   FETCH_BOOKS_FOR_COLLECTION_READY: 'book/fetch_books_for_collection_ready',
   FETCH_BOOKS_FOR_COLLECTION_FETCHING: 'book/fetch_books_for_collection_fetching',
@@ -45,6 +50,8 @@ export const initialState = {
   selectedBooks_: List().toJS(),
   isBooksByTagFetched_: false,
   selectedBooksByTag_: List().toJS(),
+  isBooksByAuthorTagFetched_: false,
+  selectedBooksByAuthorTag_: List().toJS(),
   isBooksForCollectionFetched_: false,
   selectedBooksForCollection_: List().toJS(),
   isBooksForUserFetched_: false,
@@ -113,6 +120,28 @@ const fetchBooksByTag = {
   }
 };
 
+const fetchBooksByAuthorTag = {
+  [types.FETCH_BOOKS_BY_AUTHOR_TAG_READY]: (state, action) => {
+    return {
+      ...state,
+      isBooksByAuthorTagFetched_: false
+    };
+  },
+  [types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS]: (state, action) => {
+    return {
+      ...state,
+      isBooksByAuthorTagFetched_: true,
+      selectedBooksByAuthorTag_: List(state.selectedBooksByAuthorTag_).concat(action.payload).toJS()
+    };
+  },
+  [types.FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT]: (state, action) => {
+    return {
+      ...state,
+      selectedBooksByAuthorTag_: List().toJS()
+    };
+  }
+};
+
 const fetchBooksForCollection = {
   [types.FETCH_BOOKS_FOR_COLLECTION_READY]: (state, action) => {
     return {
@@ -170,6 +199,7 @@ export default book = createReducer(initialState, {
   ...fetchSelectedBook,
   ...fetchBooks,
   ...fetchBooksByTag,
+  ...fetchBooksByAuthorTag,
   ...fetchBooksForCollection,
   ...fetchBooksByUser,
   ...add
@@ -177,7 +207,8 @@ export default book = createReducer(initialState, {
 
 export const actions = {
   UnmountFetchedBooks: () => ({ type: types.FETCH_BOOKS_UNMOUNT }),
-  UnmountFetchedBooksByTag: () => ({ type: types.FETCH_BOOKS_BY_TAG_UNMOUNT })
+  UnmountFetchedBooksByTag: () => ({ type: types.FETCH_BOOKS_BY_TAG_UNMOUNT }),
+  UnmountFetchedBooksByAuthorTag: () => ({ type: types.FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT })
 };
 
 export const selectors = {
@@ -190,6 +221,8 @@ export const selectors = {
   GetSelectedBooks: state => state.book.selectedBooks_,
   GetIsBooksByTagFetched: state => state.book.isBooksByTagFetched_,
   GetSelectedBooksByTag: state => state.book.selectedBooksByTag_,
+  GetIsBooksByAuthorTagFetched: state => state.book.isBooksByAuthorTagFetched_,
+  GetSelectedBooksByAuthorTag: state => state.book.selectedBooksByAuthorTag_,
   GetIsBooksForCollectionFetched: state => state.book.isBooksForCollectionFetched_,
   GetSelectedBooksForCollection: state => state.book.selectedBooksForCollection_,
   GetIsBooksForUserFetched: state => state.book.isBooksForUserFetched_,

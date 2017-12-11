@@ -7,7 +7,7 @@ import Header from '../../components/Header';
 import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import PostList from '../../components/PostList/container';
 
-import { fetchBooksAndUsersByTagHOC } from '../../hocs/fetchBooksAndUsersByTagHOC';
+import { enhance as selectFetchHOC } from '../../hocs/selectFetchHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
 import { fetchTagHOC } from '../../hocs/fetchTagHOC';
 import { mapSelectedPostFirstHOC } from '../../hocs/mapSelectedPostFirstHOC';
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
 
 export default compose(
   fetchBookmarksHOC,
-  fetchBooksAndUsersByTagHOC,
+  selectFetchHOC,
   mapSelectedPostFirstHOC,
   fetchTagHOC,
   withLoaderHOC

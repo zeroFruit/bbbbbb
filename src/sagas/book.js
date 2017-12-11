@@ -48,6 +48,22 @@ export function* AsyncFetchBooksByTagId(action) {
   return filteredBooks;
 }
 
+export function* AsyncFetchBooksByAuthorTagId(action) {
+  const { id, numOfFeeds, page } = action.payload;
+  yield put({
+    type: types.FETCH_BOOKS_BY_AUTHOR_TAG_READY
+  });
+  const { author_tag_id } = yield call(agent.Book.fetchByBookId, id);
+  const filteredBooks = yield call(agent.Book.fetchByAuthorTag, author_tag_id, numOfFeeds, page);
+  
+  yield put({
+    type: types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS,
+    payload: filteredBooks
+  });
+
+  return filteredBooks;
+}
+
 export function* AsyncFetchBooksByIds(action) {
   yield put({
     type: types.FETCH_BOOKS_FOR_COLLECTION_READY

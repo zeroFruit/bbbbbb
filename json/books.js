@@ -179,6 +179,16 @@ class Book {
     return _.slice(filteredBook, page * numOfFeeds, (page + 1) * numOfFeeds);
   }
 
+  getByAuthorTagId(authorTagId, numOfFeeds, page) {
+    const byId = this.getById();
+    const filteredBook = _.filter(byId, (book) => {
+      return (
+        book.author_tag_id === authorTagId
+      );
+    });
+    return _.slice(filteredBook, page * numOfFeeds, (page + 1) * numOfFeeds);
+  }
+
   insert(book) {
     const id = this.getId();
     const newBook = { ...book, id };

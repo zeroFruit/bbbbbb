@@ -11,6 +11,7 @@ import user, {
 } from './user';
 import book, {
   AsyncFetchBooksByTagId,
+  AsyncFetchBooksByAuthorTagId,
   AsyncFetchBooks,
   AsyncFetchBooksByIds,
   AsyncFetchBooksByUserId
@@ -56,6 +57,23 @@ export function* AsyncFetchBooksAndUsersByTagRequest(action) {
   });
 }
 
+export function* AsyncFetchBooksAndUsersByAuthorTagRequest(action) {
+  yield put({
+    type: types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG_READY
+  });
+  const filteredBooks = yield* AsyncFetchBooksByAuthorTagId(action);
+
+  const users = filteredBooks.map(book => book.user_id);
+  yield* AsyncFetchUsersByUserIdsForPostList({ payload: { users } });
+
+  yield put({
+    type: pageTypes.NEXT_SELECTED_LIST_PAGE
+  });
+  yield put({
+    type: types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG_SUCCESS
+  });
+}
+
 export function* AsyncFetchBooksWithCollection(action) {
   yield put({
     type: types.FETCH_BOOKS_BY_COLLECTION_READY
@@ -81,6 +99,7 @@ export function* AsyncFetchBooksByUser(action) {
 const index =  function* indexSaga() {
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_REQUEST, AsyncFetchBooksAndUsersRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_TAG_REQUEST, AsyncFetchBooksAndUsersByTagRequest);
+  yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG_REQUEST, AsyncFetchBooksAndUsersByAuthorTagRequest);
   yield takeLatest(types.FETCH_BOOKS_BY_COLLECTION_REQUEST, AsyncFetchBooksWithCollection);
   yield takeLatest(types.FETCH_BOOKS_BY_USER_REQUEST, AsyncFetchBooksByUser);
 };

@@ -31,6 +31,10 @@ const Book = {
     const filteredBooks = await new BookData().getByTagId(titleTagId, authorTagId, numOfFeeds, page);
     return filteredBooks;
   },
+  fetchByAuthorTag: async (authorTagId, numOfFeeds, page) => {
+    const filteredBooks = await new BookData().getByAuthorTagId(authorTagId, numOfFeeds, page);
+    return filteredBooks;
+  },
   fetchByUserId: async (userId) => {
     const books = await new BookData().get().books.byId;
     return _.filter(books, (book) => {

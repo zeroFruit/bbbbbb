@@ -7,7 +7,7 @@ import { selectors as bookSelectors, actions as bookActions } from '../ducks/boo
 import { selectors as userSelectors, actions as userActions } from '../ducks/user';
 import { selectors as pageSelectors, actions as pageActions } from '../ducks/page';
 
-export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
+export const fetchBooksAndUsersByAuthorTagHOC = (WrappedComponent) => {
   class WithBooksAndUsers extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
@@ -16,7 +16,7 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
     }
 
     render() {
-      console.log('By Tag');
+      console.log('By Author Tag');
       const { selectedBooksByTag_, selectedPostListUsers_ } = this.props;
       return (
         <WrappedComponent
@@ -31,12 +31,12 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
     _requestBooksAndUsers = async () => {
       const { id, numOfFeedsPerLoad_, selectedListPage_, selectedBooksByTag_ } = this.props;
       if (selectedBooksByTag_.length >= selectedListPage_ * numOfFeedsPerLoad_) {
-        await this.props.AsyncFetchBooksAndUsersByTagRequestAction(id, numOfFeedsPerLoad_, selectedListPage_);
+        await this.props.AsyncFetchBooksAndUsersByAuthorTagRequestAction(id, numOfFeedsPerLoad_, selectedListPage_);
       }
     }
 
     _resetBooksAndPage = () => {
-      this.props.UnmountFetchedBooksByTagAction();
+      this.props.UnmountFetchedBooksByAuthorTagAction();
       this.props.UnmountSelectedPostListUsersAction();
       this.props.ResetSelectedListPageAction();
     }
@@ -46,17 +46,17 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
 };
 
 const mapStateToProps = state => ({
-  selectedBooksByTag_: bookSelectors.GetSelectedBooksByTag(state),
+  selectedBooksByAuthorTag_: bookSelectors.GetSelectedBooksByAuthorTag(state),
   selectedPostListUsers_: userSelectors.GetSelectedPostListUsers(state),
   selectedListPage_: pageSelectors.GetSelectedListPage(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  AsyncFetchBooksAndUsersByTagRequestAction: (id, numOfFeeds, page) => ({
-    type: types.FETCH_BOOKS_AND_USERS_BY_TAG_REQUEST,
+  AsyncFetchBooksAndUsersByAuthorTagRequestAction: (id, numOfFeeds, page) => ({
+    type: types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG_REQUEST,
     payload: { id, numOfFeeds, page }
   }),
-  UnmountFetchedBooksByTagAction: bookActions.UnmountFetchedBooksByTag,
+  UnmountFetchedBooksByAuthorTagAction: bookActions.UnmountFetchedBooksByAuthorTag,
   UnmountSelectedPostListUsersAction: userActions.UnmountSelectedPostListUsers,
   ResetSelectedListPageAction: pageActions.ResetSelectedListPage
 }, dispatch);

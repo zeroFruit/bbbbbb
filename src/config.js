@@ -17,6 +17,8 @@ export const selectType = {
   SELECT_FROM_NEWSFEED_CLICKED_NICKNAME: 'selectType/select_from_newsfeed_clicked_nickname',
   /* 포스트 리스트 */
   SELECT_FROM_POSTLIST_CLICKED_NICKNAME: 'selectType/select_from_postlist_clicked_nickname',
+  /* 포스트 */
+  SELECT_FROM_POST_CLICKED_AUTHOR_TAG: 'selectType/select_from_post_clicked_author_tag',
   /* 북마크 - 책 */
   SELECT_FROM_BOOKMARK_CLICKED_IMAGE: 'selectType/select_from_bookmark_clicked_image',
   /* 북마크 - 컬렉션 */
