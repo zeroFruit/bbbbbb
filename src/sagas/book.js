@@ -6,11 +6,11 @@ import { pickByKey } from '../utils/ObjectUtils';
 
 export function* AsyncFetchBook(action) {
   yield put({
-    type: types.FETCH_BOOK_READY
+    type: types.FETCH_BOOK.READY
   });
   const book = yield call(agent.Book.fetchByBookId, action.payload);
   yield put({
-    type: types.FETCH_BOOK_SUCCESS,
+    type: types.FETCH_BOOK.SUCCESS,
     payload: book
   });
   return book;
@@ -114,7 +114,7 @@ export function* AsyncAddBook(action) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(types.FETCH_BOOK_REQUEST, AsyncFetchBook);
+  yield takeLatest(types.FETCH_BOOK.REQUEST, AsyncFetchBook);
   yield takeLatest(types.FETCH_BOOKS_REQUEST, AsyncFetchBooks);
   yield takeLatest(types.FETCH_BOOKS_BY_TAG_REQUEST, AsyncFetchBooksByIdForSameTag);
   yield takeLatest(types.FETCH_BOOKS_FOR_COLLECTION_REQUEST, AsyncFetchBooksByIds);

@@ -12,13 +12,17 @@ import {
   getStateFlag,
   getStatePayload
 } from './helper';
+import {
+  flow
+} from '../utils/FuncUtils';
 
 
 export const types = {
   FETCH_MY_BOOKS: createRequestTypes(['book', 'FETCH_MY_BOOKS']),
-  FETCH_BOOK_READY: 'book/fetch_book_ready',
-  FETCH_BOOK_REQUEST: 'book/fetch_book_request',
-  FETCH_BOOK_SUCCESS: 'book/fetch_book_success',
+  // FETCH_BOOK_READY: 'book/fetch_book_ready',
+  // FETCH_BOOK_REQUEST: 'book/fetch_book_request',
+  // FETCH_BOOK_SUCCESS: 'book/fetch_book_success',
+  FETCH_BOOK: createRequestTypes(['book', 'FETCH_BOOK']),
 
   FETCH_BOOKS_READY: 'book/fetch_books_ready',
   FETCH_BOOKS_REQUEST: 'book/fetch_books_request',
@@ -53,8 +57,7 @@ export const types = {
 export const initialState = {
   numOfFeedsPerLoad_: 3,
   myBooks_: createInitState('MyBooks', 'Fetch', stateType.LIST),
-  isBookFetched_: false,
-  selectedBook_: {},
+  selectedBook_: createInitState('SelectedBook', 'Fetch', stateType.OBJ),
   isBooksFetched_: false,
   selectedBooks_: List().toJS(),
   isBooksByTagFetched_: false,
@@ -76,14 +79,16 @@ const fetchMyBooks = {
 };
 
 const fetchSelectedBook = {
-  [types.FETCH_BOOK_READY]: (state, action) => ({
+  [types.FETCH_BOOK.READY]: (state, action) => ({
     ...state,
-    isBookFetched_: true
+    selectedBook_: setStateFlag(state.selectedBook_, true)
   }),
-  [types.FETCH_BOOK_SUCCESS]: (state, action) => ({
+  [types.FETCH_BOOK.SUCCESS]: (state, action) => ({
     ...state,
-    isBookFetched_: false,
-    selectedBook_: action.payload
+    selectedBook_: setStatePayload(
+      setStateFlag(state.selectedBook_, false),
+      action.payload
+    )
   })
 };
 
@@ -218,8 +223,8 @@ export const actions = {
 export const selectors = {
   GetNumOfFeedsPerLoad: state => state.book.numOfFeedsPerLoad_,
   GetMyBooks: state => getStatePayload(state.book.myBooks_),
-  GetIsBookFetched: state => state.book.isBookFetched_,
-  GetSelectedBook: state => state.book.selectedBook_,
+  GetIsBookFetched: state => getStateFlag(state.book.selectedBook_),
+  GetSelectedBook: state => getStatePayload(state.book.selectedBook_),
   GetIsBooksFetched: state => state.book.isBooksFetched_,
   GetSelectedBooks: state => state.book.selectedBooks_,
   GetIsBooksByTagFetched: state => state.book.isBooksByTagFetched_,

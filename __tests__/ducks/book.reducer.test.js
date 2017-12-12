@@ -28,25 +28,31 @@ describe('reducer', () => {
   describe('reducer / fetchSelectedBook', () => {
     const selectedBook = { id: 1 };
 
-    describe('FETCH_BOOK_READY', () => {
+    describe('FETCH_BOOK - READY', () => {
       it('success', () => {
         expect(book(initialState, {
-          type: types.FETCH_BOOK_READY
+          type: types.FETCH_BOOK.READY
         })).toEqual({
           ...initialState,
-          isBookFetched_: true
+          selectedBook_: {
+            ...initialState.selectedBook_,
+            [helper.getStateFlagName(initialState.selectedBook_)]: true
+          }
         });
       });
     });
-    describe('FETCH_BOOK_SUCCESS', () => {
+    describe('FETCH_BOOK - SUCCESS', () => {
       it('success', () => {
         expect(book(initialState, {
-          type: types.FETCH_BOOK_SUCCESS,
+          type: types.FETCH_BOOK.SUCCESS,
           payload: selectedBook
         })).toEqual({
           ...initialState,
-          isBookFetched_: false,
-          selectedBook_: selectedBook
+          selectedBook_: {
+            ...initialState.selectedBook_,
+            [helper.getStateFlagName(initialState.selectedBook_)]: false,
+            [helper.getStatePayloadName(initialState.selectedBook_)]: selectedBook
+          }
         });
       });
     });
