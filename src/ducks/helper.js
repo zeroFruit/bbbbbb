@@ -1,5 +1,4 @@
 import { List } from 'immutable';
-import { hasPath } from '../utils/ObjectUtils';
 
 export const createReducer = (initialState, handlers) => {
   return (state = initialState, action) => {
@@ -20,26 +19,74 @@ export const createRequestTypes = (_base) => {
   return res;
 };
 
-export const stateType = {
-  OBJ: 'OBJ',
-  LIST: 'LIST',
-  NUM: 'NUM'
-};
+
+/*
+  init reducer state
+*/
 export const createInitState = (_base, _key, _stateType) => {
   const base = joinBaseName(_base);
   return {
     base,
     key: _key,
-    [createStateFlag(base, _key)]: false,
-    [createStateName(base, _key, _stateType)]: createStatePayload(_stateType)
+    stateType: _stateType,
+    [createStateFlagName(base, _key)]: false,
+    [createStatePayloadName(base, _stateType)]: createStatePayload(_stateType)
   };
 };
+export const stateType = {
+  OBJ: 'OBJ',
+  LIST: 'LIST',
+  NUM: 'NUM'
+};
 
-const createStateFlag = (_base, _suffix) => `is${_base}${_suffix}_`;
-const createStateName = (_base, _prefix, _stateType) => (
+/*
+  getter / setter
+*/
+export const setStateFlag = (_state, value) => ({
+  ..._state,
+  [getStateFlagName(_state)]: value
+});
+
+export const setStatePayload = (_state, value) => ({
+  ..._state,
+  [getStatePayloadName(_state)]: value
+});
+
+export const concatStatePayload = (_state, value) => ({
+  ..._state,
+  [getStatePayloadName(_state)]: List(getStatePayload(_state)).concat(value).toJS()
+});
+
+export const getStateFlag = _state => (
+  _state[getStateFlagName(_state)]
+);
+
+export const getStatePayload = _state => (
+  _state[getStatePayloadName(_state)]
+);
+
+export const getStateFlagName = _state => (
+  _state.stateType === stateType.LIST ?
+    `is${_state.base}List${_state.key}_`:
+    `is${_state.base}${_state.key}_`
+);
+export const getStatePayloadName = _state => (
+  _state.stateType === stateType.LIST ?
+    `${_state.base}List_` :
+    `${_state.base}_`
+);
+/*
+  helper
+*/
+const createStateFlagName = (_base, _suffix, _stateType) => (
   _stateType === stateType.LIST ?
-    `${_prefix}${_base}List_` :
-    `${_prefix}${_base}_`
+    `is${_base}List${_suffix}_` :
+    `is${_base}${_suffix}_`
+);
+const createStatePayloadName = (_base, _stateType) => (
+  _stateType === stateType.LIST ?
+    `${_base}List_` :
+    `${_base}_`
 );
 const createStatePayload = (_stateType) => {
   switch(_stateType) {

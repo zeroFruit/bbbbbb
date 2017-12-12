@@ -30,7 +30,8 @@
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
     "eject": "react-native-scripts eject",
-    "test": "node node_modules/jest/bin/jest.js --watch",
+    "test": "node node_modules/jest/bin/jest.js",
+    "test:watch": "node node_modules/jest/bin/jest.js --watch",
     "storybook": "storybook start -p 7007"
   },
   "jest": {

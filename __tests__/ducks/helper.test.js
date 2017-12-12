@@ -30,40 +30,106 @@ describe.only('duck helper test', () => {
     it('basic - state type is object', () => {
       const _stateType = helper.stateType;
       const base = 'SelectedBook';
-      const key = 'Fetched';
+      const key = 'Fetch';
       expect(helper.createInitState(base, key, _stateType.OBJ))
         .toEqual({
           base,
           key,
-          isSelectedBookFetched_: false,
-          FetchedSelectedBook_: {}
+          stateType: _stateType.OBJ,
+          isSelectedBookFetch_: false,
+          SelectedBook_: {}
         });
     });
 
     it('basic - state type is List', () => {
       const _stateType = helper.stateType;
       const base = 'SelectedBook';
-      const key = 'Fetched';
+      const key = 'Fetch';
       expect(helper.createInitState(base, key, _stateType.LIST))
         .toEqual({
           base,
           key,
-          isSelectedBookFetched_: false,
-          FetchedSelectedBookList_: List().toJS()
+          stateType: _stateType.LIST,
+          isSelectedBookFetch_: false,
+          SelectedBookList_: List().toJS()
         });
     });
 
     it('basic - state type is number', () => {
       const _stateType = helper.stateType;
       const base = 'SelectedBook';
-      const key = 'Fetched';
+      const key = 'Fetch';
       expect(helper.createInitState(base, key, _stateType.NUM))
         .toEqual({
           base,
           key,
-          isSelectedBookFetched_: false,
-          FetchedSelectedBook_: 0
+          stateType: _stateType.NUM,
+          isSelectedBookFetch_: false,
+          SelectedBook_: 0
         });
+    });
+  });
+
+  describe('setStateFlag test', () => {
+    it('should set flag value and return', () => {
+      const state = helper.createInitState('SelectedBook', 'Fetch', helper.stateType.LIST);
+      expect(helper.setStateFlag(state, true))
+        .toEqual({
+          ...state,
+          [helper.getStateFlagName(state)]: true
+        });
+    });
+  });
+
+  describe('setStatePayload test', () => {
+    it('should set list type payload value and return', () => {
+      const payload = List([{
+        id: 1
+      }]).toJS();
+      const state = helper.createInitState('SelectedBook', 'Fetch', helper.stateType.LIST);
+      expect(helper.setStatePayload(state, payload))
+        .toEqual({
+          ...state,
+          [helper.getStatePayloadName(state)]: payload
+        });
+    });
+  });
+
+  describe('concatStatePayload test', () => {
+    it('should concat list type payload value and return', () => {
+      const payload = List([{
+        id: 1
+      }]).toJS();
+      const payload2 = List([{
+        id: 2
+      }]).toJS();
+      const state = helper.createInitState('SelectedBook', 'Fetch', helper.stateType.LIST);
+      const newState = helper.concatStatePayload(state, payload)
+      expect(helper.concatStatePayload(newState, payload2))
+        .toEqual({
+          ...state,
+          [helper.getStatePayloadName(state)]: List([{ id: 1 }, { id: 2 }]).toJS()
+        });
+    });
+  });
+
+  describe('getStateFlag test', () => {
+    it('should return state flag value', () => {
+      const state = helper.createInitState('SelectedBook', 'Fetch', helper.stateType.LIST);
+      expect(helper.getStateFlag(state))
+        .toBeFalsy();
+    });
+  });
+
+  describe('getStatePayload test', () => {
+    it('should return state payload value', () => {
+      const state = helper.createInitState('SelectedBook', 'Fetch', helper.stateType.LIST);
+      const newState = {
+        ...state,
+        [helper.getStatePayloadName(state)]: List([{ id: 1 }, { id: 2 }]).toJS()
+      };
+      expect(helper.getStatePayload(newState))
+        .toEqual(List([{ id: 1 }, { id: 2 }]).toJS());
     });
   });
 

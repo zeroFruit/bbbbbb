@@ -7,11 +7,11 @@ describe('reducer', () => {
   });
 
   describe('reducer / fetchMyBooks', () => {
-    describe('FETCH_MY_BOOKS_SUCCESS', () => {
+    describe('FETCH_MY_BOOKS - SUCCESS', () => {
       const myBookList = List([{ id: 1 }]).toJS();
       it('success', () => {
         expect(book(initialState, {
-          type: types.FETCH_MY_BOOKS_SUCCESS,
+          type: types.FETCH_MY_BOOKS.SUCCESS,
           payload: myBookList
         })).toEqual({
           ...initialState,
