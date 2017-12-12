@@ -55,7 +55,7 @@ const Book = {
     const insertedBook = await new BookData().insert(book);
     return insertedBook;
   },
-  updateTagIds: async (bookId, { titleTagId, authorTagId }) => {
+  updateTagIds: async (bookId, titleTagId, authorTagId) => {
     const updatedBook = await new BookData().updateTagIds(bookId, { titleTagId, authorTagId });
     return updatedBook;
   }

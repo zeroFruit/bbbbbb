@@ -101,7 +101,8 @@ export function* AsyncAddBook(action) {
   const bookWithTagId = yield call(
     agent.Book.updateTagIds,
     book.id,
-    { titleTagId: tag.title_tag_id, authorTagId: tag.author_tag_id }
+    tag.title_tag_id,
+    tag.author_tag_id
   );
   const me = yield call(agent.User.insertBook, USER_ID, book.id);
 
