@@ -1,3 +1,4 @@
+import { List } from 'immutable';
 import * as helper from '../../src/ducks/helper';
 
 describe.only('duck helper test', () => {
@@ -21,6 +22,47 @@ describe.only('duck helper test', () => {
           READY: 'book/FETCH_BOOK_READY',
           SUCCESS: 'book/FETCH_BOOK_SUCCESS',
           FAILURE: 'book/FETCH_BOOK_FAILURE'
+        });
+    });
+  });
+
+  describe('createInitState test', () => {
+    it('basic - state type is object', () => {
+      const _stateType = helper.stateType;
+      const base = 'SelectedBook';
+      const key = 'Fetched';
+      expect(helper.createInitState(base, key, _stateType.OBJ))
+        .toEqual({
+          base,
+          key,
+          isSelectedBookFetched_: false,
+          FetchedSelectedBook_: {}
+        });
+    });
+
+    it('basic - state type is List', () => {
+      const _stateType = helper.stateType;
+      const base = 'SelectedBook';
+      const key = 'Fetched';
+      expect(helper.createInitState(base, key, _stateType.LIST))
+        .toEqual({
+          base,
+          key,
+          isSelectedBookFetched_: false,
+          FetchedSelectedBookList_: List().toJS()
+        });
+    });
+
+    it('basic - state type is number', () => {
+      const _stateType = helper.stateType;
+      const base = 'SelectedBook';
+      const key = 'Fetched';
+      expect(helper.createInitState(base, key, _stateType.NUM))
+        .toEqual({
+          base,
+          key,
+          isSelectedBookFetched_: false,
+          FetchedSelectedBook_: 0
         });
     });
   });

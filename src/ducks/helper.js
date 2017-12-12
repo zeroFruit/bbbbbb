@@ -1,3 +1,4 @@
+import { List } from 'immutable';
 import { hasPath } from '../utils/ObjectUtils';
 
 export const createReducer = (initialState, handlers) => {
@@ -11,10 +12,7 @@ export const createReducer = (initialState, handlers) => {
 };
 
 export const createRequestTypes = (_base) => {
-  let base = _base;
-  if (Array.isArray(base)) {
-    base = base.join('/');
-  }
+  const base = joinBaseName(_base);
   const res = {};
 
   ['REQUEST', 'READY', 'SUCCESS', 'FAILURE']
@@ -22,12 +20,38 @@ export const createRequestTypes = (_base) => {
   return res;
 };
 
-export const createType = (_base) => {
-  let base = _base;
-  if (Array.isArray(base)) {
-    base = base.join('/');
+export const stateType = {
+  OBJ: 'OBJ',
+  LIST: 'LIST',
+  NUM: 'NUM'
+};
+export const createInitState = (_base, _key, _stateType) => {
+  const base = joinBaseName(_base);
+  return {
+    base,
+    key: _key,
+    [createStateFlag(base, _key)]: false,
+    [createStateName(base, _key, _stateType)]: createStatePayload(_stateType)
+  };
+};
+
+const createStateFlag = (_base, _suffix) => `is${_base}${_suffix}_`;
+const createStateName = (_base, _prefix, _stateType) => (
+  _stateType === stateType.LIST ?
+    `${_prefix}${_base}List_` :
+    `${_prefix}${_base}_`
+);
+const createStatePayload = (_stateType) => {
+  switch(_stateType) {
+    case stateType.OBJ: return {};
+    case stateType.LIST: return List().toJS();
+    case stateType.NUM: return 0;
   }
-  return base;
+};
+
+
+export const createType = (_base) => {
+  return joinBaseName(_base);
 };
 
 export const patch = (type, _payload = {}, mergeKeys) => {
@@ -40,3 +64,12 @@ export const patch = (type, _payload = {}, mergeKeys) => {
 
 export const action = (type, payload = {}) =>
   ({ type, payload: { ...payload } });
+
+
+const joinBaseName = (_base) => {
+  let base = _base;
+  if (Array.isArray(base)) {
+    base = base.join('/');
+  }
+  return base;
+};
