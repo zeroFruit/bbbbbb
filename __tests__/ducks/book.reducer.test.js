@@ -1,4 +1,5 @@
 import { List } from 'immutable';
+import * as helper from '../../src/ducks/helper';
 import book, { types, initialState } from '../../src/ducks/book';
 
 describe('reducer', () => {
@@ -15,7 +16,10 @@ describe('reducer', () => {
           payload: myBookList
         })).toEqual({
           ...initialState,
-          myBooks_: myBookList
+          myBooks_: {
+            ...initialState.myBooks_,
+            [helper.getStatePayloadName(initialState.myBooks_)]: myBookList
+          }
         });
       });
     });

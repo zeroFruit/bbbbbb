@@ -11,7 +11,7 @@ export function* AsyncFetchMyInfoRequest(action) {
   const me = yield call(agent.User.fetchByUserId, action.payload);
 
   yield put({
-    type: bookTypes.FETCH_MY_BOOKS_SUCCESS,
+    type: bookTypes.FETCH_MY_BOOKS.SUCCESS,
     payload: me.books
   });
   yield put({

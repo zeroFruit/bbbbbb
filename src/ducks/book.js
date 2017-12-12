@@ -1,10 +1,21 @@
 import { List } from 'immutable';
-import { createReducer } from './helper';
+import {
+  stateType,
+  createReducer,
+  createRequestTypes,
+  createInitState,
+  setStateFlag,
+  setStatePayload,
+  concatStatePayload,
+  getStateFlagName,
+  getStatePayloadName,
+  getStateFlag,
+  getStatePayload
+} from './helper';
+
 
 export const types = {
-  FETCH_MY_BOOKS_REQUEST: 'book/fetch_my_books_request',
-  FETCH_MY_BOOKS_SUCCESS: 'book/fetch_my_books_success',
-
+  FETCH_MY_BOOKS: createRequestTypes(['book', 'FETCH_MY_BOOKS']),
   FETCH_BOOK_READY: 'book/fetch_book_ready',
   FETCH_BOOK_REQUEST: 'book/fetch_book_request',
   FETCH_BOOK_SUCCESS: 'book/fetch_book_success',
@@ -40,9 +51,8 @@ export const types = {
 };
 
 export const initialState = {
-  page_: 0,
   numOfFeedsPerLoad_: 3,
-  myBooks_: List().toJS(),
+  myBooks_: createInitState('MyBooks', 'Fetch', stateType.LIST),
   isBookFetched_: false,
   selectedBook_: {},
   isBooksFetched_: false,
@@ -59,9 +69,9 @@ export const initialState = {
 };
 
 const fetchMyBooks = {
-  [types.FETCH_MY_BOOKS_SUCCESS]: (state, action) => ({
+  [types.FETCH_MY_BOOKS.SUCCESS]: (state, action) => ({
     ...state,
-    myBooks_: List(action.payload).toJS()
+    myBooks_: setStatePayload(state.myBooks_, action.payload)
   })
 };
 
@@ -206,9 +216,8 @@ export const actions = {
 };
 
 export const selectors = {
-  GetPage: state => state.book.page_,
   GetNumOfFeedsPerLoad: state => state.book.numOfFeedsPerLoad_,
-  GetMyBooks: state => state.book.myBooks_,
+  GetMyBooks: state => getStatePayload(state.book.myBooks_),
   GetIsBookFetched: state => state.book.isBookFetched_,
   GetSelectedBook: state => state.book.selectedBook_,
   GetIsBooksFetched: state => state.book.isBooksFetched_,
