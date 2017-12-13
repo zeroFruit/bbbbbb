@@ -33,7 +33,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchOtherUserCollectionsRequestAction: userId => ({
-    type: types.FETCH_OTHER_USER_COLLECTION_REQUEST,
+    type: types.FETCH_OTHER_USER_COLLECTION.REQUEST,
     payload: userId
   })
 }, dispatch);

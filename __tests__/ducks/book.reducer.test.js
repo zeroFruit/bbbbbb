@@ -29,7 +29,7 @@ describe('reducer', () => {
     const selectedBook = { id: 1 };
 
     describe('FETCH_BOOK - READY', () => {
-      it('success', () => {
+      it('should fetch flag', () => {
         expect(book(is, {
           type: types.FETCH_BOOK.READY
         })).toEqual({

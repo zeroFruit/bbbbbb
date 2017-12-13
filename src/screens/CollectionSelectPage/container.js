@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncAddCollectionRequestAction: (label, bookIds) => ({
-    type: CollectionTypes.ADD_COLLECTION_REQUEST,
+    type: CollectionTypes.ADD_COLLECTION.REQUEST,
     payload: { label, bookIds }
   })
 }, dispatch);

@@ -4,12 +4,12 @@ import { selectors as CollectionSelectors, types as CollectionTypes } from '../.
 import ComponentWithHOC from './index';
 
 const mapStateToProps = state => ({
-  isBooksAreAddingToCollection_: CollectionSelectors.GetIsBooksAreAddingToCollection(state)
+  isBooksInCollectionAdded_: CollectionSelectors.GetIsBooksInCollectionAdded(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncAddBooksToCollectionRequestAction: (id, bookIds) => ({
-    type: CollectionTypes.ADD_BOOKS_TO_COLLECTION_REQUEST,
+    type: CollectionTypes.ADD_BOOKS_TO_COLLECTION.REQUEST,
     payload: { id, bookIds }
   })
 }, dispatch);

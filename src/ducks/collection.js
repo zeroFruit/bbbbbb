@@ -1,132 +1,128 @@
 import { List } from 'immutable';
-import { createReducer } from './helper';
+import {
+  action,
+  stateType,
+  createType,
+  createReducer,
+  createRequestTypes,
+  createInitState,
+  setStateFlag,
+  setStatePayload,
+  concatStatePayload,
+  getStateFlag,
+  getStatePayload
+} from './helper';
 
 export const types = {
-  FETCH_COLLECTION_REQUEST: 'collection/fetch_collection_request',
-  FETCH_COLLECTION_READY: 'collection/fetch_collection_ready',
-  FETCH_COLLECTION_SUCCESS: 'collection/fetch_collection_success',
-
-  ADD_COLLECTION_REQUEST: 'collection/add_collection_request',
-  ADD_COLLECTION_READY: 'collection/add_collection_ready',
-  ADD_COLLECTION_SUCCESS: 'collection/add_collection_success',
-
-  REMOVE_COLLECTION_REQUEST: 'collection/remove_collection_request',
-  REMOVE_COLLECTION_READY: 'collection/remove_collection_ready',
-  REMOVE_COLLECTION_SUCCESS: 'collection/remove_collection_success',
-
-  ADD_BOOKS_TO_COLLECTION_REQUEST: 'collection/add_books_to_collection_request',
-  ADD_BOOKS_TO_COLLECTION_READY: 'collection/add_books_to_collection_ready',
-  ADD_BOOKS_TO_COLLECTION_SUCCESS: 'collection/add_books_to_collection_success',
-
-  REMOVE_COLLECTION_BOOKS_REQUEST: 'collection/remove_collection_books_request',
-  REMOVE_COLLECTION_BOOKS_READY: 'collection/remove_collection_books_ready',
-  REMOVE_COLLECTION_BOOKS_SUCCESS: 'collection/remove_collection_books_success',
-
-  FETCH_OTHER_USER_COLLECTION_REQUEST: 'collection/fetch_other_user_collection_request',
-  FETCH_OTHER_USER_COLLECTION_READY: 'collection/fetch_other_user_collection_ready',
-  FETCH_OTHER_USER_COLLECTION_SUCCESS: 'collection/fetch_other_user_collection_success'
+  FETCH_COLLECTION: createRequestTypes(['collection', 'FETCH_COLLECTION']),
+  ADD_COLLECTION: createRequestTypes(['collection', 'ADD_COLLECTION']),
+  REMOVE_COLLECTION: createRequestTypes(['collection', 'REMOVE_COLLECTION']),
+  ADD_BOOKS_TO_COLLECTION: createRequestTypes(['collection', 'ADD_BOOKS_TO_COLLECTION']),
+  REMOVE_COLLECTION_BOOKS: createRequestTypes(['collection', 'REMOVE_COLLECTION_BOOKS']),
+  FETCH_OTHER_USER_COLLECTION: createRequestTypes(['collection', 'FETCH_OTHER_USER_COLLECTION'])
 };
 
 export const initialState = {
-  isCollectionFetched_: false,
-  myCollections_: List().toJS(),
-  isCollectionAdded_: false,
-  isCollectionRemoved_: false,
-  isCollectionLoading_: false,
-  isBooksAreAddingToCollection_: false,
-  isCollectionBooksRemoved_: false,
-  isOtherUserCollectionsFetched_: false,
-  otherUserCollections_: List().toJS()
+  myCollections_: createInitState('MyCollections', 'Fetch', stateType.LIST),
+  isCollectionAdded_: createInitState('Collection', 'Add', stateType.NONE),
+  isCollectionRemoved_: createInitState('Collection', 'Remove', stateType.NONE),
+  isBooksInCollectionAdded_: createInitState('BooksInCollection', 'Add', stateType.NONE),
+  isBooksInCollectionRemoved_: createInitState('BooksInCollection', 'Remove', stateType.NONE),
+  otherUserCollections_: createInitState('OtherUserCollections', 'Fetch', stateType.LIST)
 };
 
 export const fetch = {
-  [types.FETCH_COLLECTION_READY]: (state, action) => {
+  [types.FETCH_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
-      isCollectionFetched_: false
+      myCollections_: setStateFlag(state.myCollections_, false)
     };
   },
-  [types.FETCH_COLLECTION_SUCCESS]: (state, action) => {
+  [types.FETCH_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isCollectionFetched_: true,
-      myCollections_: List(action.payload).toJS() || []
+      myCollections_: setStatePayload(
+        setStateFlag(state.myCollections_, true),
+        action.payload || []
+      )
     };
   }
 };
 
 export const add = {
-  [types.ADD_COLLECTION_READY]: (state, action) => {
+  [types.ADD_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
-      isCollectionAdded_: false
+      isCollectionAdded_: setStateFlag(state.isCollectionAdded_, false)
     };
   },
-  [types.ADD_COLLECTION_SUCCESS]: (state, action) => {
+  [types.ADD_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isCollectionAdded_: true
+      isCollectionAdded_: setStateFlag(state.isCollectionAdded_, true)
     };
   }
 };
 
 export const remove = {
-  [types.REMOVE_COLLECTION_READY]: (state, action) => {
+  [types.REMOVE_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
-      isCollectionRemoved_: false
+      isCollectionRemoved_: setStateFlag(state.isCollectionRemoved_, false)
     };
   },
-  [types.REMOVE_COLLECTION_SUCCESS]: (state, action) => {
+  [types.REMOVE_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isCollectionRemoved_: true
+      isCollectionRemoved_: setStateFlag(state.isCollectionRemoved_, true)
     };
   }
 };
 
 export const addBooks = {
-  [types.ADD_BOOKS_TO_COLLECTION_READY]: (state, action) => {
+  [types.ADD_BOOKS_TO_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
-      isBooksAreAddingToCollection_: false
+      isBooksInCollectionAdded_: setStateFlag(state.isBooksInCollectionAdded_, false)
     };
   },
-  [types.ADD_BOOKS_TO_COLLECTION_SUCCESS]: (state, action) => {
+  [types.ADD_BOOKS_TO_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBooksAreAddingToCollection_: true
+      isBooksInCollectionAdded_: setStateFlag(state.isBooksInCollectionAdded_, true)
     };
   }
 };
 
 export const removeBooks = {
-  [types.REMOVE_COLLECTION_BOOKS_READY]: (state, action) => {
+  [types.REMOVE_COLLECTION_BOOKS.READY]: (state, action) => {
     return {
       ...state,
-      isCollectionBooksRemoved_: false
+      isBooksInCollectionRemoved_: setStateFlag(state.isBooksInCollectionRemoved_, false)
     };
   },
-  [types.REMOVE_COLLECTION_BOOKS_SUCCESS]: (state, action) => {
+  [types.REMOVE_COLLECTION_BOOKS.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isCollectionBooksRemoved_: true
+      isBooksInCollectionRemoved_: setStateFlag(state.isBooksInCollectionRemoved_, true)
     };
   }
 };
 
 export const fetchOtherUser = {
-  [types.FETCH_OTHER_USER_COLLECTION_READY]: (state, action) => {
+  [types.FETCH_OTHER_USER_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
-      isOtherUserCollectionsFetched_: false
+      otherUserCollections_: setStateFlag(state.otherUserCollections_, false)
     };
   },
-  [types.FETCH_OTHER_USER_COLLECTION_SUCCESS]: (state, action) => {
+  [types.FETCH_OTHER_USER_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isOtherUserCollectionsFetched_: false,
-      otherUserCollections_: action.payload
+      otherUserCollections_: setStatePayload(
+        setStateFlag(state.otherUserCollections_, true),
+        action.payload
+      )
     };
   }
 };
@@ -141,13 +137,13 @@ export default collection = createReducer(initialState, {
 });
 
 export const selectors = {
-  GetIsCollectionFetched: state => state.collection.isCollectionFetched_,
-  GetMyCollections: state => state.collection.myCollections_,
-  GetIsCollectionAdded: state => state.collection.isCollectionAdded_,
-  GetIsCollectionRemoved: state => state.collection.isCollectionRemoved_,
-  GetIsCollectionLoading: state => state.collection.isCollectionLoading_,
-  GetIsBooksAreAddingToCollection: state => state.collection.isBooksAreAddingToCollection_,
-  GetIsCollectionBooksRemoved: state => state.collection.isCollectionBooksRemoved_,
-  GetIsOtherUserCollectionsFetched: state => state.collection.isOtherUserCollectionsFetched_,
-  GetOtherUserCollections: state => state.collection.otherUserCollections_
+  GetMyCollections:                 state => getStatePayload(state.collection.myCollections_),
+  GetOtherUserCollections:          state => getStatePayload(state.collection.otherUserCollections_),
+
+  GetIsCollectionFetched:           state => getStateFlag(state.collection.myCollections_),
+  GetIsCollectionAdded:             state => getStateFlag(state.collection.isCollectionAdded_),
+  GetIsCollectionRemoved:           state => getStateFlag(state.collection.isCollectionRemoved_),
+  GetIsBooksInCollectionAdded:      state => getStateFlag(state.collection.isBooksInCollectionAdded_),
+  GetIsCollectionBooksRemoved:      state => getStateFlag(state.collection.isBooksInCollectionRemoved_),
+  GetIsOtherUserCollectionsFetched: state => getStateFlag(state.collection.otherUserCollections_),
 };

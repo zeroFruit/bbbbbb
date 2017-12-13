@@ -14,24 +14,10 @@ import {
 } from './helper';
 
 export const types = {
-  // ADD_BOOKMARK_READY: 'bookmark/add_bookmark_ready',
-  // ADD_BOOKMARK_REQUEST: 'bookmark/add_bookmark_request',
-  // ADD_BOOKMARK_SUCCESS: 'bookmark/add_bookmark_success',
   ADD_BOOKMARK: createRequestTypes(['bookmark', 'ADD_BOOKMARK']),
-
-  // REMOVE_BOOKMARK_READY: 'bookmark/remove_bookmark_ready',
-  // REMOVE_BOOKMARK_REQUEST: 'bookmark/remove_bookmark_request',
-  // REMOVE_BOOKMARK_SUCCESS: 'bookmark/remove_bookmark_success',
   REMOVE_BOOKMARK: createRequestTypes(['bookmark', 'REMOVE_BOOKMARK']),
-
-  // FETCH_BOOKMARK_READY: 'bookmark/fetch_bookmark_ready',
-  // FETCH_BOOKMARK_REQEUST: 'bookmark/fetch_bookmark_request',
-  // FETCH_BOOKMARK_SUCCESS: 'bookmark/fetch_bookmark_success',
   FETCH_BOOKMARK: createRequestTypes(['bookmark', 'FETCH_BOOKMARK']),
-
-  FETCH_BOOKMARKS_IN_COLLECTION_READY: 'bookmark/fetch_bookmarks_in_collection_ready',
-  FETCH_BOOKMARKS_IN_COLLECTION_REQUEST: 'bookmark/fetch_bookmarks_in_collection_request',
-  FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS: 'bookmark/fetch_bookmarks_in_collection_success'
+  FETCH_BOOKMARKS_IN_COLLECTION: createRequestTypes(['bookmark', 'FETCH_BOOKMARKS_IN_COLLECTION'])
 };
 
 export const initialState = {
@@ -39,8 +25,7 @@ export const initialState = {
   isBookmarkAdded_: createInitState('Bookmark', 'Add', stateType.NONE),
   isBookmarkRemoved_: createInitState('Bookmark', 'Remove', stateType.NONE),
   isBookmarkFetched_: createInitState('Bookmark', 'Fetch', stateType.NONE),
-  isBookmarksInCollectionFetched_: false,
-  myBookmarksInCollection_: {}
+  myBookmarksInCollection: createInitState('BookmarksInCollection', 'Fetch', stateType.OBJ)
 };
 
 const add = {
@@ -98,14 +83,16 @@ const fetchInCollection = {
   [types.FETCH_BOOKMARKS_IN_COLLECTION_READY]: (state, action) => {
     return {
       ...state,
-      isBookmarkInCollectionFetched_: false
+      myBookmarksInCollection_: setStateFlag(state.myBookmarksInCollection_, false)
     };
   },
   [types.FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBookmarksInCollectionFetched_: true,
-      myBookmarksInCollection_: { ...action.payload }
+      myBookmarksInCollection_: setStatePayload(
+        setStateFlag(state.myBookmarksInCollection_, false),
+        action.payload
+      )
     };
   }
 };
@@ -118,28 +105,19 @@ export default bookmark = createReducer(initialState, {
 });
 
 export const actions = {
-  AddBookmarkRequest: () => {
-    return { type: types.ADD_BOOKMARK_REQUEST };
-  },
-  AddBookmarkSuccess: () => {
-    return { type: types.ADD_BOOKMARK_SUCCESS };
-  },
-  RemoveBookmarkRequest: () => {
-    return { type: types.REMOVE_BOOKMARK_REQUEST };
-  },
-  RemoveBookmarkSuccess: () => {
-    return { type: types.REMOVE_BOOKMARK_SUCCESS };
-  },
-  FetchBookmarkSuccess: () => {
-    return { type: types.FETCH_BOOKMARK_SUCCESS };
-  }
+  AddBookmarkRequest: () => action(types.ADD_BOOKMARK_REQUEST),
+  AddBookmarkSuccess: () => action(types.ADD_BOOKMARK_SUCCESS),
+  RemoveBookmarkRequest: () => action(types.REMOVE_BOOKMARK_REQUEST),
+  RemoveBookmarkSuccess: () => action(types.REMOVE_BOOKMARK_SUCCESS),
+  FetchBookmarkSuccess: () => action(types.FETCH_BOOKMARK_SUCCESS)
 };
 
 export const selectors = {
-  GetIsBookmarkedFetched: state => getStateFlag(state.bookmark.isBookmarkFetched_),
-  GetIsBookmarkedAdded: state => getStateFlag(state.bookmark.isBookmarkAdded_),
-  GetIsBookmarkedRemoved: state => getStateFlag(state.bookmark.isBookmarkRemoved_),
-  GetMyBookmarks: state => getStatePayload(state.bookmark.myBookmarks_),
-  GetIsBookmarksInCollectionFetched: state => state.bookmark.isBookmarksInCollectionFetched_,
-  GetBookmarksInCollection: state => state.bookmark.myBookmarksInCollection_
+  GetMyBookmarks:                     state => getStatePayload(state.bookmark.myBookmarks_),
+  GetBookmarksInCollection:           state => getStatePayload(state.bookmark.myBookmarksInCollection_),
+
+  GetIsBookmarkedFetched:             state => getStateFlag(state.bookmark.isBookmarkFetched_),
+  GetIsBookmarkedAdded:               state => getStateFlag(state.bookmark.isBookmarkAdded_),
+  GetIsBookmarkedRemoved:             state => getStateFlag(state.bookmark.isBookmarkRemoved_),
+  GetIsBookmarksInCollectionFetched:  state => getStateFlag(state.bookmark.myBookmarksInCollection_)
 };

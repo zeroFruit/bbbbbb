@@ -52,7 +52,7 @@ class CollectionSelectPage extends PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isBooksAreAddingToCollection_ && this.state.isCompleteButtonClicked) {
+    if (nextProps.isBooksInCollectionAdded_ && this.state.isCompleteButtonClicked) {
       this._setStateIsCompleteButtonClicked(false);
       this._navigateToBookmarkPage();
     }

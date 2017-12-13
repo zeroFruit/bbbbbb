@@ -34,6 +34,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchCollectionRequestAction: () => ({
-    type: types.FETCH_COLLECTION_REQUEST
+    type: types.FETCH_COLLECTION.REQUEST
   })
 }, dispatch);
