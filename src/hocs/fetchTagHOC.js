@@ -42,7 +42,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchTagRequestAction: id => ({
-    type: tagTypes.FETCH_BOOK_TAG_REQUEST,
+    type: tagTypes.FETCH_BOOK_TAG.REQUEST,
     payload: { id }
   })
 }, dispatch);

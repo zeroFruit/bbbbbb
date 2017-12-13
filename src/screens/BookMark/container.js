@@ -14,7 +14,7 @@ const mapDispatchToProps = dispatch => bindActionCreators({
     payload: id
   }),
   AsyncDeleteCollectionBookRequestAction: (id, bookIds) => ({
-    type: collectionTypes.REMOVE_COLLECTION_BOOKS_REQUEST,
+    type: collectionTypes.REMOVE_COLLECTION_BOOKS.REQUEST,
     payload: { id, bookIds }
   })
 }, dispatch);

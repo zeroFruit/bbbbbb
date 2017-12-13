@@ -57,7 +57,7 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchSelectedUserInfoRequestAction: userId => ({
-    type: types.FETCH_SELECTED_USER_REQUEST,
+    type: types.FETCH_SELECTED_USER.REQUEST,
     payload: userId
   }),
   UnmountSelectedUserAction: () => ({

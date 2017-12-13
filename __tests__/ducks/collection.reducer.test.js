@@ -16,7 +16,7 @@ describe('reducer', () => {
             ...is.myCollections_,
             [helper.getStateFlagName(is.myCollections_)]: false
           }
-        })
+        });
       });
     });
     describe('FETCH_COLLECTION - SUCCESS', () => {

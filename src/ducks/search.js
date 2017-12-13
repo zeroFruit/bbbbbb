@@ -1,19 +1,26 @@
 import { List } from 'immutable';
-import { createReducer } from './helper';
+import {
+  stateType,
+  createType,
+  createReducer,
+  createRequestTypes,
+  createInitState,
+  setStateFlag,
+  setStatePayload,
+  getStateFlag,
+  getStatePayload
+} from './helper';
+
 import SearchHistory from '../utils/SearchHistory';
 
 export const types = {
-  INSERT_TO_RECENT_SEARCH_TEXT: 'search/insert_to_recent_search_text',
-
-  FETCH_SEARCH_RESULT_REQUEST: 'search/fetch_search_result_request',
-  FETCH_SEARCH_RESULT_READY: 'search/fetch_search_result_ready',
-  FETCH_SEARCH_RESULT_SUCCESS: 'search/fetch_search_result_success'
+  FETCH_SEARCH_RESULT: createRequestTypes(['search', 'FETCH_SEARCH_RESULT']),
+  INSERT_TO_RECENT_SEARCH_TEXT: createType(['search', 'INSERT_TO_RECENT_SEARCH_TEXT']),
 };
 
 export const initialState = {
   searchHistory_: new SearchHistory(),
-  isSearching_: false,
-  searchResults_: List().toJS()
+  searchResults_: createInitState('SearchResults', 'Fetch', stateType.LIST)
 };
 
 const insert = {
@@ -26,17 +33,19 @@ const insert = {
 };
 
 const fetchResults = {
-  [types.FETCH_SEARCH_RESULT_READY]: (state, action) => {
+  [types.FETCH_SEARCH_RESULT.READY]: (state, action) => {
     return {
       ...state,
-      isSearching_: true,
+      searchResults_: setStateFlag(state.searchResults_, true)
     };
   },
-  [types.FETCH_SEARCH_RESULT_SUCCESS]: (state, action) => {
+  [types.FETCH_SEARCH_RESULT.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isSearching_: false,
-      searchResults_: List(action.payload).toJS()
+      searchResults_: setStatePayload(
+        setStateFlag(state.searchResults_, false),
+        List(action.payload).toJS()
+      )
     };
   }
 };
@@ -52,6 +61,6 @@ export const actions = {
 
 export const selectors = {
   GetSearchHistory: state => state.search.searchHistory_.GetSearchHistory(),
-  GetIsSearching: state => state.search.isSearching_,
-  GetSearchResults: state => state.search.searchResults_
+  GetIsSearching: state => getStateFlag(state.search.searchResults_),
+  GetSearchResults: state => getStatePayload(state.search.searchResults_)
 };

@@ -4,15 +4,15 @@ import agent from '../Agent';
 
 export function* AsyncFetchSearchResultRequest(action) {
   yield put({
-    type: types.FETCH_SEARCH_RESULT_READY
+    type: types.FETCH_SEARCH_RESULT.READY
   });
   const results = yield call(agent.Search.fetchBookLabelByText, action.payload);
   yield put({
-    type: types.FETCH_SEARCH_RESULT_SUCCESS,
+    type: types.FETCH_SEARCH_RESULT.SUCCESS,
     payload: results
   });
 }
 
 export default function* rootSaga() {
-  yield takeLatest(types.FETCH_SEARCH_RESULT_REQUEST, AsyncFetchSearchResultRequest);
+  yield takeLatest(types.FETCH_SEARCH_RESULT.REQUEST, AsyncFetchSearchResultRequest);
 }

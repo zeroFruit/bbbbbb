@@ -27,7 +27,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncSearchAction: searchText => ({
-    type: types.FETCH_SEARCH_RESULT_REQUEST,
+    type: types.FETCH_SEARCH_RESULT.REQUEST,
     payload: searchText
   })
 }, dispatch);

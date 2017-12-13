@@ -6,7 +6,7 @@ import agent from '../Agent';
 
 export function* AsyncFetchTagRequest(action) {
   yield put({
-    type: tagTypes.FETCH_BOOK_TAG_READY
+    type: tagTypes.FETCH_BOOK_TAG.READY
   });
   const { id } = action.payload;
 
@@ -18,16 +18,11 @@ export function* AsyncFetchTagRequest(action) {
   );
 
   yield put({
-    type: tagTypes.FETCH_BOOK_TAG_FETCHING,
+    type: tagTypes.FETCH_BOOK_TAG.SUCCESS,
     payload: response
-  });
-
-
-  yield put({
-    type: tagTypes.FETCH_BOOK_TAG_SUCCESS
   });
 }
 
 export default function* rootSaga() {
-  yield takeLatest(tagTypes.FETCH_BOOK_TAG_REQUEST, AsyncFetchTagRequest);
+  yield takeLatest(tagTypes.FETCH_BOOK_TAG.REQUEST, AsyncFetchTagRequest);
 }

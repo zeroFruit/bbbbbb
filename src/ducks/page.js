@@ -1,11 +1,15 @@
-import { createReducer } from './helper';
+import {
+  action,
+  createType,
+  createReducer
+} from './helper';
 
 export const types = {
-  NEXT_NEWSFEED_PAGE: 'page/next_newsfeed_page',
-  RESET_NEWSFEED_PAGE: 'page/reset_newsfeed_page',
+  NEXT_NEWSFEED_PAGE: createType(['page', 'NEXT_NEWSFEED_PAGE']),
+  RESET_NEWSFEED_PAGE: createType(['page', 'RESET_NEWSFEED_PAGE']),
 
-  NEXT_SELECTED_LIST_PAGE: 'page/next_selected_list_page',
-  RESET_SELECTED_LIST_PAGE: 'page/reset_selected_list_page'
+  NEXT_SELECTED_LIST_PAGE: createType(['page', 'NEXT_SELECTED_LIST_PAGE']),
+  RESET_SELECTED_LIST_PAGE: createType(['page', 'RESET_SELECTED_LIST_PAGE'])
 };
 
 export const initialState = {
@@ -41,21 +45,13 @@ export default page = createReducer(initialState, {
 });
 
 export const actions = {
-  NextNewsfeedPage: () => ({
-    type: types.NEXT_NEWSFEED_PAGE
-  }),
-  ResetNewsfeedPage: () => ({
-    type: types.RESET_NEWSFEED_PAGE
-  }),
-  NextSelectedListPage: () => ({
-    type: types.NEXT_SELECTED_LIST_PAGE
-  }),
-  ResetSelectedListPage: () => ({
-    type: types.RESET_SELECTED_LIST_PAGE
-  })
+  NextNewsfeedPage: () => action(types.NEXT_NEWSFEED_PAGE),
+  ResetNewsfeedPage: () => action(types.RESET_NEWSFEED_PAGE),
+  NextSelectedListPage: () => action(types.NEXT_SELECTED_LIST_PAGE),
+  ResetSelectedListPage: () => action(types.RESET_SELECTED_LIST_PAGE)
 };
 
 export const selectors = {
   GetNewsfeedPage: state => state.page.newsfeedPage_,
   GetSelectedListPage: state => state.page.selectedListPage_
-}
+};

@@ -1,138 +1,148 @@
 import { List } from 'immutable';
-import { createReducer } from './helper';
+import {
+  action,
+  stateType,
+  createType,
+  createReducer,
+  createRequestTypes,
+  createInitState,
+  setStateFlag,
+  setStatePayload,
+  concatStatePayload,
+  getStateFlag,
+  getStatePayload
+} from './helper';
 
 export const types = {
-  FETCH_ME_READY: 'user/fetch_me_ready',
-  FETCH_ME_REQUEST: 'user/fetch_me_request',
-  FETCH_ME_SUCCESS: 'user/fetch_me_success',
+  FETCH_ME: createRequestTypes(['user', 'FETCH_ME']),
+  FETCH_SELECTED_USER: createRequestTypes(['user', 'FETCH_SELECTED_USER']),
+  FETCH_SELECTED_USERS: createRequestTypes(['user', 'FETCH_SELECTED_USERS']),
+  FETCH_SELECTED_POST_LIST_USERS: createRequestTypes(['user', 'FETCH_SELECTED_POST_LIST_USERS']),
 
-  FETCH_SELECTED_USER_READY: 'user/fetch_selected_user_ready',
-  FETCH_SELECTED_USER_REQUEST: 'user/fetch_selected_user_request',
-  FETCH_SELECTED_USER_SUCCESS: 'user/fetch_selected_user_success',
-  FETCH_SELECTED_USER_UNMOUNT: 'user/fetch_selected_user_unmount',
-
-  FETCH_SELECTED_POST_LIST_USERS_READY: 'user/fetch_selected_post_list_users_ready',
-  FETCH_SELECTED_POST_LIST_USERS_REQUEST: 'user/fetch_selected_post_list_users_request',
-  FETCH_SELECTED_POST_LIST_USERS_SUCCESS: 'user/fetch_selected_post_list_users_success',
-  FETCH_SELECTED_POST_LIST_USERS_UNMOUNT: 'user/fetch_selected_post_list_users_unmount',
-
-  FETCH_SELECTED_USERS_REQUEST: 'user/fetch_selected_users_request',
-  FETCH_SELECTED_USERS_READY: 'user/fetch_selected_users_ready',
-  FETCH_SELECTED_USERS_SUCCESS: 'user/fetch_selected_users_success',
-  FETCH_SELECTED_USERS_UNMOUNT: 'user/fetch_selected_users_unmount'
+  FETCH_SELECTED_USER_UNMOUNT: createType(['user', 'FETCH_SELECTED_USER_UNMOUNT']),
+  FETCH_SELECTED_USERS_UNMOUNT: createType(['user', 'FETCH_SELECTED_USERS_UNMOUNT']),
+  FETCH_SELECTED_POST_LIST_USERS_UNMOUNT: createType(['user', 'FETCH_SELECTED_POST_LIST_USERS_UNMOUNT']),
 };
 
 export const initialState = {
-  isMyInfoFetched_: false,
-  myDisplayName_: '',
-  me_: {},
-  isSelectedUserInfoFetched_: false,
-  selectedUserDisplayName_: '',
-  selectedUser_: {},
-  isSelectedUsersFetched_: false,
-  selectedUsers_: List([]).toJS(),
-  isSelectedPostListUsersFetched_: false,
-  selectedPostListUsers_: List([]).toJS()
+  me_: createInitState('Me', 'Fetch', stateType.OBJ),
+  selectedUser_: createInitState('SelectedUser', 'Fetch', stateType.OBJ),
+  selectedUsers_: createInitState('SelectedUsers', 'Fetch', stateType.LIST),
+  selectedPostListUsers_: createInitState('SelectedPostListUsers', 'Fetch', stateType.LIST)
 };
 
 const me = {
-  [types.FETCH_ME_READY]: (state, action) => ({
+  [types.FETCH_ME.READY]: (state, action) => ({
     ...state,
-    isMyInfoFetched_: true
+    me_: setStateFlag(state.me_, true)
   }),
-  [types.FETCH_ME_SUCCESS]: (state, action) => ({
+  [types.FETCH_ME.SUCCESS]: (state, action) => ({
     ...state,
-    isMyInfoFetched_: false,
-    myDisplayName_: action.payload.display_name,
-    me_: action.payload
+    me_: setStatePayload(
+      setStateFlag(state.me_, false),
+      action.payload
+    )
   })
 };
 
-const selectedUser = {
-  [types.FETCH_SELECTED_USER_READY]: (state, action) => ({
+const fetchUser = {
+  [types.FETCH_SELECTED_USER.READY]: (state, action) => ({
     ...state,
-    isSelectedUserInfoFetched_: false
+    selectedUser_: setStateFlag(state.selectedUser_, false)
+
   }),
-  [types.FETCH_SELECTED_USER_SUCCESS]: (state, action) => ({
+  [types.FETCH_SELECTED_USER.SUCCESS]: (state, action) => ({
     ...state,
-    isSelectedUserInfoFetched_: true,
-    selectedUserDisplayName_: action.payload.display_name,
-    selectedUser_: { ...action.payload }
-  }),
+    selectedUser_: setStatePayload(
+      setStateFlag(state.selectedUser_, true),
+      action.payload
+    )
+  })
+};
+
+const unfetchUser = {
   [types.FETCH_SELECTED_USER_UNMOUNT]: (state, action) => {
     return {
-      isSelectedUserInfoFetched_: false,
-      selectedUserDisplayName_: initialState.selectedUserDisplayName_,
+      ...state,
       selectedUser_: initialState.selectedUser_
     };
   }
 };
 
 const fetchUsers = {
-  [types.FETCH_SELECTED_USERS_READY]: (state, action) => ({
+  [types.FETCH_SELECTED_USERS.READY]: (state, action) => ({
     ...state,
-    isSelectedUsersFetched_: false
+    selectedUsers_: setStateFlag(state.selectedUsers_, false)
   }),
-  [types.FETCH_SELECTED_USERS_SUCCESS]: (state, action) => {
+  [types.FETCH_SELECTED_USERS.SUCCESS]: (state, action) => {
     return ({
       ...state,
-      selectedUsers_: List(state.selectedUsers_).concat(action.payload).toJS(),
-      isSelectedUsersFetched_: true
+      selectedUsers_: concatStatePayload(
+        setStateFlag(state.selectedUsers_, true),
+        action.payload
+      )
     });
   },
+
+};
+
+const unfetchUsers = {
   [types.FETCH_SELECTED_USERS_UNMOUNT]: (state, action) => {
     return ({
       ...state,
-      selectedUsers_: List().toJS()
+      selectedUsers_: initialState.selectedUsers_
     });
   }
 };
 
 const fetchPostListUsers = {
-  [types.FETCH_SELECTED_POST_LIST_USERS_READY]: (state, action) => ({
+  [types.FETCH_SELECTED_POST_LIST_USERS.READY]: (state, action) => ({
     ...state,
-    isSelectedPostListUsersFetched_: false
+    selectedPostListUsers_: setStateFlag(state.selectedPostListUsers_, false)
   }),
-  [types.FETCH_SELECTED_POST_LIST_USERS_SUCCESS]: (state, action) => {
-    // console.log('reducer', action.payload);
+  [types.FETCH_SELECTED_POST_LIST_USERS.SUCCESS]: (state, action) => {
     return ({
       ...state,
-      selectedPostListUsers_: List(state.selectedPostListUsers_).concat(action.payload).toJS(),
-      isSelectedPostListUsersFetched_: true
+      selectedPostListUsers_: concatStatePayload(
+        setStateFlag(state.selectedPostListUsers_, true),
+        action.payload
+      )
     });
-  },
+  }
+};
+
+const unfetchPostListUsers = {
   [types.FETCH_SELECTED_POST_LIST_USERS_UNMOUNT]: (state, action) => {
     return ({
       ...state,
-      selectedPostListUsers_: List().toJS()
+      selectedPostListUsers_: initialState.selectedPostListUsers_
     });
   }
 };
 
 export default user = createReducer(initialState, {
   ...me,
-  ...selectedUser,
+  ...fetchUser,
+  ...unfetchUser,
   ...fetchUsers,
-  ...fetchPostListUsers
+  ...unfetchUsers,
+  ...fetchPostListUsers,
+  ...unfetchPostListUsers
 });
 
 export const actions = {
-  UnmountSelectedPostListUsers: () => ({
-    type: types.FETCH_SELECTED_POST_LIST_USERS_UNMOUNT
-  }),
-  UnmountSelectedNewsfeedUsers: () => ({
-    type: types.FETCH_SELECTED_USERS_UNMOUNT
-  })
+  UnmountSelectedPostListUsers: () => action(types.FETCH_SELECTED_POST_LIST_USERS_UNMOUNT),
+  UnmountSelectedNewsfeedUsers: () => action(types.FETCH_SELECTED_USERS_UNMOUNT)
 };
 
 export const selectors = {
-  GetMyDisplayName: state => state.user.myDisplayName_,
-  GetMe: state => state.user.me_,
-  GetSelectedUserDisplayName: state => state.user.selectedUserDisplayName_,
-  GetSelectedUser: state => state.user.selectedUser_,
-  GetIsSelectedUserInfoFetched: state => state.user.isSelectedUserInfoFetched_,
-  GetIsSelectedUsersFetched: state => state.user.isSelectedUsersFetched_,
-  GetSelectedUsers: state => state.user.selectedUsers_,
-  GetIsSelectedPostListUsersFetched: state => state.user.isSelectedPostListUsersFetched_,
-  GetSelectedPostListUsers: state => state.user.selectedPostListUsers_
+  GetMe:                              state => getStatePayload(state.user.me_),
+  GetSelectedUserDisplayName:         state => getStatePayload(state.user.selectedUser_).display_name,
+  GetSelectedUser:                    state => getStatePayload(state.user.selectedUser_),
+  GetSelectedUsers:                   state => getStatePayload(state.user.selectedUsers_),
+  GetSelectedPostListUsers:           state => getStatePayload(state.user.selectedPostListUsers_),
+
+  GetIsSelectedUserInfoFetched:       state => getStateFlag(state.user.selectedUser_),
+  GetIsSelectedUsersFetched:          state => getStateFlag(state.user.selectedUsers_),
+  GetIsSelectedPostListUsersFetched:  state => getStateFlag(state.user.selectedPostListUsers_),
 };
