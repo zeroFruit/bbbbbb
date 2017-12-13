@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncAddBookAction: book => ({
-    type: types.ADD_BOOK_REQUEST,
+    type: types.ADD_BOOK.REQUEST,
     payload: book
   })
 }, dispatch);

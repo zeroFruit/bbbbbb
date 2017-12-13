@@ -50,7 +50,7 @@ describe.only('duck helper test', () => {
           base,
           key,
           stateType: _stateType.LIST,
-          isSelectedBookFetch_: false,
+          isSelectedBookListFetch_: false,
           SelectedBookList_: List().toJS()
         });
     });
@@ -66,6 +66,18 @@ describe.only('duck helper test', () => {
           stateType: _stateType.NUM,
           isSelectedBookFetch_: false,
           SelectedBook_: 0
+        });
+    });
+    it('basic - state type is none', () => {
+      const _stateType = helper.stateType;
+      const base = 'SelectedBook';
+      const key = 'Fetch';
+      expect(helper.createInitState(base, key, _stateType.NONE))
+        .toEqual({
+          base,
+          key,
+          stateType: _stateType.NONE,
+          isSelectedBookFetch_: false
         });
     });
   });

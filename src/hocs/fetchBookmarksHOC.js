@@ -68,7 +68,7 @@ const mapDispatchToProps = (dispatch) => {
     RemoveBookmarkSuccessAction: bookmarkActions.RemoveBookmarkSuccess,
     AsyncFetchBookmarkRequestAction: (userId) => {
       return {
-        type: bookmarkTypes.FETCH_BOOKMARK_REQEUST,
+        type: bookmarkTypes.FETCH_BOOKMARK.REQUEST,
         payload: userId
       };
     }

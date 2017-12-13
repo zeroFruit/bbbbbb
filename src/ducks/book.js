@@ -1,74 +1,44 @@
 import { List } from 'immutable';
 import {
+  action,
   stateType,
+  createType,
   createReducer,
   createRequestTypes,
   createInitState,
   setStateFlag,
   setStatePayload,
   concatStatePayload,
-  getStateFlagName,
-  getStatePayloadName,
   getStateFlag,
   getStatePayload
 } from './helper';
-import {
-  flow
-} from '../utils/FuncUtils';
 
 
 export const types = {
   FETCH_MY_BOOKS: createRequestTypes(['book', 'FETCH_MY_BOOKS']),
-  // FETCH_BOOK_READY: 'book/fetch_book_ready',
-  // FETCH_BOOK_REQUEST: 'book/fetch_book_request',
-  // FETCH_BOOK_SUCCESS: 'book/fetch_book_success',
   FETCH_BOOK: createRequestTypes(['book', 'FETCH_BOOK']),
+  FETCH_BOOKS: createRequestTypes(['book', 'FETCH_BOOKS']),
+  FETCH_BOOKS_BY_TAG: createRequestTypes(['book', 'FETCH_BOOKS_BY_TAG']),
+  FETCH_BOOKS_BY_AUTHOR_TAG: createRequestTypes(['book', 'FETCH_BOOKS_BY_AUTHOR_TAG']),
+  FETCH_BOOKS_FOR_COLLECTION: createRequestTypes(['book', 'FETCH_BOOKS_FOR_COLLECTION']),
+  FETCH_BOOKS_FOR_USER: createRequestTypes(['book', 'FETCH_BOOKS_FOR_USER']),
+  ADD_BOOK: createRequestTypes(['book', 'ADD_BOOK']),
 
-  FETCH_BOOKS_READY: 'book/fetch_books_ready',
-  FETCH_BOOKS_REQUEST: 'book/fetch_books_request',
-  FETCH_BOOKS_SUCCESS: 'book/fetch_books_success',
-  FETCH_BOOKS_UNMOUNT: 'book/fetch_books_unmount',
-
-  FETCH_BOOKS_BY_TAG_REQUEST: 'book/fetch_books_by_tag_request',
-  FETCH_BOOKS_BY_TAG_READY: 'book/fetch_books_by_tag_ready',
-  FETCH_BOOKS_BY_TAG_SUCCESS: 'book/fetch_books_by_tag_success',
-  FETCH_BOOKS_BY_TAG_UNMOUNT: 'book/fetch_books_by_tag_unmount',
-
-  FETCH_BOOKS_BY_AUTHOR_TAG_REQUEST: 'book/fetch_books_by_author_tag_request',
-  FETCH_BOOKS_BY_AUTHOR_TAG_READY: 'book/fetch_books_by_author_tag_ready',
-  FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS: 'book/fetch_books_by_author_tag_success',
-  FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT: 'book/fetch_books_by_author_tag_unmount',
-
-  FETCH_BOOKS_FOR_COLLECTION_REQUEST: 'book/fetch_books_for_collection_request',
-  FETCH_BOOKS_FOR_COLLECTION_READY: 'book/fetch_books_for_collection_ready',
-  FETCH_BOOKS_FOR_COLLECTION_SUCCESS: 'book/fetch_books_for_collection_success',
-
-  FETCH_BOOKS_FOR_USER_REQUEST: 'book/fetch_books_for_user_request',
-  FETCH_BOOKS_FOR_USER_READY: 'book/fetch_books_for_user_ready',
-  FETCH_BOOKS_FOR_USER_SUCCESS: 'book/fetch_books_for_user_success',
-
-  ADD_BOOK_REQUEST: 'book/add_book_request',
-  ADD_BOOK_READY: 'book/add_book_ready',
-  ADD_BOOK_SUCCESS: 'book/add_book_success',
-
-  UNMOUNT_BOOK: 'book/unmount_book'
+  FETCH_BOOKS_UNMOUNT: createType(['book', 'FETCH_BOOKS_UNMOUNT']),
+  FETCH_BOOKS_BY_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_TAG_UNMOUNT']),
+  FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT']),
 };
 
 export const initialState = {
   numOfFeedsPerLoad_: 3,
   myBooks_: createInitState('MyBooks', 'Fetch', stateType.LIST),
   selectedBook_: createInitState('SelectedBook', 'Fetch', stateType.OBJ),
-  isBooksFetched_: false,
-  selectedBooks_: List().toJS(),
-  isBooksByTagFetched_: false,
-  selectedBooksByTag_: List().toJS(),
-  isBooksByAuthorTagFetched_: false,
-  selectedBooksByAuthorTag_: List().toJS(),
-  isBooksForCollectionFetched_: false,
-  selectedBooksForCollection_: List().toJS(),
-  isBooksForUserFetched_: false,
-  selectedBooksForUser_: List().toJS(),
-  isBookAdd_: false
+  selectedBooks_: createInitState('SelectedBooks', 'Fetch', stateType.LIST),
+  selectedBooksByTag_: createInitState('SelectedBooksByTag', 'Fetch', stateType.LIST),
+  selectedBooksByAuthorTag_: createInitState('SelectedBooksByAuthorTag', 'Fetch', stateType.LIST),
+  selectedBooksForCollection_: createInitState('SelectedBooksForCollection', 'Fetch', stateType.LIST),
+  selectedBooksForUser_: createInitState('SelectedBooksForUser', 'Fetch', stateType.LIST),
+  isBookAdd_: createInitState('Book', 'Add', stateType.NONE)
 };
 
 const fetchMyBooks = {
@@ -93,112 +63,131 @@ const fetchSelectedBook = {
 };
 
 const fetchBooks = {
-  [types.FETCH_BOOKS_READY]: (state, action) => ({
+  [types.FETCH_BOOKS.READY]: (state, action) => ({
     ...state,
-    isBooksFetched_: false
+    selectedBooks_: setStateFlag(state.selectedBooks_, false)
   }),
-  [types.FETCH_BOOKS_SUCCESS]: (state, action) => {
-    return ({
-      ...state,
-      isBooksFetched_: true,
-      selectedBooks_: List(state.selectedBooks_).concat(action.payload).toJS()
-    });
-  },
-  [types.FETCH_BOOKS_UNMOUNT]: (state, action) => {
-    return ({
-      ...state,
-      selectedBooks_: List().toJS()
-    });
-  }
+  [types.FETCH_BOOKS.SUCCESS]: (state, action) => ({
+    ...state,
+    selectedBooks_: concatStatePayload(
+      setStateFlag(state.selectedBooks_, true),
+      action.payload
+    )
+  })
+};
+
+const unfetchBooks = {
+  [types.FETCH_BOOKS_UNMOUNT]: (state, action) => ({
+    ...state,
+    selectedBooks_: setStatePayload(state.selectedBooks_, List().toJS())
+  })
 };
 
 const fetchBooksByTag = {
-  [types.FETCH_BOOKS_BY_TAG_READY]: (state, action) => {
+  [types.FETCH_BOOKS_BY_TAG.READY]: (state, action) => {
     return {
       ...state,
-      isBooksByTagFetched_: false
+      selectedBooksByTag_: setStateFlag(state.selectedBooksByTag_, false)
     };
   },
-  [types.FETCH_BOOKS_BY_TAG_SUCCESS]: (state, action) => {
+  [types.FETCH_BOOKS_BY_TAG.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBooksByTagFetched_: true,
-      selectedBooksByTag_: List(state.selectedBooksByTag_).concat(action.payload).toJS()
-    };
-  },
-  [types.FETCH_BOOKS_BY_TAG_UNMOUNT]: (state, action) => {
-    return {
-      ...state,
-      selectedBooksByTag_: List().toJS()
+      selectedBooksByTag_: concatStatePayload(
+        setStateFlag(state.selectedBooksByTag_, true),
+        action.payload
+      )
     };
   }
 };
 
+const unfetchBooksByTag = {
+  [types.FETCH_BOOKS_BY_TAG_UNMOUNT]: (state, action) => ({
+    ...state,
+    selectedBooksByTag_: setStatePayload(
+      state.selectedBooksByTag_,
+      List().toJS()
+    )
+  })
+};
+
 const fetchBooksByAuthorTag = {
-  [types.FETCH_BOOKS_BY_AUTHOR_TAG_READY]: (state, action) => {
+  [types.FETCH_BOOKS_BY_AUTHOR_TAG.READY]: (state, action) => {
     return {
       ...state,
-      isBooksByAuthorTagFetched_: false
+      selectedBooksByAuthorTag_: setStateFlag(state.selectedBooksByAuthorTag_, false)
     };
   },
-  [types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS]: (state, action) => {
+  [types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBooksByAuthorTagFetched_: true,
-      selectedBooksByAuthorTag_: List(state.selectedBooksByAuthorTag_).concat(action.payload).toJS()
+      selectedBooksByAuthorTag_: concatStatePayload(
+        setStateFlag(state.selectedBooksByAuthorTag_, true),
+        action.payload
+      )
     };
-  },
+  }
+};
+
+const unfetchBooksByAuthorTag = {
   [types.FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT]: (state, action) => {
     return {
       ...state,
-      selectedBooksByAuthorTag_: List().toJS()
+      selectedBooksByAuthorTag_: setStatePayload(
+        state.selectedBooksByAuthorTag_,
+        List().toJS()
+      )
     };
   }
 };
 
 const fetchBooksForCollection = {
-  [types.FETCH_BOOKS_FOR_COLLECTION_READY]: (state, action) => {
+  [types.FETCH_BOOKS_FOR_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
-      isBooksForCollectionFetched_: false
+      selectedBooksForCollection_: setStateFlag(state.selectedBooksForCollection_, false)
     };
   },
-  [types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS]: (state, action) => {
+  [types.FETCH_BOOKS_FOR_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
-      selectedBooksForCollection_: List(action.payload).toJS(),
-      isBooksForCollectionFetched_: true
+      selectedBooksForCollection_: setStatePayload(
+        setStateFlag(state.selectedBooksForCollection_, true),
+        action.payload
+      )
     };
   }
 };
 
 const fetchBooksByUser = {
-  [types.FETCH_BOOKS_FOR_USER_READY]: (state, action) => {
+  [types.FETCH_BOOKS_FOR_USER.READY]: (state, action) => {
     return {
       ...state,
-      isBooksForUserFetched_: false
+      selectedBooksForUser_: setStateFlag(state.selectedBooksForUser_, false)
     };
   },
-  [types.FETCH_BOOKS_FOR_USER_SUCCESS]: (state, action) => {
+  [types.FETCH_BOOKS_FOR_USER.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBooksForUserFetched_: true,
-      selectedBooksForUser_: List(action.payload).toJS()
+      selectedBooksForUser_: setStatePayload(
+        setStateFlag(state.selectedBooksForUser_, true),
+        action.payload
+      )
     };
   }
 };
 
 const add = {
-  [types.ADD_BOOK_READY]: (state, action) => {
+  [types.ADD_BOOK.READY]: (state, action) => {
     return {
       ...state,
-      isBookAdd_: false
+      isBookAdd_: setStateFlag(state.isBookAdd_, false)
     };
   },
-  [types.ADD_BOOK_SUCCESS]: (state, action) => {
+  [types.ADD_BOOK.SUCCESS]: (state, action) => {
     return {
       ...state,
-      isBookAdd_: true
+      isBookAdd_: setStateFlag(state.isBookAdd_, true)
     };
   }
 };
@@ -207,33 +196,37 @@ export default book = createReducer(initialState, {
   ...fetchMyBooks,
   ...fetchSelectedBook,
   ...fetchBooks,
+  ...unfetchBooks,
   ...fetchBooksByTag,
+  ...unfetchBooksByTag,
   ...fetchBooksByAuthorTag,
+  ...unfetchBooksByAuthorTag,
   ...fetchBooksForCollection,
   ...fetchBooksByUser,
   ...add
 });
 
 export const actions = {
-  UnmountFetchedBooks: () => ({ type: types.FETCH_BOOKS_UNMOUNT }),
-  UnmountFetchedBooksByTag: () => ({ type: types.FETCH_BOOKS_BY_TAG_UNMOUNT }),
-  UnmountFetchedBooksByAuthorTag: () => ({ type: types.FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT })
+  UnmountFetchedBooks: () => action(types.FETCH_BOOKS_UNMOUNT),
+  UnmountFetchedBooksByTag: () => action(types.FETCH_BOOKS_BY_TAG_UNMOUNT),
+  UnmountFetchedBooksByAuthorTag: () => action(types.FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT)
 };
 
 export const selectors = {
-  GetNumOfFeedsPerLoad: state => state.book.numOfFeedsPerLoad_,
-  GetMyBooks: state => getStatePayload(state.book.myBooks_),
-  GetIsBookFetched: state => getStateFlag(state.book.selectedBook_),
-  GetSelectedBook: state => getStatePayload(state.book.selectedBook_),
-  GetIsBooksFetched: state => state.book.isBooksFetched_,
-  GetSelectedBooks: state => state.book.selectedBooks_,
-  GetIsBooksByTagFetched: state => state.book.isBooksByTagFetched_,
-  GetSelectedBooksByTag: state => state.book.selectedBooksByTag_,
-  GetIsBooksByAuthorTagFetched: state => state.book.isBooksByAuthorTagFetched_,
-  GetSelectedBooksByAuthorTag: state => state.book.selectedBooksByAuthorTag_,
-  GetIsBooksForCollectionFetched: state => state.book.isBooksForCollectionFetched_,
-  GetSelectedBooksForCollection: state => state.book.selectedBooksForCollection_,
-  GetIsBooksForUserFetched: state => state.book.isBooksForUserFetched_,
-  GetSelectedBooksForUser: state => state.book.selectedBooksForUser_,
-  GetIsBookAdd: state => state.book.isBookAdd_
+  GetNumOfFeedsPerLoad:           state => state.book.numOfFeedsPerLoad_,
+  GetMyBooks:                     state => getStatePayload(state.book.myBooks_),
+  GetSelectedBook:                state => getStatePayload(state.book.selectedBook_),
+  GetSelectedBooks:               state => getStatePayload(state.book.selectedBooks_),
+  GetSelectedBooksByTag:          state => getStatePayload(state.book.selectedBooksByTag_),
+  GetSelectedBooksByAuthorTag:    state => getStatePayload(state.book.selectedBooksByAuthorTag_),
+  GetSelectedBooksForCollection:  state => getStatePayload(state.book.selectedBooksForCollection_),
+  GetSelectedBooksForUser:        state => getStatePayload(state.book.selectedBooksForUser_),
+
+  GetIsBookFetched:               state => getStateFlag(state.book.selectedBook_),
+  GetIsBooksFetched:              state => getStateFlag(state.book.selectedBooks_),
+  GetIsBooksByTagFetched:         state => getStateFlag(state.book.selectedBooksByTag_),
+  GetIsBooksByAuthorTagFetched:   state => getStateFlag(state.book.selectedBooksByAuthorTag_),
+  GetIsBooksForCollectionFetched: state => getStateFlag(state.book.selectedBooksForCollection_),
+  GetIsBooksForUserFetched:       state => getStateFlag(state.book.selectedBooksForUser_),
+  GetIsBookAdd:                   state => getStateFlag(state.book.isBookAdd_)
 };

@@ -19,13 +19,13 @@ export function* AsyncFetchBook(action) {
 export function* AsyncFetchBooks(action) {
   const { numOfFeeds, page } = action.payload;
   yield put({
-    type: types.FETCH_BOOKS_READY
+    type: types.FETCH_BOOKS.READY
   });
 
   const books = yield call(agent.Book.fetch, numOfFeeds, page);
 
   yield put({
-    type: types.FETCH_BOOKS_SUCCESS,
+    type: types.FETCH_BOOKS.SUCCESS,
     payload: books
   });
 
@@ -35,13 +35,13 @@ export function* AsyncFetchBooks(action) {
 export function* AsyncFetchBooksByIdForSameTag(action) {
   const { id, numOfFeeds, page } = action.payload;
   yield put({
-    type: types.FETCH_BOOKS_BY_TAG_READY
+    type: types.FETCH_BOOKS_BY_TAG.READY
   });
   const { title_tag_id, author_tag_id } = yield call(agent.Book.fetchByBookId, id);
   const filteredBooks = yield call(agent.Book.fetchByTag, title_tag_id, author_tag_id, numOfFeeds, page);
 
   yield put({
-    type: types.FETCH_BOOKS_BY_TAG_SUCCESS,
+    type: types.FETCH_BOOKS_BY_TAG.SUCCESS,
     payload: filteredBooks
   });
 
@@ -51,13 +51,13 @@ export function* AsyncFetchBooksByIdForSameTag(action) {
 export function* AsyncFetchBooksByAuthorTagId(action) {
   const { id, numOfFeeds, page } = action.payload;
   yield put({
-    type: types.FETCH_BOOKS_BY_AUTHOR_TAG_READY
+    type: types.FETCH_BOOKS_BY_AUTHOR_TAG.READY
   });
   const { author_tag_id } = yield call(agent.Book.fetchByBookId, id);
   const filteredBooks = yield call(agent.Book.fetchByAuthorTag, author_tag_id, numOfFeeds, page);
 
   yield put({
-    type: types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS,
+    type: types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS,
     payload: filteredBooks
   });
 
@@ -66,11 +66,11 @@ export function* AsyncFetchBooksByAuthorTagId(action) {
 
 export function* AsyncFetchBooksByIds(action) {
   yield put({
-    type: types.FETCH_BOOKS_FOR_COLLECTION_READY
+    type: types.FETCH_BOOKS_FOR_COLLECTION.READY
   });
   const books = yield call(agent.Book.fetchByBookIds, action.payload);
   yield put({
-    type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS,
+    type: types.FETCH_BOOKS_FOR_COLLECTION.SUCCESS,
     payload: books
   });
 
@@ -79,11 +79,11 @@ export function* AsyncFetchBooksByIds(action) {
 
 export function* AsyncFetchBooksByUserId(action) {
   yield put({
-    type: types.FETCH_BOOKS_FOR_USER_READY
+    type: types.FETCH_BOOKS_FOR_USER.READY
   });
   const books = yield call(agent.Book.fetchByBookIds, action.payload);
   yield put({
-    type: types.FETCH_BOOKS_FOR_USER_SUCCESS,
+    type: types.FETCH_BOOKS_FOR_USER.SUCCESS,
     payload: books
   });
 
@@ -92,7 +92,7 @@ export function* AsyncFetchBooksByUserId(action) {
 
 export function* AsyncAddBook(action) {
   yield put({
-    type: types.ADD_BOOK_READY
+    type: types.ADD_BOOK.READY
   });
 
   const book = yield call(agent.Book.insert, pickByKey(action.payload, ['img_src', 'content', 'user_id']));
@@ -107,7 +107,7 @@ export function* AsyncAddBook(action) {
   const me = yield call(agent.User.insertBook, USER_ID, book.id);
 
   yield put({
-    type: types.ADD_BOOK_SUCCESS
+    type: types.ADD_BOOK.SUCCESS
   });
 
   return book;
@@ -115,9 +115,9 @@ export function* AsyncAddBook(action) {
 
 export default function* rootSaga() {
   yield takeLatest(types.FETCH_BOOK.REQUEST, AsyncFetchBook);
-  yield takeLatest(types.FETCH_BOOKS_REQUEST, AsyncFetchBooks);
-  yield takeLatest(types.FETCH_BOOKS_BY_TAG_REQUEST, AsyncFetchBooksByIdForSameTag);
-  yield takeLatest(types.FETCH_BOOKS_FOR_COLLECTION_REQUEST, AsyncFetchBooksByIds);
-  yield takeLatest(types.FETCH_BOOKS_FOR_USER_REQUEST, AsyncFetchBooksByUserId);
-  yield takeLatest(types.ADD_BOOK_REQUEST, AsyncAddBook);
+  yield takeLatest(types.FETCH_BOOKS.REQUEST, AsyncFetchBooks);
+  yield takeLatest(types.FETCH_BOOKS_BY_TAG.REQUEST, AsyncFetchBooksByIdForSameTag);
+  yield takeLatest(types.FETCH_BOOKS_FOR_COLLECTION.REQUEST, AsyncFetchBooksByIds);
+  yield takeLatest(types.FETCH_BOOKS_FOR_USER.REQUEST, AsyncFetchBooksByUserId);
+  yield takeLatest(types.ADD_BOOK.REQUEST, AsyncAddBook);
 }

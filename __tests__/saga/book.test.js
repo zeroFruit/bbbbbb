@@ -14,11 +14,11 @@ describe('book saga test', () => {
       const gen = saga.AsyncFetchBook(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOK_READY }));
+        .toEqual(put({ type: types.FETCH_BOOK.READY }));
       expect(gen.next(params).value)
         .toEqual(call(agent.Book.fetchByBookId, params.payload));
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOK_SUCCESS }));
+        .toEqual(put({ type: types.FETCH_BOOK.SUCCESS }));
     });
   });
 
@@ -31,14 +31,19 @@ describe('book saga test', () => {
       }
     };
     it('success', () => {
-      const gen = saga.AsyncFetchBook(params);
+      const gen = saga.AsyncFetchBooks(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOK_READY }));
+        .toEqual(put({ type: types.FETCH_BOOKS.READY }));
+
+      const { numOfFeeds, page } = params.payload;
+      expect(gen.next({
+        numOfFeeds,
+        page
+      }).value)
+        .toEqual(call(agent.Book.fetch, numOfFeeds, page));
       expect(gen.next().value)
-        .toEqual(call(agent.Book.fetchByBookId, params.payload));
-      expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOK_SUCCESS }));
+        .toEqual(put({ type: types.FETCH_BOOKS.SUCCESS }));
     });
   });
 
@@ -55,7 +60,7 @@ describe('book saga test', () => {
       const gen = saga.AsyncFetchBooksByIdForSameTag(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS_BY_TAG_READY }));
+        .toEqual(put({ type: types.FETCH_BOOKS_BY_TAG.READY }));
       expect(gen.next().value)
         .toEqual(call(agent.Book.fetchByBookId, params.payload.id));
 
@@ -80,7 +85,7 @@ describe('book saga test', () => {
       const filteredBooks = [];
       expect(gen.next(filteredBooks).value)
         .toEqual(put({
-          type: types.FETCH_BOOKS_BY_TAG_SUCCESS,
+          type: types.FETCH_BOOKS_BY_TAG.SUCCESS,
           payload: filteredBooks
         }));
     });
@@ -99,7 +104,7 @@ describe('book saga test', () => {
       const gen = saga.AsyncFetchBooksByAuthorTagId(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS_BY_AUTHOR_TAG_READY }));
+        .toEqual(put({ type: types.FETCH_BOOKS_BY_AUTHOR_TAG.READY }));
 
       expect(gen.next().value)
         .toEqual(call(agent.Book.fetchByBookId, params.payload.id));
@@ -122,7 +127,7 @@ describe('book saga test', () => {
       const filteredBooks = [];
       expect(gen.next(filteredBooks).value)
         .toEqual(put({
-          type: types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS,
+          type: types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS,
           payload: filteredBooks
         }));
     });
@@ -138,14 +143,14 @@ describe('book saga test', () => {
       const gen = saga.AsyncFetchBooksByIds(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS_FOR_COLLECTION_READY }));
+        .toEqual(put({ type: types.FETCH_BOOKS_FOR_COLLECTION.READY }));
       expect(gen.next().value)
         .toEqual(call(agent.Book.fetchByBookIds, params.payload));
 
       const books = [{ id: 1 }, { id: 2 }];
       expect(gen.next(books).value)
         .toEqual(put({
-          type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS,
+          type: types.FETCH_BOOKS_FOR_COLLECTION.SUCCESS,
           payload: books
         }));
     });
@@ -161,14 +166,14 @@ describe('book saga test', () => {
       const gen = saga.AsyncFetchBooksByUserId(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS_FOR_USER_READY }));
+        .toEqual(put({ type: types.FETCH_BOOKS_FOR_USER.READY }));
       expect(gen.next().value)
         .toEqual(call(agent.Book.fetchByBookIds, params.payload));
 
       const books = [{ id: 1 }, { id: 2 }];
       expect(gen.next(books).value)
         .toEqual(put({
-          type: types.FETCH_BOOKS_FOR_USER_SUCCESS,
+          type: types.FETCH_BOOKS_FOR_USER.SUCCESS,
           payload: books
         }));
     });
@@ -189,7 +194,7 @@ describe('book saga test', () => {
       const gen = saga.AsyncAddBook(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.ADD_BOOK_READY }));
+        .toEqual(put({ type: types.ADD_BOOK.READY }));
       expect(gen.next().value)
         .toEqual(call(
           agent.Book.insert,
@@ -240,7 +245,7 @@ describe('book saga test', () => {
 
       expect(gen.next().value)
         .toEqual(put({
-          type: types.ADD_BOOK_SUCCESS
+          type: types.ADD_BOOK.SUCCESS
         }));
     });
   });

@@ -5,62 +5,45 @@ import { USER_ID } from '../config';
 
 export function* AsyncFetchBookmarkRequest(action) {
   yield put({
-    type: types.FETCH_BOOKMARK_READY
+    type: types.FETCH_BOOKMARK.READY
   });
 
   const { book_ids } = yield call(agent.Bookmark.fetchByUserId, action.payload);
 
   yield put({
-    type: types.FETCH_BOOKMARK_SUCCESS,
+    type: types.FETCH_BOOKMARK.SUCCESS,
     payload: book_ids
   });
 }
 
 export function* AsyncAddBookmarkRequest(action) {
   yield put({
-    type: types.ADD_BOOKMARK_READY
-  });
-  yield put({
-    type: types.ADD_BOOKMARK_FETCHING,
-    payload: action.payload
+    type: types.ADD_BOOKMARK.READY
   });
 
   yield call(agent.Bookmark.addByBookId, action.payload, USER_ID);
 
   yield put({
-    type: types.ADD_BOOKMARK_SUCCESS
+    type: types.ADD_BOOKMARK.SUCCESS,
+    payload: action.payload
   });
 }
 
 export function* AsyncRemoveBookmarkRequest(action) {
   yield put({
-    type: types.REMOVE_BOOKMARK_READY
-  });
-  yield put({
-    type: types.REMOVE_BOOKMARK_FETCHING,
-    payload: action.payload
+    type: types.REMOVE_BOOKMARK.READY
   });
 
   yield call(agent.Bookmark.removeByBookId, action.payload, USER_ID);
 
   yield put({
-    type: types.REMOVE_BOOKMARK_SUCCESS
+    type: types.REMOVE_BOOKMARK.SUCCESS,
+    payload: action.payload
   });
 }
 
-// export function* AsyncFetchBookmarksInCollection(action) {
-//   yield put({
-//     type: types.FETCH_BOOKMARKS_IN_COLLECTION_READY
-//   });
-//
-//   yield put({
-//     type: types.FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS
-//   });
-// }
-
 export default function* rootSaga() {
-  yield takeLatest(types.ADD_BOOKMARK_REQUEST, AsyncAddBookmarkRequest);
-  yield takeLatest(types.REMOVE_BOOKMARK_REQUEST, AsyncRemoveBookmarkRequest);
-  yield takeLatest(types.FETCH_BOOKMARK_REQEUST, AsyncFetchBookmarkRequest);
-  // yield takeLatest(types.FETCH_BOOKMARKS_IN_COLLECTION_REQUEST, AsyncFetchBookmarksInCollection);
+  yield takeLatest(types.ADD_BOOKMARK.REQUEST, AsyncAddBookmarkRequest);
+  yield takeLatest(types.REMOVE_BOOKMARK.REQUEST, AsyncRemoveBookmarkRequest);
+  yield takeLatest(types.FETCH_BOOKMARK.REQEUST, AsyncFetchBookmarkRequest);
 }

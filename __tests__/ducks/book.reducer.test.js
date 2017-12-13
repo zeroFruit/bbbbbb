@@ -1,24 +1,24 @@
 import { List } from 'immutable';
 import * as helper from '../../src/ducks/helper';
-import book, { types, initialState } from '../../src/ducks/book';
+import book, { types, initialState as is } from '../../src/ducks/book';
 
 describe('reducer', () => {
-  it('should return the initial state', () => {
-    expect(book(undefined, {})).toEqual(initialState);
+  xit('should return the initial state', () => {
+    expect(book(undefined, {})).toEqual(is);
   });
 
   describe('reducer / fetchMyBooks', () => {
     describe('FETCH_MY_BOOKS - SUCCESS', () => {
       const myBookList = List([{ id: 1 }]).toJS();
       it('success', () => {
-        expect(book(initialState, {
+        expect(book(is, {
           type: types.FETCH_MY_BOOKS.SUCCESS,
           payload: myBookList
         })).toEqual({
-          ...initialState,
+          ...is,
           myBooks_: {
-            ...initialState.myBooks_,
-            [helper.getStatePayloadName(initialState.myBooks_)]: myBookList
+            ...is.myBooks_,
+            [helper.getStatePayloadName(is.myBooks_)]: myBookList
           }
         });
       });
@@ -30,28 +30,28 @@ describe('reducer', () => {
 
     describe('FETCH_BOOK - READY', () => {
       it('success', () => {
-        expect(book(initialState, {
+        expect(book(is, {
           type: types.FETCH_BOOK.READY
         })).toEqual({
-          ...initialState,
+          ...is,
           selectedBook_: {
-            ...initialState.selectedBook_,
-            [helper.getStateFlagName(initialState.selectedBook_)]: true
+            ...is.selectedBook_,
+            [helper.getStateFlagName(is.selectedBook_)]: true
           }
         });
       });
     });
     describe('FETCH_BOOK - SUCCESS', () => {
       it('success', () => {
-        expect(book(initialState, {
+        expect(book(is, {
           type: types.FETCH_BOOK.SUCCESS,
           payload: selectedBook
         })).toEqual({
-          ...initialState,
+          ...is,
           selectedBook_: {
-            ...initialState.selectedBook_,
-            [helper.getStateFlagName(initialState.selectedBook_)]: false,
-            [helper.getStatePayloadName(initialState.selectedBook_)]: selectedBook
+            ...is.selectedBook_,
+            [helper.getStateFlagName(is.selectedBook_)]: false,
+            [helper.getStatePayloadName(is.selectedBook_)]: selectedBook
           }
         });
       });
@@ -64,48 +64,63 @@ describe('reducer', () => {
     }, {
       id: 2
     }]).toJS();
-    describe('FETCH_BOOKS_READY', () => {
-      it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_READY
+    describe('FETCH_BOOKS - READY', () => {
+      it('should fetch flag', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS.READY
         })).toEqual({
-          ...initialState,
-          isBooksFetched_: false
+          ...is,
+          selectedBooks_: {
+            ...is.selectedBooks_,
+            [helper.getStateFlagName(is.selectedBooks_)]: false
+          }
         });
       });
     });
-    describe('FETCH_BOOKS_SUCCESS', () => {
-      it('success - initial fetch', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_SUCCESS,
+    describe('FETCH_BOOKS - SUCCESS', () => {
+      it('should fetch flag with payload', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS.SUCCESS,
           payload: selectedBooks[0]
         })).toEqual({
-          ...initialState,
-          isBooksFetched_: true,
-          selectedBooks_: List([selectedBooks[0]]).toJS()
+          ...is,
+          selectedBooks_: {
+            ...is.selectedBooks_,
+            [helper.getStateFlagName(is.selectedBooks_)]: true,
+            [helper.getStatePayloadName(is.selectedBooks_)]: List([selectedBooks[0]]).toJS()
+          }
         });
       });
-      it('success - concat books', () => {
+      it('should fetch flag with concatenated payload', () => {
         expect(book({
-          ...initialState,
-          selectedBooks_: List([selectedBooks[0]]).toJS()
+          ...is,
+          selectedBooks_: {
+            ...is.selectedBooks_,
+            [helper.getStatePayloadName(is.selectedBooks_)]: List([selectedBooks[0]]).toJS()
+          }
         }, {
-          type: types.FETCH_BOOKS_SUCCESS,
+          type: types.FETCH_BOOKS.SUCCESS,
           payload: selectedBooks[1]
         })).toEqual({
-          ...initialState,
-          isBooksFetched_: true,
-          selectedBooks_: List(selectedBooks).toJS()
+          ...is,
+          selectedBooks_: {
+            ...is.selectedBooks_,
+            [helper.getStateFlagName(is.selectedBooks_)]: true,
+            [helper.getStatePayloadName(is.selectedBooks_)]: List(selectedBooks).toJS()
+          }
         });
       });
     });
     describe('FETCH_BOOKS_UNMOUNT', () => {
       it('success', () => {
-        expect(book(initialState, {
+        expect(book(is, {
           type: types.FETCH_BOOKS_UNMOUNT
         })).toEqual({
-          ...initialState,
-          selectedBooks_: List().toJS()
+          ...is,
+          selectedBooks_: {
+            ...is.selectedBooks_,
+            [helper.getStatePayloadName(is.selectedBooks_)]: List().toJS()
+          }
         });
       });
     });
@@ -117,48 +132,63 @@ describe('reducer', () => {
     }, {
       id: 2
     }]).toJS();
-    describe('FETCH_BOOKS_BY_TAG_READY', () => {
-      it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_BY_TAG_READY
+    describe('FETCH_BOOKS_BY_TAG - READY', () => {
+      it('should fetch flag', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS_BY_TAG.READY
         })).toEqual({
-          ...initialState,
-          isBooksByTagFetched_: false
+          ...is,
+          selectedBooksByTag_: {
+            ...is.selectedBooksByTag_,
+            [helper.getStateFlagName(is.selectedBooksByTag_)]: false
+          }
         });
       });
     });
-    describe('FETCH_BOOKS_BY_TAG_SUCCESS', () => {
-      it('success - initial fetch', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_BY_TAG_SUCCESS,
+    describe('FETCH_BOOKS_BY_TAG - SUCCESS', () => {
+      it('should fetch flag with payload', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS_BY_TAG.SUCCESS,
           payload: selectedBooks[0]
         })).toEqual({
-          ...initialState,
-          isBooksByTagFetched_: true,
-          selectedBooksByTag_: List([selectedBooks[0]]).toJS()
+          ...is,
+          selectedBooksByTag_: {
+            ...is.selectedBooksByTag_,
+            [helper.getStateFlagName(is.selectedBooksByTag_)]: true,
+            [helper.getStatePayloadName(is.selectedBooksByTag_)]: List([selectedBooks[0]]).toJS()
+          }
         });
       });
-      it('success - concat books', () => {
+      it('should fetch flag with concatenated payload', () => {
         expect(book({
-          ...initialState,
-          selectedBooksByTag_: List([selectedBooks[0]]).toJS()
+          ...is,
+          selectedBooksByTag_: {
+            ...is.selectedBooksByTag_,
+            [helper.getStatePayloadName(is.selectedBooksByTag_)]: List([selectedBooks[0]]).toJS()
+          }
         }, {
-          type: types.FETCH_BOOKS_BY_TAG_SUCCESS,
+          type: types.FETCH_BOOKS_BY_TAG.SUCCESS,
           payload: selectedBooks[1]
         })).toEqual({
-          ...initialState,
-          isBooksByTagFetched_: true,
-          selectedBooksByTag_: List(selectedBooks).toJS()
+          ...is,
+          selectedBooksByTag_: {
+            ...is.selectedBooksByTag_,
+            [helper.getStateFlagName(is.selectedBooksByTag_)]: true,
+            [helper.getStatePayloadName(is.selectedBooksByTag_)]: List(selectedBooks).toJS()
+          }
         });
       });
     });
     describe('FETCH_BOOKS_BY_TAG_UNMOUNT', () => {
-      it('success', () => {
-        expect(book(initialState, {
+      it('should empty list when there is no items', () => {
+        expect(book(is, {
           type: types.FETCH_BOOKS_BY_TAG_UNMOUNT
         })).toEqual({
-          ...initialState,
-          selectedBooksByTag_: List().toJS()
+          ...is,
+          selectedBooksByTag_: {
+            ...is.selectedBooksByTag_,
+            [helper.getStatePayloadName(is.selectedBooksByTag_)]: List().toJS()
+          }
         });
       });
     });
@@ -170,48 +200,63 @@ describe('reducer', () => {
     }, {
       id: 2
     }]).toJS();
-    describe('FETCH_BOOKS_BY_AUTHOR_TAG_READY', () => {
-      it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_BY_AUTHOR_TAG_READY
+    describe('FETCH_BOOKS_BY_AUTHOR_TAG - READY', () => {
+      it('should fetch flag', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS_BY_AUTHOR_TAG.READY
         })).toEqual({
-          ...initialState,
-          isBooksByAuthorTagFetched_: false
+          ...is,
+          selectedBooksByAuthorTag_: {
+            ...is.selectedBooksByAuthorTag_,
+            [helper.getStateFlagName(is.selectedBooksByAuthorTag_)]: false
+          }
         });
       });
     });
-    describe('FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS', () => {
-      it('success - initial fetch', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS,
+    describe('FETCH_BOOKS_BY_AUTHOR_TAG - SUCCESS', () => {
+      it('should fetch flag with payload', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS,
           payload: selectedBooks[0]
         })).toEqual({
-          ...initialState,
-          isBooksByAuthorTagFetched_: true,
-          selectedBooksByAuthorTag_: List([selectedBooks[0]]).toJS()
+          ...is,
+          selectedBooksByAuthorTag_: {
+            ...is.selectedBooksByAuthorTag_,
+            [helper.getStateFlagName(is.selectedBooksByAuthorTag_)]: true,
+            [helper.getStatePayloadName(is.selectedBooksByAuthorTag_)]: List([selectedBooks[0]]).toJS()
+          }
         });
       });
-      it('success - concat books', () => {
+      it('should fetch flag with concatenated payload', () => {
         expect(book({
-          ...initialState,
-          selectedBooksByAuthorTag_: List([selectedBooks[0]]).toJS()
+          ...is,
+          selectedBooksByAuthorTag_: {
+            ...is.selectedBooksByAuthorTag_,
+            [helper.getStatePayloadName(is.selectedBooksByAuthorTag_)]: List([selectedBooks[0]]).toJS()
+          }
         }, {
-          type: types.FETCH_BOOKS_BY_AUTHOR_TAG_SUCCESS,
+          type: types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS,
           payload: selectedBooks[1]
         })).toEqual({
-          ...initialState,
-          isBooksByAuthorTagFetched_: true,
-          selectedBooksByAuthorTag_: List(selectedBooks).toJS()
+          ...is,
+          selectedBooksByAuthorTag_: {
+            ...is.selectedBooksByAuthorTag_,
+            [helper.getStateFlagName(is.selectedBooksByAuthorTag_)]: true,
+            [helper.getStatePayloadName(is.selectedBooksByAuthorTag_)]: List(selectedBooks).toJS()
+          }
         });
       });
     });
     describe('FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT', () => {
-      it('success', () => {
-        expect(book(initialState, {
+      it('should empty list when there is no items', () => {
+        expect(book(is, {
           type: types.FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT
         })).toEqual({
-          ...initialState,
-          selectedBooksByAuthorTag_: List().toJS()
+          ...is,
+          selectedBooksByAuthorTag_: {
+            ...is.selectedBooksByAuthorTag_,
+            [helper.getStatePayloadName(is.selectedBooksByAuthorTag_)]: List().toJS()
+          }
         });
       });
     });
@@ -220,25 +265,31 @@ describe('reducer', () => {
   describe('reducer / fetchBooksForCollection', () => {
     const selectedBooks = [{ id: 1 }, { id: 2 }];
 
-    describe('FETCH_BOOKS_FOR_COLLECTION_READY', () => {
-      it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_FOR_COLLECTION_READY
+    describe('FETCH_BOOKS_FOR_COLLECTION - READY', () => {
+      it('should fetch flag', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS_FOR_COLLECTION.READY
         })).toEqual({
-          ...initialState,
-          isBooksForCollectionFetched_: false
+          ...is,
+          selectedBooksForCollection_: {
+            ...is.selectedBooksForCollection_,
+            [helper.getStateFlagName(is.selectedBooksForCollection_)]: false
+          }
         });
       });
     });
-    describe('FETCH_BOOKS_FOR_COLLECTION_SUCCESS', () => {
-      it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_FOR_COLLECTION_SUCCESS,
+    describe('FETCH_BOOKS_FOR_COLLECTION - SUCCESS', () => {
+      it('should fetch flag with payload', () => {
+        expect(book(is, {
+          type: types.FETCH_BOOKS_FOR_COLLECTION.SUCCESS,
           payload: selectedBooks
         })).toEqual({
-          ...initialState,
-          isBooksForCollectionFetched_: true,
-          selectedBooksForCollection_: List(selectedBooks).toJS()
+          ...is,
+          selectedBooksForCollection_: {
+            ...is.selectedBooksForCollection_,
+            [helper.getStateFlagName(is.selectedBooksForCollection_)]: true,
+            [helper.getStatePayloadName(is.selectedBooksForCollection_)]: List(selectedBooks).toJS()
+          }
         });
       });
     });
@@ -247,48 +298,60 @@ describe('reducer', () => {
   describe('reducer / fetchBooksByUser', () => {
     const selectedBooks = [{ id: 1 }, { id: 2 }];
 
-    describe('FETCH_BOOKS_FOR_USER_READY', () => {
+    describe('FETCH_BOOKS_FOR_USER - READY', () => {
       it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_FOR_USER_READY
+        expect(book(is, {
+          type: types.FETCH_BOOKS_FOR_USER.READY
         })).toEqual({
-          ...initialState,
-          isBooksForUserFetched_: false
+          ...is,
+          selectedBooksForUser_: {
+            ...is.selectedBooksForUser_,
+            [helper.getStateFlagName(is.selectedBooksForUser_)]: false
+          }
         });
       });
     });
-    describe('FETCH_BOOKS_FOR_USER_SUCCESS', () => {
+    describe('FETCH_BOOKS_FOR_USER - SUCCESS', () => {
       it('success', () => {
-        expect(book(initialState, {
-          type: types.FETCH_BOOKS_FOR_USER_SUCCESS,
+        expect(book(is, {
+          type: types.FETCH_BOOKS_FOR_USER.SUCCESS,
           payload: selectedBooks
         })).toEqual({
-          ...initialState,
-          isBooksForUserFetched_: true,
-          selectedBooksForUser_: List(selectedBooks).toJS()
+          ...is,
+          selectedBooksForUser_: {
+            ...is.selectedBooksForUser_,
+            [helper.getStateFlagName(is.selectedBooksForUser_)]: true,
+            [helper.getStatePayloadName(is.selectedBooksForUser_)]: List(selectedBooks).toJS()
+          }
         });
       });
     });
   });
 
   describe('reducer / add', () => {
-    describe('ADD_BOOK_READY', () => {
+    describe('ADD_BOOK - READY', () => {
       it('success', () => {
-        expect(book(initialState, {
-          type: types.ADD_BOOK_READY
+        expect(book(is, {
+          type: types.ADD_BOOK.READY
         })).toEqual({
-          ...initialState,
-          isBookAdd_: false
+          ...is,
+          isBookAdd_: {
+            ...is.isBookAdd_,
+            [helper.getStateFlagName(is.isBookAdd_)]: false
+          }
         });
       });
     });
-    describe('ADD_BOOK_SUCCESS', () => {
+    describe('ADD_BOOK - SUCCESS', () => {
       it('success', () => {
-        expect(book(initialState, {
-          type: types.ADD_BOOK_SUCCESS
+        expect(book(is, {
+          type: types.ADD_BOOK.SUCCESS
         })).toEqual({
-          ...initialState,
-          isBookAdd_: true
+          ...is,
+          isBookAdd_: {
+            ...is.isBookAdd_,
+            [helper.getStateFlagName(is.isBookAdd_)]: true
+          }
         });
       });
     });
