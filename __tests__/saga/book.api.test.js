@@ -12,6 +12,7 @@ describe('apiEntity', () => {
     });
   });
 
+
   describe('fetchBooksApi test', () => {
     it('should request user books', () => {
       const nof = 3;
@@ -21,6 +22,7 @@ describe('apiEntity', () => {
         .toEqual(call(agent.Book.fetch, nof, page));
     });
   });
+
 
   describe('fetchBooksByBookIdApi test', () => {
     it('should request user books', () => {
@@ -37,6 +39,52 @@ describe('apiEntity', () => {
         author_tag_id: author
       }).value)
         .toEqual(call(agent.Book.fetchByTag, title, author, nof, page));
+    });
+  });
+
+
+  describe('addBookApi test', () => {
+    it('should request user books', () => {
+      const params = {
+        img_src: 'src',
+        content: 'content',
+        user_id: 1,
+        bookAuthor: 'author',
+        bookTitle: 'title'
+      };
+      const bid = 1;
+      const gen = api.addBookApi(params);
+      expect(gen.next().value)
+        .toEqual(call(agent.Book.insert, {
+          img_src: params.img_src,
+          content: params.content,
+          user_id: params.user_id
+        }));
+        
+      expect(gen.next({
+        id: bid,
+        bookdTitle: params.bookTitle,
+        bookAuthor: params.bookAuthor
+      }).value)
+        .toEqual(call(
+          agent.Search.fetchBookTagIdAndAuthorTagIdByText,
+          bid,
+          params.bookTitle,
+          params.bookAuthor
+        ));
+
+      expect(gen.next({
+        id: bid,
+        title_tag_id: 1,
+        author_tag_id: 1
+      }).value)
+        .toEqual(call(agent.Book.updateTagIds, bid, 1, 1));
+
+      expect(gen.next({
+        USER_ID: 1,
+        id: bid
+      }).value)
+        .toEqual(call(agent.User.insertBook, 1, 1));
     });
   });
 });
