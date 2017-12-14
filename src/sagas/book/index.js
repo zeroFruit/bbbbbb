@@ -6,56 +6,26 @@ import { pickByKey } from '../../utils/ObjectUtils';
 import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchBook(action) {
-  const result = yield call(re.myBooks, action.payload);
+  const result = yield call(re.selectedBook, action.payload);
   return result;
 }
 
 export function* AsyncFetchBooks(action) {
   const { numOfFeeds, page } = action.payload;
-  yield put({
-    type: types.FETCH_BOOKS.READY
-  });
-
-  const books = yield call(agent.Book.fetch, numOfFeeds, page);
-
-  yield put({
-    type: types.FETCH_BOOKS.SUCCESS,
-    payload: books
-  });
-
-  return books;
+  const result = yield call(re.selectedBooks, numOfFeeds, page);
+  return result;
 }
 
 export function* AsyncFetchBooksByIdForSameTag(action) {
   const { id, numOfFeeds, page } = action.payload;
-  yield put({
-    type: types.FETCH_BOOKS_BY_TAG.READY
-  });
-  const { title_tag_id, author_tag_id } = yield call(agent.Book.fetchByBookId, id);
-  const filteredBooks = yield call(agent.Book.fetchByTag, title_tag_id, author_tag_id, numOfFeeds, page);
-
-  yield put({
-    type: types.FETCH_BOOKS_BY_TAG.SUCCESS,
-    payload: filteredBooks
-  });
-
-  return filteredBooks;
+  const result = yield call(re.selectedBooksByTag, id, numOfFeeds, page)
+  return result;
 }
 
 export function* AsyncFetchBooksByAuthorTagId(action) {
   const { id, numOfFeeds, page } = action.payload;
-  yield put({
-    type: types.FETCH_BOOKS_BY_AUTHOR_TAG.READY
-  });
-  const { author_tag_id } = yield call(agent.Book.fetchByBookId, id);
-  const filteredBooks = yield call(agent.Book.fetchByAuthorTag, author_tag_id, numOfFeeds, page);
-
-  yield put({
-    type: types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS,
-    payload: filteredBooks
-  });
-
-  return filteredBooks;
+  const result = yield call(re.selectedBooksByAuthorTag, id, numOfFeeds, page);
+  return result;
 }
 
 export function* AsyncFetchBooksByIds(action) {

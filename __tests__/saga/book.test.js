@@ -11,11 +11,11 @@ describe('book saga test', () => {
     const params = {
       payload: 1
     };
-    it('success', () => {
+    it('should call requestEntity selectedBook', () => {
       const gen = saga.AsyncFetchBook(params);
 
       expect(gen.next(params).value)
-        .toEqual(call(re.myBooks, params.payload));
+        .toEqual(call(re.selectedBook, params.payload));
     });
   });
 
@@ -27,20 +27,11 @@ describe('book saga test', () => {
         page: 0
       }
     };
-    it('success', () => {
+    it('should call requestEntity selectedBooks', () => {
       const gen = saga.AsyncFetchBooks(params);
 
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS.READY }));
-
-      const { numOfFeeds, page } = params.payload;
-      expect(gen.next({
-        numOfFeeds,
-        page
-      }).value)
-        .toEqual(call(agent.Book.fetch, numOfFeeds, page));
-      expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS.SUCCESS }));
+        .toEqual(call(re.selectedBooks, 3, 0));
     });
   });
 
@@ -53,38 +44,10 @@ describe('book saga test', () => {
         page: 0
       }
     };
-    it('success', () => {
+    it('should call requestEntity selectedBooksByTag', () => {
       const gen = saga.AsyncFetchBooksByIdForSameTag(params);
-
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS_BY_TAG.READY }));
-      expect(gen.next().value)
-        .toEqual(call(agent.Book.fetchByBookId, params.payload.id));
-
-      const result = {
-        title_tag_id: 1,
-        author_tag_id: 1
-      };
-
-      expect(gen.next({
-        ...result,
-        numOfFeeds: params.numOfFeeds,
-        page: params.page
-      }).value)
-        .toEqual(call(
-          agent.Book.fetchByTag,
-          result.title_tag_id,
-          result.author_tag_id,
-          params.payload.numOfFeeds,
-          params.payload.page
-        ));
-
-      const filteredBooks = [];
-      expect(gen.next(filteredBooks).value)
-        .toEqual(put({
-          type: types.FETCH_BOOKS_BY_TAG.SUCCESS,
-          payload: filteredBooks
-        }));
+        .toEqual(call(re.selectedBooksByTag, 1, 3, 0));
     });
   });
 
@@ -97,36 +60,10 @@ describe('book saga test', () => {
         page: 0
       }
     };
-    it('success', () => {
+    it('should call requestEntity selectedBooksByAuthorTagId', () => {
       const gen = saga.AsyncFetchBooksByAuthorTagId(params);
-
       expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOKS_BY_AUTHOR_TAG.READY }));
-
-      expect(gen.next().value)
-        .toEqual(call(agent.Book.fetchByBookId, params.payload.id));
-
-      const result = {
-        author_tag_id: 1
-      };
-      expect(gen.next({
-        ...result,
-        numOfFeeds: params.numOfFeeds,
-        page: params.page
-      }).value)
-        .toEqual(call(
-          agent.Book.fetchByAuthorTag,
-          result.author_tag_id,
-          params.payload.numOfFeeds,
-          params.payload.page
-        ));
-
-      const filteredBooks = [];
-      expect(gen.next(filteredBooks).value)
-        .toEqual(put({
-          type: types.FETCH_BOOKS_BY_AUTHOR_TAG.SUCCESS,
-          payload: filteredBooks
-        }));
+        .toEqual(call(re.selectedBooksByAuthorTag, 1, 3, 0));
     });
   });
 
