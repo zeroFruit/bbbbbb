@@ -2,44 +2,21 @@ import { call, put, takeLatest } from 'redux-saga/effects';
 import { types } from '../../ducks/bookmark';
 import agent from '../../Agent';
 import { USER_ID } from '../../config';
-
-export function* AsyncFetchBookmarkRequest(action) {
-  yield put({
-    type: types.FETCH_BOOKMARK.READY
-  });
-
-  const { book_ids } = yield call(agent.Bookmark.fetchByUserId, action.payload);
-
-  yield put({
-    type: types.FETCH_BOOKMARK.SUCCESS,
-    payload: book_ids
-  });
-}
+import { requestEntity as re } from './requestEntity';
 
 export function* AsyncAddBookmarkRequest(action) {
-  yield put({
-    type: types.ADD_BOOKMARK.READY
-  });
-
-  yield call(agent.Bookmark.addByBookId, action.payload, USER_ID);
-
-  yield put({
-    type: types.ADD_BOOKMARK.SUCCESS,
-    payload: action.payload
-  });
+  const result = yield call(re.addBookmark, action.payload, USER_ID);
+  return result;
 }
 
 export function* AsyncRemoveBookmarkRequest(action) {
-  yield put({
-    type: types.REMOVE_BOOKMARK.READY
-  });
+  const result = yield call(re.removeBookmark, action.payload, USER_ID);
+  return result;
+}
 
-  yield call(agent.Bookmark.removeByBookId, action.payload, USER_ID);
-
-  yield put({
-    type: types.REMOVE_BOOKMARK.SUCCESS,
-    payload: action.payload
-  });
+export function* AsyncFetchBookmarkRequest(action) {
+  const result = yield call(re.fetchBookmark, action.payload);
+  return result;
 }
 
 export default function* rootSaga() {

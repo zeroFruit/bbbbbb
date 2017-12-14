@@ -1,6 +1,5 @@
 import {
-  requestData as rd,
-  requestEntity as re
+  requestData as rd
 } from '../../src/sagas/book/requestEntity';
 import * as api from '../../src/sagas/book/apiEntity';
 import { types } from '../../src/ducks/book';

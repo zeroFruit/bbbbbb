@@ -1,8 +1,5 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { types } from '../../ducks/book';
-import agent from '../../Agent';
-import { USER_ID } from '../../config';
-import { pickByKey } from '../../utils/ObjectUtils';
 import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchBook(action) {

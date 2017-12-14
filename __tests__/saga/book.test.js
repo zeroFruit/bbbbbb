@@ -2,9 +2,6 @@ import { call, put } from 'redux-saga/effects';
 import agent from '../../src/Agent';
 import * as saga from '../../src/sagas/book';
 import { requestEntity as re } from '../../src/sagas/book/requestEntity';
-import { types } from '../../src/ducks/book';
-
-import { pickByKey } from '../../src/utils/ObjectUtils';
 
 describe('book saga test', () => {
   describe('AsyncFetchBook', () => {

@@ -80,13 +80,13 @@ const fetch = {
 };
 
 const fetchInCollection = {
-  [types.FETCH_BOOKMARKS_IN_COLLECTION_READY]: (state, action) => {
+  [types.FETCH_BOOKMARKS_IN_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
       myBookmarksInCollection_: setStateFlag(state.myBookmarksInCollection_, false)
     };
   },
-  [types.FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS]: (state, action) => {
+  [types.FETCH_BOOKMARKS_IN_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
       myBookmarksInCollection_: setStatePayload(
@@ -105,11 +105,11 @@ export default bookmark = createReducer(initialState, {
 });
 
 export const actions = {
-  AddBookmarkRequest: () => action(types.ADD_BOOKMARK_REQUEST),
-  AddBookmarkSuccess: () => action(types.ADD_BOOKMARK_SUCCESS),
-  RemoveBookmarkRequest: () => action(types.REMOVE_BOOKMARK_REQUEST),
-  RemoveBookmarkSuccess: () => action(types.REMOVE_BOOKMARK_SUCCESS),
-  FetchBookmarkSuccess: () => action(types.FETCH_BOOKMARK_SUCCESS)
+  AddBookmarkRequest: () => action(types.ADD_BOOKMARK.REQUEST),
+  AddBookmarkSuccess: () => action(types.ADD_BOOKMARK.SUCCESS),
+  RemoveBookmarkRequest: () => action(types.REMOVE_BOOKMARK.REQUEST),
+  RemoveBookmarkSuccess: () => action(types.REMOVE_BOOKMARK.SUCCESS),
+  FetchBookmarkSuccess: () => action(types.FETCH_BOOKMARK.SUCCESS)
 };
 
 export const selectors = {
