@@ -1,6 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import agent from '../../src/Agent';
 import * as saga from '../../src/sagas/book';
+import { requestEntity as re } from '../../src/sagas/book/requestEntity';
 import { types } from '../../src/ducks/book';
 
 import { pickByKey } from '../../src/utils/ObjectUtils';
@@ -13,12 +14,8 @@ describe('book saga test', () => {
     it('success', () => {
       const gen = saga.AsyncFetchBook(params);
 
-      expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOK.READY }));
       expect(gen.next(params).value)
-        .toEqual(call(agent.Book.fetchByBookId, params.payload));
-      expect(gen.next().value)
-        .toEqual(put({ type: types.FETCH_BOOK.SUCCESS }));
+        .toEqual(call(re.myBooks, params.payload));
     });
   });
 

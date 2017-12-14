@@ -1,6 +1,6 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { types } from '../ducks/search';
-import agent from '../Agent';
+import { types } from '../../ducks/search';
+import agent from '../../Agent';
 
 export function* AsyncFetchSearchResultRequest(action) {
   yield put({

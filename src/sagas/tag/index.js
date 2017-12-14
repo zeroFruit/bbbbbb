@@ -1,8 +1,8 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { types as tagTypes } from '../ducks/tag';
-import { types as userTypes } from '../ducks/user';
-import { types as bookTypes } from '../ducks/book';
-import agent from '../Agent';
+import { types as tagTypes } from '../../ducks/tag';
+import { types as userTypes } from '../../ducks/user';
+import { types as bookTypes } from '../../ducks/book';
+import agent from '../../Agent';
 
 export function* AsyncFetchTagRequest(action) {
   yield put({

@@ -1,8 +1,8 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { types } from '../ducks/collection';
-import { types as bookTypes } from '../ducks/book';
-import agent from '../Agent';
-import { USER_ID } from '../config';
+import { types } from '../../ducks/collection';
+import { types as bookTypes } from '../../ducks/book';
+import agent from '../../Agent';
+import { USER_ID } from '../../config';
 
 export function* AsyncFetchCollectionRequest(action) {
   yield put({

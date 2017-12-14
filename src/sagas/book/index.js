@@ -1,19 +1,13 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { types } from '../ducks/book';
-import agent from '../Agent';
-import { USER_ID } from '../config';
-import { pickByKey } from '../utils/ObjectUtils';
+import { types } from '../../ducks/book';
+import agent from '../../Agent';
+import { USER_ID } from '../../config';
+import { pickByKey } from '../../utils/ObjectUtils';
+import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchBook(action) {
-  yield put({
-    type: types.FETCH_BOOK.READY
-  });
-  const book = yield call(agent.Book.fetchByBookId, action.payload);
-  yield put({
-    type: types.FETCH_BOOK.SUCCESS,
-    payload: book
-  });
-  return book;
+  const result = yield call(re.myBooks, action.payload);
+  return result;
 }
 
 export function* AsyncFetchBooks(action) {

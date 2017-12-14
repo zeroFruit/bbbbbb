@@ -2,7 +2,7 @@ import {
   action,
   createType,
   createReducer
-} from './helper';
+} from '../helper';
 
 export const types = {
   NEXT_NEWSFEED_PAGE: createType(['page', 'NEXT_NEWSFEED_PAGE']),

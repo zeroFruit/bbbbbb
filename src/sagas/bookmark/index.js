@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { types } from '../ducks/bookmark';
-import agent from '../Agent';
-import { USER_ID } from '../config';
+import { types } from '../../ducks/bookmark';
+import agent from '../../Agent';
+import { USER_ID } from '../../config';
 
 export function* AsyncFetchBookmarkRequest(action) {
   yield put({
