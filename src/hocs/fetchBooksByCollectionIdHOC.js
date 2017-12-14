@@ -55,7 +55,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchBooksWithCollectionAction: collection => ({
-    type: types.FETCH_BOOKS_BY_COLLECTION_REQUEST,
+    type: types.FETCH_BOOKS_BY_COLLECTION.REQUEST,
     payload: collection
   })
 }, dispatch);

@@ -43,7 +43,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchBookAndUserRequestAction: bookId => ({
-    type: types.FETCH_BOOK_AND_USER_REQUEST,
+    type: types.FETCH_BOOK_AND_USER.REQUEST,
     payload: { bookId }
   }),
   UnmountSelectedUserAction: () => ({

@@ -52,7 +52,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchBooksAndUsersRequestAction: (numOfFeeds, page) => ({
-    type: types.FETCH_BOOKS_AND_USERS_REQUEST,
+    type: types.FETCH_BOOKS_AND_USERS.REQUEST,
     payload: { numOfFeeds, page }
   }),
   ResetNewsfeedPageAction: () => ({

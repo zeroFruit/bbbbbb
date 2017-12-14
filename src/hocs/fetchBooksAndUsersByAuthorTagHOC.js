@@ -52,7 +52,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchBooksAndUsersByAuthorTagRequestAction: (id, numOfFeeds, page) => ({
-    type: types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG_REQUEST,
+    type: types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG.REQUEST,
     payload: { id, numOfFeeds, page }
   }),
   UnmountFetchedBooksByAuthorTagAction: bookActions.UnmountFetchedBooksByAuthorTag,

@@ -51,12 +51,12 @@ export function* AsyncFetchUsersByUserIds(action) {
 export function* AsyncFetchUsersByUserIdsForPostList(action) {
   const { users } = action.payload;
   yield put({
-    type: userTypes.FETCH_SELECTED_POST_LIST_USERS_READY
+    type: userTypes.FETCH_SELECTED_POST_LIST_USERS.READY
   });
 
   const Users = yield call(agent.User.fetchByUserIds, users);
   yield put({
-    type: userTypes.FETCH_SELECTED_POST_LIST_USERS_SUCCESS,
+    type: userTypes.FETCH_SELECTED_POST_LIST_USERS.SUCCESS,
     payload: Users
   });
 
@@ -67,5 +67,5 @@ export default function* rootSaga() {
   yield takeLatest(userTypes.FETCH_ME_REQUEST, AsyncFetchMyInfoRequest);
   yield takeLatest(userTypes.FETCH_SELECTED_USER.REQUEST, AsyncFetchSelectedUserInfoRequest);
   yield takeLatest(userTypes.FETCH_SELECTED_USERS.REQUEST, AsyncFetchUsersByUserIds);
-  yield takeLatest(userTypes.FETCH_SELECTED_POST_LIST_USERS_REQUEST, AsyncFetchUsersByUserIdsForPostList);
+  yield takeLatest(userTypes.FETCH_SELECTED_POST_LIST_USERS.REQUEST, AsyncFetchUsersByUserIdsForPostList);
 }
