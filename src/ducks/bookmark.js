@@ -80,13 +80,13 @@ const fetch = {
 };
 
 const fetchInCollection = {
-  [types.FETCH_BOOKMARKS_IN_COLLECTION_READY]: (state, action) => {
+  [types.FETCH_BOOKMARKS_IN_COLLECTION.READY]: (state, action) => {
     return {
       ...state,
       myBookmarksInCollection_: setStateFlag(state.myBookmarksInCollection_, false)
     };
   },
-  [types.FETCH_BOOKMARKS_IN_COLLECTION_SUCCESS]: (state, action) => {
+  [types.FETCH_BOOKMARKS_IN_COLLECTION.SUCCESS]: (state, action) => {
     return {
       ...state,
       myBookmarksInCollection_: setStatePayload(

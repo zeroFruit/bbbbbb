@@ -84,6 +84,6 @@ export default function* rootSaga() {
   yield takeLatest(types.ADD_COLLECTION.REQUEST, AsyncAddCollectionRequest);
   yield takeLatest(types.REMOVE_COLLECTION.REQUEST, AsyncDeleteCollectionRequest);
   yield takeLatest(types.ADD_BOOKS_TO_COLLECTION.REQUEST, AsyncAddBooksToCollectionRequest);
-  yield takeLatest(types.REMOVE_COLLECTION_BOOKS_REQUEST, AsyncDeleteCollectionBookRequest);
+  yield takeLatest(types.REMOVE_COLLECTION_BOOKS.REQUEST, AsyncDeleteCollectionBookRequest);
   yield takeLatest(types.FETCH_OTHER_USER_COLLECTION.REQUEST, AsyncFetchOtherUserCollectionRequest);
 }
