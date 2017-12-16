@@ -1,82 +1,39 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, takeLatest } from 'redux-saga/effects';
 import { types } from '../../ducks/collection';
-import { types as bookTypes } from '../../ducks/book';
-import agent from '../../Agent';
+import { requestEntity as re } from './requestEntity';
 import { USER_ID } from '../../config';
 
 export function* AsyncFetchCollectionRequest(action) {
-  yield put({
-    type: types.FETCH_COLLECTION.READY
-  });
-  const me = yield call(agent.User.fetchByUserId, USER_ID);
-  const collections = yield call(agent.Collection.fetchByIds, me.collections);
-
-  yield put({
-    type: types.FETCH_COLLECTION.SUCCESS,
-    payload: collections
-  });
+  const result = yield call(re.myCollections, USER_ID);
+  return result;
 }
 
 export function* AsyncAddCollectionRequest(action) {
-  yield put({
-    type: types.ADD_COLLECTION.READY
-  });
   const { label, bookIds } = action.payload;
-  const collection = yield call(agent.Collection.insertCollection, label, bookIds);
-  const me = yield call(agent.User.insertCollection, USER_ID, collection.id);
-  yield put({
-    type: types.ADD_COLLECTION.SUCCESS
-  });
+  const result = yield call(re.addCollection, USER_ID, label, bookIds);
+  return result;
 }
 
 export function* AsyncDeleteCollectionRequest(action) {
-  yield put({
-    type: types.REMOVE_COLLECTION.READY
-  });
-  const collection = yield call(agent.Collection.deleteCollection, action.payload);
-  const me = yield call(agent.User.deleteCollection, USER_ID, collection.id);
-  yield put({
-    type: types.REMOVE_COLLECTION.SUCCESS
-  });
+  const result = yield call(re.removeCollection, action.payload);
+  return result;
 }
 
 export function* AsyncAddBooksToCollectionRequest(action) {
-  yield put({
-    type: types.ADD_BOOKS_TO_COLLECTION.READY
-  });
   const { id, bookIds } = action.payload;
-  const updatedCollection = yield call(agent.Collection.updateBooksToCollection, id, bookIds);
-
-  yield put({
-    type: bookTypes.FETCH_BOOKS_FOR_COLLECTION.SUCCESS,
-    payload: updatedCollection.book_ids
-  });
-  yield put({
-    type: types.ADD_BOOKS_TO_COLLECTION.SUCCESS
-  });
+  const result = yield call(re.addBooksToCollection, id, bookIds);
+  return result;
 }
 
 export function* AsyncDeleteCollectionBookRequest(action) {
-  yield put({
-    type: types.REMOVE_COLLECTION_BOOKS.READY
-  });
   const { id, bookIds } = action.payload;
-  const collection = yield call(agent.Collection.deleteCollectionBooks, id, bookIds);
-  yield put({
-    type: types.REMOVE_COLLECTION_BOOKS.SUCCESS
-  });
+  const result = yield call(re.removeBooksInCollection, id, bookIds);
+  return result;
 }
 
 export function* AsyncFetchOtherUserCollectionRequest(action) {
-  yield put({
-    type: types.FETCH_OTHER_USER_COLLECTION.READY
-  });
-  const user = yield call(agent.User.fetchByUserId, action.payload);
-  const collections = yield call(agent.Collection.fetchByIds, user.collections);
-  yield put({
-    type: types.FETCH_OTHER_USER_COLLECTION.SUCCESS,
-    payload: collections
-  });
+  const result = yield call(re.otherUserCollections, action.payload);
+  return result;
 }
 
 export default function* rootSaga() {
