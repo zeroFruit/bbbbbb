@@ -2,7 +2,7 @@ import { call } from 'redux-saga/effects';
 import * as saga from '../../src/sagas/user';
 import { requestEntity as re } from '../../src/sagas/user/requestEntity';
 
-describe('collection saga test', () => {
+describe('user saga test', () => {
   describe('AsyncFetchMyInfoRequest', () => {
     const params = {
       payload: 1

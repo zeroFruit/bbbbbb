@@ -1,16 +1,10 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 import { types } from '../../ducks/search';
-import agent from '../../Agent';
+import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchSearchResultRequest(action) {
-  yield put({
-    type: types.FETCH_SEARCH_RESULT.READY
-  });
-  const results = yield call(agent.Search.fetchBookLabelByText, action.payload);
-  yield put({
-    type: types.FETCH_SEARCH_RESULT.SUCCESS,
-    payload: results
-  });
+  const result = yield call(re.searchResult, action.payload);
+  return result;
 }
 
 export default function* rootSaga() {
