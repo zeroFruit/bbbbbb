@@ -7,3 +7,10 @@ export function* FetchBooksForCollection({ book_ids }) {
     payload: book_ids
   });
 }
+
+export function* FetchMyBooks(books) {
+  yield put({
+    type: bookTypes._FETCH_MY_BOOKS,
+    payload: books
+  });
+}

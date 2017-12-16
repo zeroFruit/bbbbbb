@@ -4,11 +4,11 @@ import { fetchEntity } from '../helper';
 import * as api from './apiEntity';
 
 export const requestData = {
-  myBooks: {
-    ready: () => patch(types.FETCH_MY_BOOKS.READY),
-    success: pl => patch(types.FETCH_MY_BOOKS.SUCCESS, pl),
-    api: bid => api.fetchBookApi(bid)
-  },
+  // myBooks: {
+  //   ready: () => patch(types.FETCH_MY_BOOKS.READY),
+  //   success: pl => patch(types.FETCH_MY_BOOKS.SUCCESS, pl),
+  //   api: bid => api.fetchBookApi(bid)
+  // },
   selectedBook: {
     ready: () => patch(types.FETCH_BOOK.READY),
     success: pl => patch(types.FETCH_BOOK.SUCCESS, pl),
@@ -47,7 +47,7 @@ export const requestData = {
 };
 
 export const requestEntity = {
-  myBooks: fetchEntity.bind(null, requestData.myBooks),
+  // myBooks: fetchEntity.bind(null, requestData.myBooks),
   selectedBook: fetchEntity.bind(null, requestData.selectedBook),
   selectedBooks: fetchEntity.bind(null, requestData.selectedBooks),
   selectedBooksByTag: fetchEntity.bind(null, requestData.selectedBooksByTag),

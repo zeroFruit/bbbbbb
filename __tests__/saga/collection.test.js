@@ -84,7 +84,6 @@ describe('collection saga test', () => {
       payload: 1
     };
     it('should call requestEntity otherUserCollections', () => {
-      const { id, bookIds } = params.payload;
       const gen = saga.AsyncFetchOtherUserCollectionRequest(params);
 
       expect(gen.next().value)

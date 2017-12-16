@@ -15,7 +15,6 @@ import {
 
 
 export const types = {
-  FETCH_MY_BOOKS: createRequestTypes(['book', 'FETCH_MY_BOOKS']),
   FETCH_BOOK: createRequestTypes(['book', 'FETCH_BOOK']),
   FETCH_BOOKS: createRequestTypes(['book', 'FETCH_BOOKS']),
   FETCH_BOOKS_BY_TAG: createRequestTypes(['book', 'FETCH_BOOKS_BY_TAG']),
@@ -27,7 +26,8 @@ export const types = {
   FETCH_BOOKS_UNMOUNT: createType(['book', 'FETCH_BOOKS_UNMOUNT']),
   FETCH_BOOKS_BY_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_TAG_UNMOUNT']),
   FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT']),
-  _FETCH_BOOKS_FOR_COLLECTION: createType(['common', '_FETCH_BOOKS_FOR_COLLECTION'])
+  _FETCH_BOOKS_FOR_COLLECTION: createType(['common', '_FETCH_BOOKS_FOR_COLLECTION']),
+  _FETCH_MY_BOOKS: createType(['common', '_FETCH_MY_BOOKS'])
 };
 
 export const initialState = {
@@ -43,7 +43,7 @@ export const initialState = {
 };
 
 const fetchMyBooks = {
-  [types.FETCH_MY_BOOKS.SUCCESS]: (state, action) => ({
+  [types._FETCH_MY_BOOKS]: (state, action) => ({
     ...state,
     myBooks_: setStatePayload(state.myBooks_, action.payload)
   })

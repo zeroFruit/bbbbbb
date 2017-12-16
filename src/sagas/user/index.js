@@ -1,66 +1,27 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import { types as userTypes } from '../../ducks/user';
-import { types as bookTypes } from '../../ducks/book';
-import agent from '../../Agent';
+import { types } from '../../ducks/user';
+import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchMyInfoRequest(action) {
-  yield put({
-    type: userTypes.FETCH_ME_READY
-  });
-
-  const me = yield call(agent.User.fetchByUserId, action.payload);
-
-  yield put({
-    type: bookTypes.FETCH_MY_BOOKS.SUCCESS,
-    payload: me.books
-  });
-  yield put({
-    type: userTypes.FETCH_ME_SUCCESS,
-    payload: me
-  });
+  const result = yield call(re.me, action.payload);
+  return result;
 }
 
 export function* AsyncFetchSelectedUserInfoRequest(action) {
-  yield put({
-    type: userTypes.FETCH_SELECTED_USER.READY
-  });
-
-  const me = yield call(agent.User.fetchByUserId, action.payload);
-  yield put({
-    type: userTypes.FETCH_SELECTED_USER.SUCCESS,
-    payload: me
-  });
-
-  return me;
+  const result = yield call(re.selectedUser, action.payload);
+  return result;
 }
+
 export function* AsyncFetchUsersByUserIds(action) {
   const { users } = action.payload;
-  yield put({
-    type: userTypes.FETCH_SELECTED_USERS.READY
-  });
-
-  const Users = yield call(agent.User.fetchByUserIds, users);
-  yield put({
-    type: userTypes.FETCH_SELECTED_USERS.SUCCESS,
-    payload: Users
-  });
-
-  return Users;
+  const result = yield call(re.selectedUsers, users);
+  return result;
 }
 
 export function* AsyncFetchUsersByUserIdsForPostList(action) {
   const { users } = action.payload;
-  yield put({
-    type: userTypes.FETCH_SELECTED_POST_LIST_USERS.READY
-  });
-
-  const Users = yield call(agent.User.fetchByUserIds, users);
-  yield put({
-    type: userTypes.FETCH_SELECTED_POST_LIST_USERS.SUCCESS,
-    payload: Users
-  });
-
-  return Users;
+  const result = yield call(re.selectedPostListUsers, users);
+  return result;
 }
 
 export default function* rootSaga() {

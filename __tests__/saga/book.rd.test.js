@@ -5,30 +5,30 @@ import * as api from '../../src/sagas/book/apiEntity';
 import { types } from '../../src/ducks/book';
 
 describe('requestData', () => {
-  describe('myBooks test', () => {
-    it('should patch type when ready', () => {
-      expect(rd.myBooks.ready())
-        .toEqual({
-          type: types.FETCH_MY_BOOKS.READY,
-          payload: {}
-        });
-    });
-
-    it('should patch type with payload when success', () => {
-      const myBookList = [{ id: 1 }, { id: 2 }];
-      expect(rd.myBooks.success(myBookList))
-        .toEqual({
-          type: types.FETCH_MY_BOOKS.SUCCESS,
-          payload: myBookList
-        });
-    });
-
-    it('should call matching api', () => {
-      const bid = 0;
-      expect(rd.myBooks.api(bid))
-        .toEqual(api.fetchBookApi(bid));
-    });
-  });
+  // describe('myBooks test', () => {
+  //   it('should patch type when ready', () => {
+  //     expect(rd.myBooks.ready())
+  //       .toEqual({
+  //         type: types.FETCH_MY_BOOKS.READY,
+  //         payload: {}
+  //       });
+  //   });
+  //
+  //   it('should patch type with payload when success', () => {
+  //     const myBookList = [{ id: 1 }, { id: 2 }];
+  //     expect(rd.myBooks.success(myBookList))
+  //       .toEqual({
+  //         type: types.FETCH_MY_BOOKS.SUCCESS,
+  //         payload: myBookList
+  //       });
+  //   });
+  //
+  //   it('should call matching api', () => {
+  //     const bid = 0;
+  //     expect(rd.myBooks.api(bid))
+  //       .toEqual(api.fetchBookApi(bid));
+  //   });
+  // });
 
   describe('selectedBook test', () => {
     it('should patch type when ready', () => {

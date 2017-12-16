@@ -6,28 +6,28 @@ import {
 import { types } from '../../src/ducks/book';
 
 describe('requestEntity', () => {
-  describe('myBooks test', () => {
-    it('should ready > call > success', () => {
-      const params = {
-        payload: 1
-      };
-      const gen = re.myBooks(params.payload);
-      expect(gen.next().value)
-        .toEqual(put({
-          type: types.FETCH_MY_BOOKS.READY,
-          payload: {}
-        }));
-      expect(gen.next().value)
-        .toEqual(call(rd.myBooks.api, params.payload));
-
-      const result = [{ id: 1 }, { id: 2 }];
-      expect(gen.next(result).value)
-        .toEqual(put({
-          type: types.FETCH_MY_BOOKS.SUCCESS,
-          payload: result
-        }));
-    });
-  });
+  // describe('myBooks test', () => {
+  //   it('should ready > call > success', () => {
+  //     const params = {
+  //       payload: 1
+  //     };
+  //     const gen = re.myBooks(params.payload);
+  //     expect(gen.next().value)
+  //       .toEqual(put({
+  //         type: types.FETCH_MY_BOOKS.READY,
+  //         payload: {}
+  //       }));
+  //     expect(gen.next().value)
+  //       .toEqual(call(rd.myBooks.api, params.payload));
+  //
+  //     const result = [{ id: 1 }, { id: 2 }];
+  //     expect(gen.next(result).value)
+  //       .toEqual(put({
+  //         type: types.FETCH_MY_BOOKS.SUCCESS,
+  //         payload: result
+  //       }));
+  //   });
+  // });
 
   describe('selectedBook test', () => {
     it('should ready > call > success', () => {
