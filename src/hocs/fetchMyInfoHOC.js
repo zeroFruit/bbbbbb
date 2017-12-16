@@ -33,7 +33,7 @@ export const fetchMyInfoHOC = (WrappedComponent) => {
 
 const mapDispatchToProps = dispatch => bindActionCreators({
   AsyncFetchMyInfoRequestAction: userId => ({
-    type: types.FETCH_ME_REQUEST,
+    type: types.FETCH_ME.REQUEST,
     payload: userId
   })
 }, dispatch);

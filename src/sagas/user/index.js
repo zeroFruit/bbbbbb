@@ -3,7 +3,9 @@ import { types } from '../../ducks/user';
 import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchMyInfoRequest(action) {
+  console.log('action', action);
   const result = yield call(re.me, action.payload);
+
   return result;
 }
 
@@ -25,8 +27,8 @@ export function* AsyncFetchUsersByUserIdsForPostList(action) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(userTypes.FETCH_ME_REQUEST, AsyncFetchMyInfoRequest);
-  yield takeLatest(userTypes.FETCH_SELECTED_USER.REQUEST, AsyncFetchSelectedUserInfoRequest);
-  yield takeLatest(userTypes.FETCH_SELECTED_USERS.REQUEST, AsyncFetchUsersByUserIds);
-  yield takeLatest(userTypes.FETCH_SELECTED_POST_LIST_USERS.REQUEST, AsyncFetchUsersByUserIdsForPostList);
+  yield takeLatest(types.FETCH_ME.REQUEST, AsyncFetchMyInfoRequest);
+  yield takeLatest(types.FETCH_SELECTED_USER.REQUEST, AsyncFetchSelectedUserInfoRequest);
+  yield takeLatest(types.FETCH_SELECTED_USERS.REQUEST, AsyncFetchUsersByUserIds);
+  yield takeLatest(types.FETCH_SELECTED_POST_LIST_USERS.REQUEST, AsyncFetchUsersByUserIdsForPostList);
 }
