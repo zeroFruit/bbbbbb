@@ -48,7 +48,8 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
 const mapStateToProps = state => ({
   selectedBooksByTag_: bookSelectors.GetSelectedBooksByTag(state),
   selectedPostListUsers_: userSelectors.GetSelectedPostListUsers(state),
-  selectedListPage_: pageSelectors.GetSelectedListPage(state)
+  selectedListPage_: pageSelectors.GetSelectedListPage(state),
+  numOfFeedsPerLoad_: pageSelectors.GetNumOfFeedsPerLoad(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

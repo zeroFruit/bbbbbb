@@ -105,11 +105,15 @@ export default bookmark = createReducer(initialState, {
 });
 
 export const actions = {
+<<<<<<< HEAD:src/ducks/bookmark/index.js
   AddBookmarkRequest: () => action(types.ADD_BOOKMARK.REQUEST),
   AddBookmarkSuccess: () => action(types.ADD_BOOKMARK.SUCCESS),
   RemoveBookmarkRequest: () => action(types.REMOVE_BOOKMARK.REQUEST),
   RemoveBookmarkSuccess: () => action(types.REMOVE_BOOKMARK.SUCCESS),
   FetchBookmarkSuccess: () => action(types.FETCH_BOOKMARK.SUCCESS)
+=======
+
+>>>>>>> debug:src/ducks/bookmark.js
 };
 
 export const selectors = {

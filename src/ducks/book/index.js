@@ -31,7 +31,6 @@ export const types = {
 };
 
 export const initialState = {
-  numOfFeedsPerLoad_: 3,
   myBooks_: createInitState('MyBooks', 'Fetch', stateType.LIST),
   selectedBook_: createInitState('SelectedBook', 'Fetch', stateType.OBJ),
   selectedBooks_: createInitState('SelectedBooks', 'Fetch', stateType.LIST),
@@ -223,7 +222,6 @@ export const actions = {
 };
 
 export const selectors = {
-  GetNumOfFeedsPerLoad:           state => state.book.numOfFeedsPerLoad_,
   GetMyBooks:                     state => getStatePayload(state.book.myBooks_),
   GetSelectedBook:                state => getStatePayload(state.book.selectedBook_),
   GetSelectedBooks:               state => getStatePayload(state.book.selectedBooks_),
