@@ -29,9 +29,6 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
 
     _requestBooksAndUsers = async () => {
       const { numOfFeedsPerLoad_, newsfeedPage_, selectedBooks_ } = this.props;
-      console.log('numOfFeedsPerLoad_', numOfFeedsPerLoad_);
-      console.log('newsfeedPage_', newsfeedPage_);
-      console.log('selectedBooks_', selectedBooks_);
       if (selectedBooks_.length >= newsfeedPage_ * numOfFeedsPerLoad_) {
         await this.props.AsyncFetchBooksAndUsersRequestAction(numOfFeedsPerLoad_, newsfeedPage_);
       }
