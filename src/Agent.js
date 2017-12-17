@@ -131,8 +131,8 @@ const Collection = {
     const newCollection = await new CollectionData().insert(label, bookIds);
     return newCollection;
   },
-  deleteCollection: async (id) => {
-    const removedCollection = await new CollectionData().delete(id);
+  deleteCollection: async (cid) => {
+    const removedCollection = await new CollectionData().delete(cid);
     return removedCollection;
   },
   updateBooksToCollection: async (cid, bids) => {

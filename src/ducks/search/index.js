@@ -9,9 +9,9 @@ import {
   setStatePayload,
   getStateFlag,
   getStatePayload
-} from './helper';
+} from '../helper';
 
-import SearchHistory from '../utils/SearchHistory';
+import SearchHistory from '../../utils/SearchHistory';
 
 export const types = {
   FETCH_SEARCH_RESULT: createRequestTypes(['search', 'FETCH_SEARCH_RESULT']),

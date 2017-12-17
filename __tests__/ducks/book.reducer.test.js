@@ -8,21 +8,21 @@ describe('reducer', () => {
   });
 
   describe('reducer / fetchMyBooks', () => {
-    describe('FETCH_MY_BOOKS - SUCCESS', () => {
-      const myBookList = List([{ id: 1 }]).toJS();
-      it('success', () => {
-        expect(book(is, {
-          type: types.FETCH_MY_BOOKS.SUCCESS,
-          payload: myBookList
-        })).toEqual({
-          ...is,
-          myBooks_: {
-            ...is.myBooks_,
-            [helper.getStatePayloadName(is.myBooks_)]: myBookList
-          }
-        });
-      });
-    });
+    // describe('FETCH_MY_BOOKS - SUCCESS', () => {
+    //   const myBookList = List([{ id: 1 }]).toJS();
+    //   it('success', () => {
+    //     expect(book(is, {
+    //       type: types.FETCH_MY_BOOKS.SUCCESS,
+    //       payload: myBookList
+    //     })).toEqual({
+    //       ...is,
+    //       myBooks_: {
+    //         ...is.myBooks_,
+    //         [helper.getStatePayloadName(is.myBooks_)]: myBookList
+    //       }
+    //     });
+    //   });
+    // });
   });
 
   describe('reducer / fetchSelectedBook', () => {

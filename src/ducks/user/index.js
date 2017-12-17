@@ -11,7 +11,7 @@ import {
   concatStatePayload,
   getStateFlag,
   getStatePayload
-} from './helper';
+} from '../helper';
 
 export const types = {
   FETCH_ME: createRequestTypes(['user', 'FETCH_ME']),

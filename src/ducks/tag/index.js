@@ -7,7 +7,7 @@ import {
   setStatePayload,
   getStateFlag,
   getStatePayload
-} from './helper';
+} from '../helper';
 
 export const types = {
   FETCH_BOOK_TAG: createRequestTypes(['tag', 'FETCH_BOOK_TAG'])
@@ -45,6 +45,6 @@ export const actions = {
 export const selectors = {
   GetSeletedBookTitleTag: state => getStatePayload(state.tag.selectedTag_).title,
   GetSelectedBookAuthorTag: state => getStatePayload(state.tag.selectedTag_).author,
-  
+
   GetIsSelectedBookTagFetched: state => getStateFlag(state.tag.selectedTag_),
 };
