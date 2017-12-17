@@ -9,12 +9,12 @@ import _index from './_index';
 
 export default function* rootSaga() {
   yield all([
-    // fork(_index),
-    // fork(bookmark),
-    fork(user)
-    // fork(book),
-    // fork(tag),
-    // fork(collection),
-    // fork(search)
+    fork(_index),
+    fork(bookmark),
+    fork(user),
+    fork(book),
+    fork(tag),
+    fork(collection),
+    fork(search)
   ]);
 }

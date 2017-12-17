@@ -3,7 +3,6 @@ import { types } from '../../ducks/user';
 import { requestEntity as re } from './requestEntity';
 
 export function* AsyncFetchMyInfoRequest(action) {
-  console.log('action', action);
   const result = yield call(re.me, action.payload);
 
   return result;
