@@ -101,12 +101,12 @@ export function* AsyncFetchBooksWithCollection(action) {
 
 export function* AsyncFetchBooksByUser(action) {
   yield put({
-    type: types.FETCH_BOOKS_BY_USER_READY
+    type: types.FETCH_BOOKS_BY_USER.READY
   });
   const User = yield* AsyncFetchSelectedUserInfoRequest(action);
   const books = yield* AsyncFetchBooksByUserId({ payload: User.books });
   yield put({
-    type: types.FETCH_BOOKS_BY_USER_SUCCESS
+    type: types.FETCH_BOOKS_BY_USER.SUCCESS
   });
 }
 

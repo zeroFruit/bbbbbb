@@ -5,7 +5,7 @@ import agent from '../Agent';
 
 export function* AsyncFetchMyInfoRequest(action) {
   yield put({
-    type: userTypes.FETCH_ME_READY
+    type: userTypes.FETCH_ME.READY
   });
 
   const me = yield call(agent.User.fetchByUserId, action.payload);
@@ -15,7 +15,7 @@ export function* AsyncFetchMyInfoRequest(action) {
     payload: me.books
   });
   yield put({
-    type: userTypes.FETCH_ME_SUCCESS,
+    type: userTypes.FETCH_ME.SUCCESS,
     payload: me
   });
 }
@@ -64,7 +64,7 @@ export function* AsyncFetchUsersByUserIdsForPostList(action) {
 }
 
 export default function* rootSaga() {
-  yield takeLatest(userTypes.FETCH_ME_REQUEST, AsyncFetchMyInfoRequest);
+  yield takeLatest(userTypes.FETCH_ME.REQUEST, AsyncFetchMyInfoRequest);
   yield takeLatest(userTypes.FETCH_SELECTED_USER.REQUEST, AsyncFetchSelectedUserInfoRequest);
   yield takeLatest(userTypes.FETCH_SELECTED_USERS.REQUEST, AsyncFetchUsersByUserIds);
   yield takeLatest(userTypes.FETCH_SELECTED_POST_LIST_USERS.REQUEST, AsyncFetchUsersByUserIdsForPostList);
