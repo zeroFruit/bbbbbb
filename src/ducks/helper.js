@@ -117,7 +117,7 @@ export const patch = (type, _payload = {}, mergeKeys) => {
 };
 
 export const action = (type, payload = {}) =>
-  ({ type, payload: { ...payload } });
+  ({ type, payload });
 
 
 const joinBaseName = (_base) => {

@@ -55,17 +55,19 @@ export const fetchBookmarksHOC = (WrappedComponent) => {
 
 
 const mapStateToProps = state => ({
-  ...state.book,
-  ...state.bookmark,
-  ...state.page,
+  isBookmarkAdded_: bookmarkSelectors.GetIsBookmarkedAdded(state),
+  isBookmarkRemoved_: bookmarkSelectors.GetIsBookmarkedRemoved(state),
   myBookmarks_: selectors.BookmarksWithIdProp(state)
 });
 
 const mapDispatchToProps = (dispatch) => {
   return bindActionCreators({
-    // TODO: 나중에 api request를 action으로 이동
-    AddBookmarkSuccessAction: bookmarkActions.AddBookmarkSuccess,
-    RemoveBookmarkSuccessAction: bookmarkActions.RemoveBookmarkSuccess,
+    AddBookmarkSuccessAction: () => ({
+      type: bookmarkTypes.ADD_BOOKMARK.SUCCESS
+    }),
+    RemoveBookmarkSuccessAction: () => ({
+      type: bookmarkTypes.REMOVE_BOOKMARK.SUCCESS
+    }),
     AsyncFetchBookmarkRequestAction: (userId) => {
       return {
         type: bookmarkTypes.FETCH_BOOKMARK.REQUEST,
