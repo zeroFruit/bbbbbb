@@ -67,13 +67,15 @@ const fetchBooks = {
     ...state,
     selectedBooks_: setStateFlag(state.selectedBooks_, false)
   }),
-  [types.FETCH_BOOKS.SUCCESS]: (state, action) => ({
-    ...state,
-    selectedBooks_: concatStatePayload(
-      setStateFlag(state.selectedBooks_, true),
-      action.payload
-    )
-  })
+  [types.FETCH_BOOKS.SUCCESS]: (state, action) => {
+    return ({
+      ...state,
+      selectedBooks_: concatStatePayload(
+        setStateFlag(state.selectedBooks_, true),
+        action.payload
+      )
+    });
+  }
 };
 
 const unfetchBooks = {

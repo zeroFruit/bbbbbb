@@ -5,7 +5,7 @@ import * as api from './apiEntity';
 import * as cmn from '../_common';
 
 export const requestData = {
-  me: { /* TODO: 병렬로 success, fetch 처리 */
+  me: {
     ready: () => patch(types.FETCH_ME.READY),
     success: pl => patch(types.FETCH_ME.SUCCESS, pl),
     api: uid => api.fetchUserApi(uid),

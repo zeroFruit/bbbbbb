@@ -22,5 +22,5 @@ export function* AsyncFetchBookmarkRequest(action) {
 export default function* rootSaga() {
   yield takeLatest(types.ADD_BOOKMARK.REQUEST, AsyncAddBookmarkRequest);
   yield takeLatest(types.REMOVE_BOOKMARK.REQUEST, AsyncRemoveBookmarkRequest);
-  yield takeLatest(types.FETCH_BOOKMARK.REQEUST, AsyncFetchBookmarkRequest);
+  yield takeLatest(types.FETCH_BOOKMARK.REQUEST, AsyncFetchBookmarkRequest);
 }
