@@ -29,6 +29,9 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
 
     _requestBooksAndUsers = async () => {
       const { numOfFeedsPerLoad_, newsfeedPage_, selectedBooks_ } = this.props;
+      console.log('numOfFeedsPerLoad_', numOfFeedsPerLoad_);
+      console.log('newsfeedPage_', newsfeedPage_);
+      console.log('selectedBooks_', selectedBooks_);
       if (selectedBooks_.length >= newsfeedPage_ * numOfFeedsPerLoad_) {
         await this.props.AsyncFetchBooksAndUsersRequestAction(numOfFeedsPerLoad_, newsfeedPage_);
       }
@@ -47,7 +50,8 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
 const mapStateToProps = state => ({
   selectedBooks_: bookSelectors.GetSelectedBooks(state),
   selectedUsers_: userSelectors.GetSelectedUsers(state),
-  newsfeedPage_: pageSelectors.GetNewsfeedPage(state)
+  newsfeedPage_: pageSelectors.GetNewsfeedPage(state),
+  numOfFeedsPerLoad_: pageSelectors.GetNumOfFeedsPerLoad(state)
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({

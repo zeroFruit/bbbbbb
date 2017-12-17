@@ -9,6 +9,7 @@ export const types = {
 };
 
 export const initialState = {
+  numOfFeedsPerLoad_: 3,
   newsfeedPage_: 0,
   selectedListPage_: 0
 };
@@ -56,6 +57,7 @@ export const actions = {
 };
 
 export const selectors = {
+  GetNumOfFeedsPerLoad: state => state.page.numOfFeedsPerLoad_,
   GetNewsfeedPage: state => state.page.newsfeedPage_,
   GetSelectedListPage: state => state.page.selectedListPage_
 }
