@@ -17,17 +17,25 @@ import PostEditTextArea from '../../components/PostEditTextArea';
 import ProgressBar from '../../components/ProgressBar';
 
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
+  const vm = new ViewManager(
+    selectType.SELECT_FROM_COLLECTION_CARD,
+    selectType.SELECT_FROM_COLLECTION_CARD,
+    _h._getHeaderWithIconsProps,
+    undefined
+  );
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
+        vm={ vm }
         title="페이지 업로드"
         leftLabel="뒤로"
         rightLabel="완료"
         onClickHeaderRightButton={ params.onClickHeaderRightButton ? params.onClickHeaderRightButton : () => {} }
-        onClickHeaderLeftButton={ params.onClickHeaderLeftButton ? params.onClickHeaderLeftButton : () => {} }
-        selectType={ selectType.SELECT_FROM_COLLECTION_CARD } />
+        onClickHeaderLeftButton={ params.onClickHeaderLeftButton ? params.onClickHeaderLeftButton : () => {} } />
     </Header>
   );
 });

@@ -11,18 +11,25 @@ import {
   navigateTo
 } from '../../Router';
 import { selectType } from '../../config';
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  const { selectType, onClickHeaderRightButton, onClickHeaderLeftButton } = params;
+  const {
+    selectType,
+    vm,
+    onClickHeaderRightButton,
+    onClickHeaderLeftButton
+  } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
+        vm={ vm }
         title="새 컬렉션"
         leftLabel="취소"
         rightLabel="다음"
         onClickHeaderRightButton={ onClickHeaderRightButton }
-        onClickHeaderLeftButton={ onClickHeaderLeftButton }
-        selectType={ selectType } />
+        onClickHeaderLeftButton={ onClickHeaderLeftButton } />
     </Header>
   );
 });
@@ -72,7 +79,14 @@ class CollectionAddPage extends PureComponent {
     if (this.state.inputText === '') {
       return Alert.alert('컬렉션 이름을 입력해주세요.');
     }
+    const vm = new ViewManager(
+      selectType.SELECT_FROM_COLLECTION_NEXT_BUTTON,
+      selectType.SELECT_FROM_COLLECTION_NEXT_BUTTON,
+      _h._getHeaderWithLabelsProps,
+      undefined
+    );
     const params = {
+      vm,
       selectType: selectType.SELECT_FROM_COLLECTION_NEXT_BUTTON,
       collectionLabel: this.state.inputText
     };

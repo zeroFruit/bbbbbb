@@ -4,6 +4,9 @@ import BookmarkCollectionBookGallery from '../../components/BookmarkCollectionBo
 import logger from '../../utils/LogUtils';
 import { selectType } from '../../config';
 import { navigateTo, setParamsToNavigation } from '../../Router';
+import ViewManager from '../../ViewManager';
+import * as _t from '../../ViewManager/_title';
+import * as _h from '../../ViewManager/_header';
 
 class BookmarkCollectionBook extends PureComponent {
   render() {
@@ -21,13 +24,29 @@ class BookmarkCollectionBook extends PureComponent {
 
   _onClickCollectionBookGalleryCard = (id, user) => {
     const key = 'Post';
-    const params = { id, user, selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE };
+    const params = {
+      id,
+      user,
+      vm: new ViewManager(
+        selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE,
+        selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE,
+        _h._getTagHeaderProps,
+        _t._getTextTitleProps
+      ),
+      selectType: selectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE
+    };
     navigateTo({ navigation: this.props.parentNavigation }, key, params);
   }
 
   _onLongClickCollectionBookCard = async () => {
     await this.props.setStateBookDeletingMode(true);
     await setParamsToNavigation({ navigation: this.props.parentNavigation }, {
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
+        selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
+        _h._getHeaderWithLabelsProps,
+        undefined
+      ),
       selectType: selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
       isDeletingCollectionBookMode: this.props.isDeletingMode,
       onClickHeaderRightButton: this._onClickRemoveCompleteCollectionBookButton,
@@ -44,7 +63,16 @@ class BookmarkCollectionBook extends PureComponent {
 
   _onClickAddCollectionBookButton = () => {
     const key = 'collectionBookSelect';
-    const params = { id: this.props.collectionId, selectType: selectType.SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON };
+    const params = {
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON,
+        selectType.SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON,
+        _h._getHeaderWithLabelsProps,
+        undefined
+      ),
+      id: this.props.collectionId,
+      selectType: selectType.SELECT_FROM_COLLECTION_BOOK_ADD_BUTTON
+    };
     navigateTo({ navigation: this.props.parentNavigation }, key, params);
   }
 

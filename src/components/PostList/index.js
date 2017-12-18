@@ -29,17 +29,18 @@ class PostList extends PureComponent {
   _keyExtractor = item => item.id;
 
   _renderItem = ({ item, index }) => {
+    const { vm } = this.props;
     const { id, user_id } = item;
     const isMyBookmark = this._isMyBookmark(id);
     const isMyBook = this._isMyBook(id);
     return (
       <Post
+        vm={ vm }
         onClickPost={ () => { this._onClickNewsfeedCard(id, user_id); } }
         onClickAuthorTagOfPostTitle={ this._onClickAuthorTagOfPostTitle }
         onClickNicknameTextOfPostTitle={ this._onClickNicknameTextOfPostTitle }
         bookInfo={ item }
         userInfo={ this.props.usersInfo[index] }
-        selectType={ this.props.selectType }
         isMyBook={ isMyBook }
         isBookmarked={ isMyBookmark } />
     );

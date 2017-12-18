@@ -24,12 +24,12 @@ const renderHeader = defaultViewWhileNoParams((params) => {
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
+        vm={ params.vm }
         title="페이지 업로드"
         leftLabel="취소"
         rightLabel="다음"
         onClickHeaderRightButton={ params.onClickHeaderRightButton ? params.onClickHeaderRightButton : () => {} }
-        onClickHeaderLeftButton={ params.onClickHeaderLeftButton ? params.onClickHeaderLeftButton : () => {} }
-        selectType={ selectType.SELECT_FROM_COLLECTION_CARD } />
+        onClickHeaderLeftButton={ params.onClickHeaderLeftButton ? params.onClickHeaderLeftButton : () => {} } />
     </Header>
   );
 });

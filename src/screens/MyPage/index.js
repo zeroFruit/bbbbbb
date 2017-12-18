@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
-import { Card, Avatar, ButtonGroup } from 'react-native-elements';
 
 import { takeFromArray } from '../../utils/ArrayUtils';
 import { isObjectHasProperty } from '../../utils/ObjectUtils';
 import logger from '../../utils/LogUtils';
 import {
   navigateTo,
-  getParamsFromNavigationState,
   setParamsToNavigation,
   renderHeaderWithNavigation
 } from '../../Router';
@@ -19,6 +17,9 @@ import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultView
 
 import agent from '../../Agent';
 import { selectType, USER_ID } from '../../config';
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
+import * as _t from '../../ViewManager/_title';
 
 const NUM_OF_CARDS_IN_GALLERY = 7;
 
@@ -43,7 +44,6 @@ class MyPage extends Component {
   };
 
   async componentDidMount() {
-    // console.log('me?', this.props.me_);
     try {
       await this.fetchMyGalleryCards();
       await this.fetchMyInfo();
@@ -110,14 +110,32 @@ class MyPage extends Component {
 
   _onClickGalleryCard = (id, user) => {
     const key = 'Post';
-    const params = { id, user, selectType: selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE };
+    const params = {
+      id,
+      user,
+      vm: new ViewManager(
+        selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE,
+        selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE,
+        _h._getUserHeaderProps,
+        _t._getTagTitleProps
+      ),
+      selectType: selectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE
+    };
     navigateTo(this.props, key, params);
   }
 
   _onClickAddPost = () => {
     const key = 'NewPost';
+    const vm = new ViewManager(
+      selectType.SELECT_FROM_MYPAGE_NEWPOST,
+      selectType.SELECT_FROM_MYPAGE_NEWPOST,
+      _h._getTextHeaderProps,
+      _t._getTextTitleProps
+    );
     const params = {
-      my: this.state.my
+      vm,
+      my: this.state.my,
+      selectType: selectType.SELECT_FROM_MYPAGE_NEWPOST
     };
     navigateTo(this.props, key, params);
   }

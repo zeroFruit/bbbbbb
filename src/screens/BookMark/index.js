@@ -33,8 +33,8 @@ const renderHeader = (params) => {
 };
 
 const isHeaderOnListBookMode = params => (
-  hasPath(params, 'selectType') &&
-  params.selectType === selectType.SELECT_FROM_COLLECTION_CARD
+  hasPath(params, 'vm') &&
+  params.selectType === params.vm.getHeaderType()
 );
 
 const isHeaderDeletingMode = params => (
@@ -59,24 +59,24 @@ const HeaderDefault = params => (
 const HeaderOnDeletingMode = params => (
   <Header headerStyle={ StyleSheet.flatten(styles.deletingModeHeaderContainer) }>
     <HeaderBarWithTexts
+      vm={ params.vm }
       title="삭제"
       leftLabel="뒤로"
       rightLabel="완료"
       onClickHeaderRightButton={ params.onClickHeaderRightButton }
-      onClickHeaderLeftButton={ params.onClickHeaderLeftButton }
-      selectType={ params.selectType } />
+      onClickHeaderLeftButton={ params.onClickHeaderLeftButton } />
   </Header>
 );
 
 const HeaderOnListMode = params => (
   <Header headerStyle={ StyleSheet.flatten(styles.listModeHeaderContainer) }>
     <HeaderBarWithIcons
+      vm={ params.vm }
       title={ params.title }
       leftIconName="arrow-back"
       rightIconName="more-horiz"
       onClickHeaderRightButton={ params.onClickHeaderRightButton }
-      onClickHeaderLeftButton={ params.onClickHeaderLeftButton }
-      selectType={ params.selectType } />
+      onClickHeaderLeftButton={ params.onClickHeaderLeftButton } />
   </Header>
 );
 

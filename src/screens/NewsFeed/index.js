@@ -15,18 +15,22 @@ import NewsFeedList from '../../components/NewsFeedList/container';
 import HeaderBarBasic from '../../components/HeaderBarBasic';
 import { fetchBooksAndUsersHOC } from '../../hocs/fetchBooksAndUsersHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
+import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import logger from '../../utils/LogUtils';
 import { hasPath } from '../../utils/ObjectUtils';
 import { selectType, USER_ID } from '../../config';
+import ViewManager from '../../ViewManager';
+import * as _t from '../../ViewManager/_title';
+import * as _h from '../../ViewManager/_header';
 
-const { func } = PropTypes;
-
-const propTypes = {
-};
-const defaultProps = {};
-
-const renderHeader = (params) => {
+const vm = new ViewManager(
+  selectType.FETCHED_FROM_NEWSFEED,
+  selectType.FETCHED_FROM_NEWSFEED,
+  _h._getTextHeaderProps,
+  _t._getTextTitleProps
+);
+const renderHeader = defaultViewWhileNoParams((params) => {
   const onClickSearchListItem = hasPath(params, 'onClickSearchListItem') ?
     params.onClickSearchListItem :
     () => {};
@@ -35,12 +39,12 @@ const renderHeader = (params) => {
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <View>
         <HeaderBarBasic
-          selectType={ selectType.FETCHED_FROM_NEWSFEED }
+          vm={ vm }
           onClickSearchListItem={ onClickSearchListItem } />
       </View>
     </Header>
   );
-};
+});
 
 class NewsFeed extends ScreenWithSearchBarHeader {
   static navigationOptions = {
@@ -68,9 +72,9 @@ class NewsFeed extends ScreenWithSearchBarHeader {
     return (
       <View style={ styles.container }>
         <NewsFeedList
+          vm={ vm }
           booksInfo={ booksInfo }
           usersInfo={ usersInfo }
-          selectType={ selectType.FETCHED_FROM_NEWSFEED }
           page={ newsfeedPage_ }
           numOfFeedsPerLoad={ numOfFeedsPerLoad_ }
           bookmarks={ bookmarksAndBooks }
@@ -87,7 +91,16 @@ class NewsFeed extends ScreenWithSearchBarHeader {
 
   _onClickNewsfeedCard = (id, user) => {
     const key = 'PostList';
-    const params = { id, selectType: selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE };
+    const params = {
+      id,
+      vm: new ViewManager(
+        selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE,
+        selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE,
+        _h._getTagHeaderProps,
+        _t._getTextTitleProps
+      ),
+      selectType: selectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE
+    };
     navigateTo(this.props, key, params);
   }
 
@@ -114,9 +127,6 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   }
 });
-
-NewsFeed.propTypes = propTypes;
-NewsFeed.defaultProps = defaultProps;
 
 export default compose(
   fetchBookmarksHOC,

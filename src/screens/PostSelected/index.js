@@ -17,6 +17,9 @@ import {
 } from '../../Router';
 import { indexOfValueInArray } from '../../utils/ArrayUtils';
 import { selectType } from '../../config';
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
+import * as _t from '../../ViewManager/_title';
 
 const { number, func, shape, string, bool } = PropTypes;
 const propTypes = {
@@ -43,11 +46,11 @@ const defaultProps = {
 };
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  const { selectType } = params;
+  const { selectType, vm } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithSearchBar
-        selectType={ selectType } />
+        vm={ vm } />
     </Header>
   );
 });
@@ -66,17 +69,16 @@ class PostSelected extends Component {
   render() {
     const {
       bookInfo, userInfo, selectType, id,
-      selectedBookTitleTag, selectedBookAuthorTag
+      selectedBookTitleTag, selectedBookAuthorTag, vm
     } = this.props;
     const isMyBookmark = this._isMyBookmark(id);
     const isMyBook = this._isMyBook(id);
-    console.log('id, usr', this.props.id, this.props.user);
     return (
       <View>
         <Post
+          vm={ vm }
           bookInfo={ bookInfo }
           userInfo={ userInfo }
-          selectType={ selectType }
           bookTitleTag={ selectedBookTitleTag }
           bookAuthorTag={ selectedBookAuthorTag }
           isMyBookmark={ isMyBookmark }
@@ -100,7 +102,16 @@ class PostSelected extends Component {
   _onClickAuthorTagOfPostTitle = (tagId) => {
     const { id, user } = this.props;
     const key = 'PostList';
-    const params = { id, selectType: selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG };
+    const params = {
+      id,
+      vm: new ViewManager(
+        selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG,
+        selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG,
+        _h._getTagHeaderProps,
+        _t._getTextTitleProps
+      ),
+      selectType: selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG
+    };
     navigateTo(this.props, key, params);
   }
 }

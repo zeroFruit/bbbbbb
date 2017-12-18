@@ -17,16 +17,21 @@ import {
 import { selectType } from '../../config';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  const { selectType, onClickHeaderRightButton, onClickHeaderLeftButton } = params;
+  const {
+    selectType,
+    vm,
+    onClickHeaderRightButton,
+    onClickHeaderLeftButton
+  } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
+        vm={ vm }
         title="추가"
         leftLabel="뒤로"
         rightLabel="완료"
         onClickHeaderRightButton={ onClickHeaderRightButton }
-        onClickHeaderLeftButton={ onClickHeaderLeftButton }
-        selectType={ selectType } />
+        onClickHeaderLeftButton={ onClickHeaderLeftButton } />
     </Header>
   );
 });

@@ -49,8 +49,8 @@ const defaultProps = {
 
 class Post extends React.Component {
   render() {
-    const { bookInfo, selectType, isBookmarked, isMyBook } = this.props;
-    const titleProps = this._fetchPostTitle(selectType);
+    const { bookInfo, isBookmarked, isMyBook, vm } = this.props;
+    const titleProps = this._fetchPostTitle(vm);
     return (
       <View>
         <PostTitle
@@ -73,36 +73,8 @@ class Post extends React.Component {
     );
   }
 
-  _fetchPostTitle(selectType) {
-    switch(selectType) {
-      case SelectType.SELECT_FROM_NEWSFEED_CLICKED_IMAGE:
-      case SelectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG:
-      case SelectType.SELECT_FROM_SEARCH_LIST:
-      case SelectType.FETCHED_FROM_NEWSFEED:
-      case SelectType.SELECT_FROM_BOOKMARK_CLICKED_IMAGE:
-      {
-        const { userInfo } = this.props;
-        return {
-          type: postTitleType.TEXT,
-          text: textTitlePropFormatter(userInfo.id, userInfo.display_name, 'nickname')
-        };
-      }
-      case SelectType.SELECT_FROM_MYPAGE_CLICKED_IMAGE:
-      case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_IMAGE:
-      case SelectType.SELECT_FROM_OTHERPAGE_CLICKED_COLLECTION_BOOK:
-      {
-        const { bookTitleTag, bookAuthorTag, bookInfo } = this.props;
-        return {
-          type: postTitleType.TAG,
-          text: [
-            tagTitlePropFormatter(bookInfo.title_tag_id, bookTitleTag, 'title'),
-            tagTitlePropFormatter(bookInfo.author_tag_id, bookAuthorTag, 'author')
-          ]
-        };
-      }
-      default:
-        return logger.error('Post, Invalid select type');
-    }
+  _fetchPostTitle(vm) {
+    return vm.getTitleProps(this.props);
   }
 
   _onClickImage = () => {

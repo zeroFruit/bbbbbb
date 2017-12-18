@@ -6,6 +6,9 @@ import {
   navigateTo,
   setParamsToNavigation
 } from '../../Router';
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
+import * as _t from '../../ViewManager/_title';
 
 class BookmarkCollection extends PureComponent {
   render() {
@@ -22,7 +25,15 @@ class BookmarkCollection extends PureComponent {
 
   _onClickAddCollectionButton = () => {
     const key = 'collectionAdd';
-    const params = { selectType: selectType.SELECT_FROM_COLLECTION_ADD_BUTTON };
+    const params = {
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_ADD_BUTTON,
+        selectType.SELECT_FROM_COLLECTION_ADD_BUTTON,
+        _h._getHeaderWithLabelsProps,
+        undefined
+      ),
+      selectType: selectType.SELECT_FROM_COLLECTION_ADD_BUTTON
+    };
     navigateTo({ navigation: this.props.parentNavigation }, key, params);
   }
 
@@ -34,6 +45,12 @@ class BookmarkCollection extends PureComponent {
   _onClickCollectionCard = (id, label) => {
     this.props.setStateCollectionBookListMode(true);
     setParamsToNavigation({ navigation: this.props.parentNavigation }, {
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_CARD,
+        selectType.SELECT_FROM_COLLECTION_CARD,
+        _h._getHeaderWithIconsProps,
+        undefined
+      ),
       selectType: selectType.SELECT_FROM_COLLECTION_CARD,
       title: label,
       isCollectionBookListMode: this.props.isCollectionBookListMode,
@@ -47,6 +64,12 @@ class BookmarkCollection extends PureComponent {
   _onLongClickCollectionCard = async () => {
     await this.props.setStateDeletingMode(true);
     await setParamsToNavigation({ navigation: this.props.parentNavigation }, {
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
+        selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
+        _h._getHeaderWithLabelsProps,
+        undefined
+      ),
       selectType: selectType.SELECT_FROM_COLLECTION_DELETE_BUTTON,
       isDeletingCollectionMode: this.props.isDeletingMode,
       onClickHeaderRightButton: this._onClickRemoveCompleteCollectionButton,

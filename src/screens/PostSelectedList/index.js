@@ -22,11 +22,11 @@ import {
 import { selectType, USER_ID } from '../../config';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  const { selectType } = params;
+  const { selectType, vm } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithSearchBar
-        selectType={ selectType }
+        vm={ vm }
         onClickAuthorTagOfHeader={ params.onClickAuthorTagOfHeader } />
     </Header>
   );
@@ -49,6 +49,7 @@ class PostSelectedList extends PureComponent {
 
   render() {
     const {
+      vm,
       booksInfo,
       usersInfo,
       selectedListPage_,
@@ -58,9 +59,9 @@ class PostSelectedList extends PureComponent {
     return (
       <View style={ { flex: 1 } }>
         <PostList
+          vm={ vm }
           booksInfo={ booksInfo }
           usersInfo={ usersInfo }
-          selectType={ selectType.FETCHED_FROM_NEWSFEED }
           page={ selectedListPage_ }
           numOfFeedsPerLoad={ numOfFeedsPerLoad_ }
           bookmarks={ bookmarksAndBooks }

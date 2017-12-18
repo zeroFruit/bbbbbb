@@ -11,22 +11,27 @@ import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultView
 import {
   setParamsToNavigation,
   renderHeaderWithNavigation,
-  navigateTo,
   navigateToNested
 } from '../../Router';
 import { selectType } from '../../config';
+import ViewManager from '../../ViewManager';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
-  const { selectType, onClickHeaderRightButton, onClickHeaderLeftButton } = params;
+  const {
+    selectType,
+    vm,
+    onClickHeaderRightButton,
+    onClickHeaderLeftButton
+  } = params;
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
+        vm={ vm }
         title="추가"
         leftLabel="뒤로"
         rightLabel="완료"
         onClickHeaderRightButton={ onClickHeaderRightButton }
-        onClickHeaderLeftButton={ onClickHeaderLeftButton }
-        selectType={ selectType } />
+        onClickHeaderLeftButton={ onClickHeaderLeftButton } />
     </Header>
   );
 });
@@ -103,7 +108,14 @@ class CollectionSelectPage extends PureComponent {
   }
 
   _navigateToBookmarkPage = () => {
+    const vm = new ViewManager(
+      selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON,
+      selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON,
+      undefined,
+      undefined
+    );
     const params = {
+      vm,
       selectType: selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON
     };
     navigateToNested(this.props, 'tabs', params, 'BookMark', params);

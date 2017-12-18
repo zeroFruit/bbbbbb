@@ -16,15 +16,23 @@ import {
 import { selectType } from '../../config';
 import logger from '../../utils/LogUtils';
 import { hasPath } from '../../utils/ObjectUtils';
-
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
+import * as _t from '../../ViewManager/_title';
 
 const renderHeader = (params) => {
   const headerTitle = hasPath(params, 'selectedUser') ? params.selectedUser.display_name : 'Loading';
+  const vm = new ViewManager(
+    selectType.SELECT_FROM_POSTLIST_CLICKED_NICKNAME,
+    selectType.SELECT_FROM_POSTLIST_CLICKED_NICKNAME,
+    _h._getTextHeaderProps,
+    undefined
+  );
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithSearchBar
-        headerTitle={ headerTitle }
-        selectType={ selectType.SELECT_FROM_POSTLIST_CLICKED_NICKNAME } />
+        vm={ vm }
+        headerTitle={ headerTitle } />
     </Header>
   );
 };
