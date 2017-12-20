@@ -1,7 +1,10 @@
-import { call } from 'redux-saga/effects';
+import { call, put, all } from 'redux-saga/effects';
 import agent from '../../Agent';
 import { requestEntity as bre } from '../book/requestEntity';
 import { requestEntity as ure } from '../user/requestEntity';
+import { types as bookTypes } from '../../ducks/book';
+import { types as userTypes } from '../../ducks/user';
+import { MapperBooksAndUsers } from '../helper';
 
 export function* fetchBookAndUserApi(bid) {
   const book = yield call(bre.selectedBook, bid);
@@ -9,9 +12,18 @@ export function* fetchBookAndUserApi(bid) {
 }
 
 export function* fetchBooksAndUsersApi(nof, page) {
-  const books = yield call(bre.selectedBooks, nof, page);
-  const users = books.map(b => b.user_id);
-  yield call(ure.selectedUsers, users);
+  const result = yield call(agent.Book.__fetch, nof, page);
+  const { books, users } = MapperBooksAndUsers(result);
+  yield all([
+    put({
+      type: bookTypes._FETCH_SELECTED_BOOKS,
+      payload: books
+    }),
+    put({
+      type: userTypes._FETCH_SELECTED_USERS,
+      payload: users
+    })
+  ]);
 }
 
 export function* fetchBooksAndUsersByTagApi(bid, nof, page) {

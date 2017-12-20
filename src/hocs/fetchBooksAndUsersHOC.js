@@ -2,7 +2,8 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { types } from '../ducks';
+import ProgressBar from '../components/ProgressBar';
+import { types, selectors } from '../ducks';
 import { selectors as userSelectors, actions as userActions } from '../ducks/user';
 import { selectors as bookSelectors, actions as bookActions } from '../ducks/book';
 import { selectors as pageSelectors, types as pageTypes } from '../ducks/page';
@@ -16,7 +17,12 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
     }
 
     render() {
-      const { selectedBooks_, selectedUsers_ } = this.props;
+      const {
+        selectedBooks_,
+        selectedUsers_,
+        isBooksAndUsersFetched_
+      } = this.props;
+
       return (
         <WrappedComponent
           { ...this.props }
@@ -45,6 +51,7 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
 };
 
 const mapStateToProps = state => ({
+  isBooksAndUsersFetched_: selectors.GetIsBooksAndUsersFetched(state),
   selectedBooks_: bookSelectors.GetSelectedBooks(state),
   selectedUsers_: userSelectors.GetSelectedUsers(state),
   newsfeedPage_: pageSelectors.GetNewsfeedPage(state),

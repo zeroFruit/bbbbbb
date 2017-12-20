@@ -12,6 +12,7 @@ export function* removeBookmarkApi(bid, uid) {
 }
 
 export function* fetchBookmarkApi(uid) {
-  const result = yield call(agent.Bookmark.fetchByUserId, uid);
-  return result.book_ids;
+  // GET /bookmarks/user/:id
+  const result = yield call(agent.Bookmark.__fetchByUserId, uid);
+  return result.map(b => b.id);
 }

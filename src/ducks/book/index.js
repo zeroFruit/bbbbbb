@@ -27,7 +27,8 @@ export const types = {
   FETCH_BOOKS_BY_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_TAG_UNMOUNT']),
   FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT']),
   _FETCH_BOOKS_FOR_COLLECTION: createType(['common', '_FETCH_BOOKS_FOR_COLLECTION']),
-  _FETCH_MY_BOOKS: createType(['common', '_FETCH_MY_BOOKS'])
+  _FETCH_MY_BOOKS: createType(['common', '_FETCH_MY_BOOKS']),
+  _FETCH_SELECTED_BOOKS: createType(['common', '_FETCH_SELECTED_BOOKS'])
 };
 
 export const initialState = {
@@ -75,6 +76,15 @@ const fetchBooks = {
         action.payload
       )
     });
+  },
+  [types._FETCH_SELECTED_BOOKS]: (state, action) => {
+    return ({
+      ...state,
+      selectedBooks_: concatStatePayload(
+        state.selectedBooks_,
+        action.payload
+      )
+    })
   }
 };
 

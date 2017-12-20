@@ -22,6 +22,7 @@ export const types = {
   FETCH_SELECTED_USER_UNMOUNT: createType(['user', 'FETCH_SELECTED_USER_UNMOUNT']),
   FETCH_SELECTED_USERS_UNMOUNT: createType(['user', 'FETCH_SELECTED_USERS_UNMOUNT']),
   FETCH_SELECTED_POST_LIST_USERS_UNMOUNT: createType(['user', 'FETCH_SELECTED_POST_LIST_USERS_UNMOUNT']),
+  _FETCH_SELECTED_USERS: createType(['common', '_FETCH_SELECTED_USERS'])
 };
 
 export const initialState = {
@@ -83,7 +84,15 @@ const fetchUsers = {
       )
     });
   },
-
+  [types._FETCH_SELECTED_USERS]: (state, action) => {
+    return ({
+      ...state,
+      selectedUsers_: concatStatePayload(
+        state.selectedUsers_,
+        action.payload
+      )
+    });
+  }
 };
 
 const unfetchUsers = {

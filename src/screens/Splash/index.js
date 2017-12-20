@@ -20,7 +20,7 @@ class Splash extends Component {
     );
   }
 
-  onClickLoginBtn = () => {
+  onClickLoginBtn = async () => {
     const key = 'main';
     navigateTo(this.props, key);
   }

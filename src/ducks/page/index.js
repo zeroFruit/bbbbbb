@@ -19,10 +19,12 @@ export const initialState = {
 };
 
 const newsfeedPage = {
-  [types.NEXT_NEWSFEED_PAGE]: (state, action) => ({
-    ...state,
-    newsfeedPage_: state.newsfeedPage_ + 1
-  }),
+  [types.NEXT_NEWSFEED_PAGE]: (state, action) => {
+    return ({
+      ...state,
+      newsfeedPage_: state.newsfeedPage_ + 1
+    });
+  },
   [types.RESET_NEWSFEED_PAGE]: (state, action) => ({
     ...state,
     newsfeedPage_: 0
