@@ -4,7 +4,11 @@ import { requestEntity as bre } from '../book/requestEntity';
 import { requestEntity as ure } from '../user/requestEntity';
 import { types as bookTypes } from '../../ducks/book';
 import { types as userTypes } from '../../ducks/user';
-import { MapperBooksAndUsers, MapperBookAndUser } from '../helper';
+import {
+  MapperBooksAndUsers,
+  MapperBookAndUser,
+  MapperBooks
+} from '../helper';
 
 export function* fetchBookAndUserApi(bid) {
   const result = yield call(agent.Book.__fetchByBookId, bid);
@@ -67,8 +71,12 @@ export function* fetchBooksAndUsersByAuthorTagApi(bid, nof, page) {
 }
 
 export function* fetchBooksByCollectionApi(cid) {
-  const cln = yield call(agent.Collection.fetchById, cid);
-  yield call(bre.selectedBooksForCollection, cln.book_ids);
+  const result = yield call(agent.Collection.__fetchById, cid);
+  const books = MapperBooks(result);
+  yield put({
+    type: bookTypes._FETCH_BOOKS_FOR_COLLECTION,
+    payload: books
+  });
 }
 
 export function* fetchBooksByUserApi(uid) {

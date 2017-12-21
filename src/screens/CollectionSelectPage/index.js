@@ -15,6 +15,9 @@ import {
   navigateToNested
 } from '../../Router';
 import { selectType } from '../../config';
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
+import * as _t from '../../ViewManager/_title';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
   const {
@@ -109,6 +112,12 @@ class CollectionSelectPage extends PureComponent {
 
   _navigateToBookmarkPage = () => {
     const params = {
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON,
+        selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON,
+        undefined,
+        undefined
+      ),
       selectType: selectType.SELECT_FROM_COLLECTION_COMPLETE_BUTTON
     };
     navigateToNested(this.props, 'tabs', params, 'BookMark', params);

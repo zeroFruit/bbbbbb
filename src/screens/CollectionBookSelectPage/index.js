@@ -80,12 +80,11 @@ class CollectionSelectPage extends PureComponent {
       return Alert.alert('책을 선택해주세요.');
     }
 
+    await this._setStateIsCompleteButtonClicked(true);
     await this.props.AsyncAddBooksToCollectionRequestAction(
       this.props.id,
       this.state.selectedBookIdList
     );
-
-    this._setStateIsCompleteButtonClicked(true);
   }
 
   _onClickHeaderBackButton = () => {
@@ -108,14 +107,13 @@ class CollectionSelectPage extends PureComponent {
   }
 
   _navigateToBookmarkPage = () => {
-    const vm = new ViewManager(
-      selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON,
-      selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON,
-      undefined,
-      undefined
-    );
     const params = {
-      vm,
+      vm: new ViewManager(
+        selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON,
+        selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON,
+        undefined,
+        undefined
+      ),
       selectType: selectType.SELECT_FROM_COLLECTION_BOOK_COMPLETE_BUTTON
     };
     navigateToNested(this.props, 'tabs', params, 'BookMark', params);

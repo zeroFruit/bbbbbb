@@ -19,7 +19,7 @@ describe('apiEntity', () => {
       const page = 1;
       const gen = api.fetchBooksApi(nof, page);
       expect(gen.next().value)
-        .toEqual(call(agent.Book.fetch, nof, page));
+        .toEqual(call(agent.Book.__fetch, nof, page));
     });
   });
 
@@ -60,7 +60,7 @@ describe('apiEntity', () => {
           content: params.content,
           user_id: params.user_id
         }));
-        
+
       expect(gen.next({
         id: bid,
         bookdTitle: params.bookTitle,

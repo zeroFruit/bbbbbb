@@ -25,7 +25,6 @@ const renderHeader = (params) => {
   if (isHeaderOnListBookMode(params)) {
     return HeaderOnListMode(params);
   }
-
   if (isHeaderDeletingMode(params) || isHeaderDeletingBookMode(params)) {
     return HeaderOnDeletingMode(params);
   }

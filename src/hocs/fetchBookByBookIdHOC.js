@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import agent from '../Agent';
+import { MapperBook } from '../sagas/helper';
 
 export const fetchBookByBookIdHOC = (WrappedComponent) => {
   class WithBook extends PureComponent {
@@ -11,8 +12,11 @@ export const fetchBookByBookIdHOC = (WrappedComponent) => {
 
     async componentDidMount() {
       const { bookId } = this.props;
+      /*
+        TODO: Agent is used, should be moved
+      */
       const bookInfo = await agent.Book.__fetchByBookId(bookId);
-      this._setStateBookInfo(bookInfo);
+      this._setStateBookInfo(MapperBook(bookInfo));
     }
 
     render() {

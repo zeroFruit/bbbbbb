@@ -44,5 +44,26 @@ export const MapperBookAndUser = (r) => {
       ...r.user,
       display_name: r.user.displayName
     }
-  }
+  };
+};
+
+export const MapperBooks = (result) => {
+  const books = [];
+  result.forEach((r) => {
+    const _r = omit(r, ['user', 'imgSrc']);
+    books.push({
+      ..._r,
+      img_src: r.imgSrc,
+      user_id: r.user.id
+    });
+  });
+  return books;
+};
+
+export const MapperBook = (r) => {
+  return {
+    ...omit(r, ['user', 'imgSrc']),
+    img_src: r.imgSrc,
+    user_id: r.user.id
+  };
 }

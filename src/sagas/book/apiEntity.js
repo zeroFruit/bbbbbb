@@ -1,14 +1,15 @@
 import { call } from 'redux-saga/effects';
 import agent from '../../Agent';
 import { USER_ID } from '../../config';
+import { MapperBooks } from '../helper';
 
 export function* fetchBookApi(bid) {
   const result = yield call(agent.Book.fetchByBookId, bid);
-  return result;
+  return MapperBooks(result);
 }
 
 export function* fetchBooksApi(nof, page) {
-  const result = yield call(agent.Book.fetch, nof, page);
+  const result = yield call(agent.Book.__fetch, nof, page);
   return result;
 }
 

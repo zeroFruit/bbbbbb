@@ -19,20 +19,16 @@ const requests = {
   get: async (rootUrl, route = '', config = {}) => {
     const response = await axios.get(`${rootUrl}${route}`, config);
     return getResponse(response);
+  },
+  put: async (rootUrl, route = '', config = {}) => {
+    const response = await axios.put(`${rootUrl}${route}`, config);
+    return getResponse(response);
   }
 };
 const HelloWorld = {
   hello: () => requests.get(LOCAL_SERVER, '/hello-world')
 };
 const Book = {
-  // o
-  fetch: async (numOfFeedsPerLoad, page) => {
-    const { byId, allIds } = await new BookData().get().books;
-    const slicedIds = sliceArray(allIds, page * numOfFeedsPerLoad, (page + 1) * numOfFeedsPerLoad);
-    return _.map(slicedIds, (id) => {
-      return byId[id];
-    });
-  },
   __fetch: async(nof, page) => {
     const { data, response } = await requests.get(LOCAL_SERVER, '/books', {
       params: {
@@ -146,6 +142,10 @@ const User = {
   insertBook: async (userId, bookId) => {
     const newUser = await new UserData().setBook(userId, bookId);
     return newUser;
+  },
+  __fetchCollections: async (uid) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, `/user/${uid}/collections`);
+    return data;
   }
 };
 
@@ -193,6 +193,10 @@ const Collection = {
     const collection = collections[collectionId];
     return collection;
   },
+  __fetchById: async (cid) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, `/collection/${cid}/books`);
+    return data;
+  },
   // o
   fetchByIds: async (collectionIdArray) => {
     const collections = await new CollectionData().get().collections.byId;
@@ -211,6 +215,11 @@ const Collection = {
   updateBooksToCollection: async (cid, bids) => {
     const updatedCollection = await new CollectionData().updateBooks(cid, bids);
     return updatedCollection;
+  },
+  __updateBookToCollection: async (cid, bid) => {
+    const { data, status } = await requests.put(LOCAL_SERVER, `/collection/${cid}/book/${bid}`);
+    console.log('data', data);
+    return data;
   },
   deleteCollectionBooks: async (id, bookIds) => {
     removedCollection = await new CollectionData().deleteBooks(id, bookIds);

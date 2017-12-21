@@ -31,7 +31,7 @@ export const types = {
   _FETCH_BOOKS: createType(['common', '_FETCH_SELECTED_BOOKS']),
   _FETCH_BOOK: createType(['common', '_FETCH_SELECTED_BOOK']),
   _FETCH_BOOKS_BY_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_TAG']),
-  _FETCH_BOOKS_BY_ATHR_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_ATHR_TAG'])
+  _FETCH_BOOKS_BY_ATHR_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_ATHR_TAG']),
 };
 
 export const initialState = {
@@ -200,7 +200,7 @@ const fetchBooksForCollection = {
   [types._FETCH_BOOKS_FOR_COLLECTION]: (state, action) => {
     return {
       ...state,
-      selectedBooksForCollection: setStatePayload(
+      selectedBooksForCollection_: setStatePayload(
         state.selectedBooksForCollection_,
         action.payload
       )

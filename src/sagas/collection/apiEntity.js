@@ -2,8 +2,9 @@ import { call } from 'redux-saga/effects';
 import agent from '../../Agent';
 
 export function* fetchCollectionsApi(uid) {
-  const user = yield call(agent.User.fetchByUserId, uid);
-  const result = yield call(agent.Collection.fetchByIds, user.collections);
+  // const user = yield call(agent.User.fetchByUserId, uid);
+  // const result = yield call(agent.Collection.fetchByIds, user.collections);
+  const result = yield call(agent.User.__fetchCollections, uid);
   return result;
 }
 
@@ -20,8 +21,11 @@ export function* removeCollectionsApi(cid, uid) {
 }
 
 export function* addBooksToCollectionApi(cid, bids) {
-  const result = yield call(agent.Collection.updateBooksToCollection, cid, bids);
-  return result;
+  console.log('bids', cid, bids);
+  const tasks = bids.map(bid =>
+    call(agent.Collection.__updateBookToCollection, cid, bid))
+  const result = yield all(tasks);
+  return result[0];
 }
 
 export function* removeBooksInCollectionApi(cid, bids) {
