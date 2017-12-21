@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import ProgressBar from '../components/ProgressBar';
 import { types, selectors } from '../ducks';
 import { selectors as userSelectors, actions as userActions } from '../ducks/user';
 import { selectors as bookSelectors, actions as bookActions } from '../ducks/book';
@@ -20,9 +19,7 @@ export const fetchBooksAndUsersHOC = (WrappedComponent) => {
       const {
         selectedBooks_,
         selectedUsers_,
-        isBooksAndUsersFetched_
       } = this.props;
-
       return (
         <WrappedComponent
           { ...this.props }

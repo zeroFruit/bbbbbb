@@ -16,7 +16,7 @@ export const MapperBooksAndUsers = (result) => {
   const users = [];
   const books = [];
   result.forEach((r) => {
-    const _r = omit(r, 'user', 'imgSrc');
+    const _r = omit(r, ['user', 'imgSrc']);
     books.push({
       ..._r,
       img_src: r.imgSrc,
@@ -32,3 +32,17 @@ export const MapperBooksAndUsers = (result) => {
     books
   };
 };
+
+export const MapperBookAndUser = (r) => {
+  return {
+    book: {
+      ...omit(r, ['user', 'imgSrc']),
+      img_src: r.imgSrc,
+      user_id: r.user.id
+    },
+    user: {
+      ...r.user,
+      display_name: r.user.displayName
+    }
+  }
+}

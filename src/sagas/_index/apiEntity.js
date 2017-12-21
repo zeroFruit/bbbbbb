@@ -4,11 +4,21 @@ import { requestEntity as bre } from '../book/requestEntity';
 import { requestEntity as ure } from '../user/requestEntity';
 import { types as bookTypes } from '../../ducks/book';
 import { types as userTypes } from '../../ducks/user';
-import { MapperBooksAndUsers } from '../helper';
+import { MapperBooksAndUsers, MapperBookAndUser } from '../helper';
 
 export function* fetchBookAndUserApi(bid) {
-  const book = yield call(bre.selectedBook, bid);
-  yield call(ure.selectedUser, book.user_id);
+  const result = yield call(agent.Book.__fetchByBookId, bid);
+  const { book, user } = MapperBookAndUser(result);
+  yield all([
+    put({
+      type: bookTypes._FETCH_BOOK,
+      payload: book
+    }),
+    put({
+      type: userTypes._FETCH_USER,
+      payload: user
+    })
+  ]);
 }
 
 export function* fetchBooksAndUsersApi(nof, page) {
@@ -16,26 +26,44 @@ export function* fetchBooksAndUsersApi(nof, page) {
   const { books, users } = MapperBooksAndUsers(result);
   yield all([
     put({
-      type: bookTypes._FETCH_SELECTED_BOOKS,
+      type: bookTypes._FETCH_BOOKS,
       payload: books
     }),
     put({
-      type: userTypes._FETCH_SELECTED_USERS,
+      type: userTypes._FETCH_USERS,
       payload: users
     })
   ]);
 }
 
 export function* fetchBooksAndUsersByTagApi(bid, nof, page) {
-  const books = yield call(bre.selectedBooksByTag, bid, nof, page);
-  const users = books.map(b => b.user_id);
-  yield call(ure.selectedPostListUsers, users);
+  const result = yield call(agent.Book.__fetchByTag, bid, nof, page);
+  const { books, users } = MapperBooksAndUsers(result);
+  yield all([
+    put({
+      type: bookTypes._FETCH_BOOKS_BY_TAG,
+      payload: books
+    }),
+    put({
+      type: userTypes._FETCH_POST_LIST_USERS,
+      payload: users
+    })
+  ]);
 }
 
 export function* fetchBooksAndUsersByAuthorTagApi(bid, nof, page) {
-  const books = yield call(bre.selectedBooksByAuthorTag, bid, nof, page);
-  const users = books.map(b => b.user_id);
-  yield call(ure.selectedPostListUsers, users);
+  const result = yield call(agent.Book.__fetchByAuthorTag, bid, nof, page);
+  const { books, users } = MapperBooksAndUsers(result);
+  yield all([
+    put({
+      type: bookTypes._FETCH_BOOKS_BY_ATHR_TAG,
+      payload: books
+    }),
+    put({
+      type: userTypes._FETCH_POST_LIST_USERS,
+      payload: users
+    })
+  ]);
 }
 
 export function* fetchBooksByCollectionApi(cid) {

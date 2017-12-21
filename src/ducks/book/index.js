@@ -28,7 +28,10 @@ export const types = {
   FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT: createType(['book', 'FETCH_BOOKS_BY_AUTHOR_TAG_UNMOUNT']),
   _FETCH_BOOKS_FOR_COLLECTION: createType(['common', '_FETCH_BOOKS_FOR_COLLECTION']),
   _FETCH_MY_BOOKS: createType(['common', '_FETCH_MY_BOOKS']),
-  _FETCH_SELECTED_BOOKS: createType(['common', '_FETCH_SELECTED_BOOKS'])
+  _FETCH_BOOKS: createType(['common', '_FETCH_SELECTED_BOOKS']),
+  _FETCH_BOOK: createType(['common', '_FETCH_SELECTED_BOOK']),
+  _FETCH_BOOKS_BY_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_TAG']),
+  _FETCH_BOOKS_BY_ATHR_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_ATHR_TAG'])
 };
 
 export const initialState = {
@@ -60,6 +63,13 @@ const fetchSelectedBook = {
       setStateFlag(state.selectedBook_, false),
       action.payload
     )
+  }),
+  [types._FETCH_BOOK]: (state, action) => ({
+    ...state,
+    selectedBook_: setStatePayload(
+      state.selectedBook_,
+      action.payload
+    )
   })
 };
 
@@ -77,14 +87,14 @@ const fetchBooks = {
       )
     });
   },
-  [types._FETCH_SELECTED_BOOKS]: (state, action) => {
+  [types._FETCH_BOOKS]: (state, action) => {
     return ({
       ...state,
       selectedBooks_: concatStatePayload(
         state.selectedBooks_,
         action.payload
       )
-    })
+    });
   }
 };
 
@@ -107,6 +117,15 @@ const fetchBooksByTag = {
       ...state,
       selectedBooksByTag_: concatStatePayload(
         setStateFlag(state.selectedBooksByTag_, true),
+        action.payload
+      )
+    };
+  },
+  [types._FETCH_BOOKS_BY_TAG]: (state, action) => {
+    return {
+      ...state,
+      selectedBooksByTag_: concatStatePayload(
+        state.selectedBooksByTag_,
         action.payload
       )
     };
@@ -135,6 +154,15 @@ const fetchBooksByAuthorTag = {
       ...state,
       selectedBooksByAuthorTag_: concatStatePayload(
         setStateFlag(state.selectedBooksByAuthorTag_, true),
+        action.payload
+      )
+    };
+  },
+  [types._FETCH_BOOKS_BY_ATHR_TAG]: (state, action) => {
+    return {
+      ...state,
+      selectedBooksByAuthorTag_: concatStatePayload(
+        state.selectedBooksByAuthorTag_,
         action.payload
       )
     };

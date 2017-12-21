@@ -42,3 +42,24 @@ export function* FetchSelectedUsers(users) {
     payload: users
   });
 }
+
+export function* FetchSelectedBook(book) {
+  yield put({
+    type: bookTypes._FETCH_SELECTED_BOOK,
+    payload: book
+  });
+}
+
+export function* FetchSelectedUser(user) {
+  yield put({
+    type: userTypes._FETCH_SELECTED_USER,
+    payload: user
+  });
+}
+
+export function* FetchSelectedBooksByAthrTag(books) {
+  yield put({
+    type: bookTypes._FETCH_SELECTED_BOOKS_BY_ATHR_TAG,
+    payload: books
+  });
+}

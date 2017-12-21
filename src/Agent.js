@@ -35,9 +35,11 @@ const Book = {
   },
   __fetch: async(nof, page) => {
     const { data, response } = await requests.get(LOCAL_SERVER, '/books', {
-      params: { nof, page }
+      params: {
+        nof,
+        page
+      }
     });
-    console.log('Book__fetch', data);
     return data;
   },
   // o
@@ -45,10 +47,30 @@ const Book = {
     const filteredBooks = await new BookData().getByTagId(titleTagId, authorTagId, numOfFeeds, page);
     return filteredBooks;
   },
+  __fetchByTag: async (bid, nof, page) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, '/books/tag', {
+      params: {
+        nof,
+        page,
+        bid
+      }
+    });
+    return data;
+  },
   // o
   fetchByAuthorTag: async (authorTagId, numOfFeeds, page) => {
     const filteredBooks = await new BookData().getByAuthorTagId(authorTagId, numOfFeeds, page);
     return filteredBooks;
+  },
+  __fetchByAuthorTag: async (bid, nof, page) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, '/books/author_tag', {
+      params: {
+        nof,
+        page,
+        bid
+      }
+    });
+    return data;
   },
   // o
   fetchByUserId: async (userId) => {
@@ -63,6 +85,10 @@ const Book = {
     return _.filter(books, (book) => {
       return book.id === bookId;
     })[0];
+  },
+  __fetchByBookId: async (bid) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, `/book/${bid}`);
+    return data;
   },
   // o
   fetchByBookIds: async (bookIds) => {
@@ -88,6 +114,10 @@ const User = {
     return _.filter(users, (user) => {
       return user.id === userId;
     })[0];
+  },
+  __fetchByUserId: async (uid) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, `/user/${uid}`);
+    return data;
   },
   // o
   fetchByUserIds: async (userIds) => {
@@ -128,7 +158,7 @@ const Bookmark = {
     })[0];
   },
   __fetchByUserId: async (uid) => {
-    const { data, response } = await requests.get(LOCAL_SERVER, `/bookmarks/user/${uid}`);
+    const { data, status } = await requests.get(LOCAL_SERVER, `/bookmarks/user/${uid}`);
     return data;
   },
   // BookDao => insert

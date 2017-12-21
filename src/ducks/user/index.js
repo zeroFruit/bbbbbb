@@ -22,7 +22,9 @@ export const types = {
   FETCH_SELECTED_USER_UNMOUNT: createType(['user', 'FETCH_SELECTED_USER_UNMOUNT']),
   FETCH_SELECTED_USERS_UNMOUNT: createType(['user', 'FETCH_SELECTED_USERS_UNMOUNT']),
   FETCH_SELECTED_POST_LIST_USERS_UNMOUNT: createType(['user', 'FETCH_SELECTED_POST_LIST_USERS_UNMOUNT']),
-  _FETCH_SELECTED_USERS: createType(['common', '_FETCH_SELECTED_USERS'])
+  _FETCH_USERS: createType(['common', '_FETCH_SELECTED_USERS']),
+  _FETCH_USER: createType(['common', '_FETCH_SELECTED_USER']),
+  _FETCH_POST_LIST_USERS: createType(['common', '_FETCH_SELECTED_POST_LIST_USERS'])
 };
 
 export const initialState = {
@@ -58,6 +60,13 @@ const fetchUser = {
       setStateFlag(state.selectedUser_, true),
       action.payload
     )
+  }),
+  [types._FETCH_USER]: (state, action) => ({
+    ...state,
+    selectedUser_: setStatePayload(
+      state.selectedUser_,
+      action.payload
+    )
   })
 };
 
@@ -84,7 +93,7 @@ const fetchUsers = {
       )
     });
   },
-  [types._FETCH_SELECTED_USERS]: (state, action) => {
+  [types._FETCH_USERS]: (state, action) => {
     return ({
       ...state,
       selectedUsers_: concatStatePayload(
@@ -114,6 +123,15 @@ const fetchPostListUsers = {
       ...state,
       selectedPostListUsers_: concatStatePayload(
         setStateFlag(state.selectedPostListUsers_, true),
+        action.payload
+      )
+    });
+  },
+  [types._FETCH_POST_LIST_USERS]: (state, action) => {
+    return ({
+      ...state,
+      selectedPostListUsers_: concatStatePayload(
+        state.selectedPostListUsers_,
         action.payload
       )
     });

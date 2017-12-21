@@ -2,7 +2,7 @@ import { call } from 'redux-saga/effects';
 import agent from '../../Agent';
 
 export function* fetchUserApi(uid) {
-  const rt = yield call(agent.User.fetchByUserId, uid);
+  const rt = yield call(agent.User.__fetchByUserId, uid);
   return rt;
 }
 

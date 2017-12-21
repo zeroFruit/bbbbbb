@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import { setParamsToNavigation, navigateTo } from '../../Router';
 import { selectType, USER_ID } from '../../config';
 import ViewManager from '../../ViewManager';
 import * as _h from '../../ViewManager/_header';
 import * as _t from '../../ViewManager/_title';
 
-export default class ScreenWithSearchBarHeader extends Component {
+export default class ScreenWithSearchBarHeader extends PureComponent {
   componentWillMount() {
     setParamsToNavigation(this.props, {
       onClickSearchListItem: this._onClickSearchListItem

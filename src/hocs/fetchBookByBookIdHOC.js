@@ -11,7 +11,7 @@ export const fetchBookByBookIdHOC = (WrappedComponent) => {
 
     async componentDidMount() {
       const { bookId } = this.props;
-      const bookInfo = await agent.Book.fetchByBookId(bookId);
+      const bookInfo = await agent.Book.__fetchByBookId(bookId);
       this._setStateBookInfo(bookInfo);
     }
 
