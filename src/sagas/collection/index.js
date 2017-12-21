@@ -26,8 +26,8 @@ export function* AsyncAddBooksToCollectionRequest(action) {
 }
 
 export function* AsyncDeleteCollectionBookRequest(action) {
-  const { id, bookIds } = action.payload;
-  const result = yield call(re.removeBooksInCollection, id, bookIds);
+  const { id, bid } = action.payload;
+  const result = yield call(re.removeBooksInCollection, id, bid);
   return result;
 }
 

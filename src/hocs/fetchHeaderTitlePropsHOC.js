@@ -10,7 +10,6 @@ export const fetchHeaderTitlePropsHOC = (WrappedComponent) => {
 
     render() {
       const { vm } = this.props;
-      console.log('vm', vm);
       const headerTitleProps = this._getHeaderTitleProps(vm);
       return (
         <WrappedComponent

@@ -20,8 +20,16 @@ const requests = {
     const response = await axios.get(`${rootUrl}${route}`, config);
     return getResponse(response);
   },
+  post: async (rootUrl, route = '', body = {}, config = {}) => {
+    const response = await axios.post(`${rootUrl}${route}`, body, config);
+    return getResponse(response);
+  },
   put: async (rootUrl, route = '', config = {}) => {
     const response = await axios.put(`${rootUrl}${route}`, config);
+    return getResponse(response);
+  },
+  delete: async (rootUrl, route = '', config = {}) => {
+    const response = await axios.delete(`${rootUrl}${route}`, config);
     return getResponse(response);
   }
 };
@@ -204,26 +212,30 @@ const Collection = {
       return collections[collectionId];
     });
   },
-  insertCollection: async (label, bookIds) => {
-    const newCollection = await new CollectionData().insert(label, bookIds);
-    return newCollection;
+  __insertCollection: async (uid, label, bids) => {
+    const { status } = await requests.post(LOCAL_SERVER, '/collection', {
+      uid,
+      label,
+      bids
+    });
   },
   deleteCollection: async (cid) => {
     const removedCollection = await new CollectionData().delete(cid);
     return removedCollection;
   },
-  updateBooksToCollection: async (cid, bids) => {
-    const updatedCollection = await new CollectionData().updateBooks(cid, bids);
-    return updatedCollection;
+  __deleteCollection: async (cid) => {
+    const { status } = await requests.delete(LOCAL_SERVER, `/collection/${cid}`);
   },
   __updateBookToCollection: async (cid, bid) => {
     const { data, status } = await requests.put(LOCAL_SERVER, `/collection/${cid}/book/${bid}`);
-    console.log('data', data);
     return data;
   },
   deleteCollectionBooks: async (id, bookIds) => {
     removedCollection = await new CollectionData().deleteBooks(id, bookIds);
     return removedCollection;
+  },
+  __deleteCollectionBooks: async (cid, bid) => {
+    const { status } = await requests.delete(LOCAL_SERVER, `/collection/${cid}/book/${bid}`);
   }
 };
 

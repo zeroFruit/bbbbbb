@@ -12,13 +12,13 @@ export const requestData = {
   },
   addCollection: {
     ready: () => patch(types.ADD_COLLECTION.READY),
-    success: pl => patch(types.ADD_COLLECTION.SUCCESS, pl),
+    success: () => patch(types.ADD_COLLECTION.SUCCESS),
     api: (uid, label, bids) => api.addCollectionsApi(uid, label, bids)
   },
   removeCollection: {
     ready: () => patch(types.REMOVE_COLLECTION.READY),
     success: () => patch(types.REMOVE_COLLECTION.SUCCESS),
-    api: (cid, uid) => api.removeCollectionsApi(cid, uid)
+    api: cid => api.removeCollectionsApi(cid)
   },
   addBooksToCollection: {
     ready: () => patch(types.ADD_BOOKS_TO_COLLECTION.READY),
@@ -29,7 +29,7 @@ export const requestData = {
   removeBooksInCollection: {
     ready: () => patch(types.REMOVE_COLLECTION_BOOKS.READY),
     success: () => patch(types.REMOVE_COLLECTION_BOOKS.SUCCESS),
-    api: (cid, bids) => api.removeBooksInCollectionApi(cid, bids)
+    api: (cid, bid) => api.removeBooksInCollectionApi(cid, bid)
   },
   otherUserCollections: {
     ready: () => patch(types.FETCH_OTHER_USER_COLLECTION.READY),

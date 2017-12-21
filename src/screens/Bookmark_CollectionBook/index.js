@@ -78,7 +78,7 @@ class BookmarkCollectionBook extends PureComponent {
 
   _onClickCollectionBookDeleteButton = async (bid) => {
     this.props.setStateCollectionBookDeleteButtonClicked(true);
-    await this.props.AsyncDeleteCollectionBookRequestAction(this.props.collectionId, List([bid]).toJS());
+    await this.props.AsyncDeleteCollectionBookRequestAction(this.props.collectionId, bid);
   }
 }
 

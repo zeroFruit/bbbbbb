@@ -102,17 +102,6 @@ class BookMark extends PureComponent {
   componentWillMount() {
     this._initNavProps();
   }
-  componentDidMount() {
-    // if (this._isNavigationParamHasCollectionCompleteSelectType(this.props)) {
-    //   console.log('1');
-    //   this._setStateScreenType(screenTypes.COLLECTIONS);
-    // }
-    //
-    // if (this._isNavigationParamHasAddingBookCompleteSelectType(this.props)) {
-    //   console.log('2');
-    //   this._setStateScreenType(screenTypes.COLLECTION_BOOK_LIST);
-    // }
-  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isCollectionRemoved_ && this.state.isCollectionDeleteButtonClicked) {
