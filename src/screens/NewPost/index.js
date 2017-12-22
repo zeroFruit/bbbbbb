@@ -1,6 +1,5 @@
 import React, { PureComponent } from 'react';
-import { View, Text, StyleSheet, Vibration, CameraRoll, ScrollView, Alert } from 'react-native';
-import { FileSystem } from 'expo';
+import { View, StyleSheet, Vibration, CameraRoll, ScrollView, Alert } from 'react-native';
 import {
   renderHeaderWithNavigation,
   setParamsToNavigation,
@@ -18,13 +17,24 @@ import NewPostSelectedCameraRoll from '../../components/NewPostSelectedCameraRol
 import NewPostCameraRollThumbnail from '../../components/NewPostCameraRollThumbnail';
 
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
-
+import ViewManager from '../../ViewManager';
+import * as _h from '../../ViewManager/_header';
+import * as _t from '../../ViewManager/_title';
 
 const renderHeader = defaultViewWhileNoParams((params) => {
+  const vm = !params.vm ?
+    new ViewManager(
+      selectType.SELECT_FROM_MYPAGE_NEWPOST,
+      selectType.SELECT_FROM_MYPAGE_NEWPOST,
+      _h._getTextHeaderProps,
+      _t._getTextTitleProps
+    ) :
+    params.vm;
+
   return (
     <Header headerStyle={ StyleSheet.flatten(styles.header) }>
       <HeaderBarWithTexts
-        vm={ params.vm }
+        vm={ vm }
         title="페이지 업로드"
         leftLabel="취소"
         rightLabel="다음"

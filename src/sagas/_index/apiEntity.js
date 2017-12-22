@@ -56,7 +56,7 @@ export function* fetchBooksAndUsersByBidApi(bid, nof, page) {
 }
 
 export function* fetchBooksAndUsersByTagApi(athrid, titid, nof, page) {
-  const result = yield call(agent.Book.__fetchByAllTag, athrid, titid, nof, page);
+  const result = yield call(agent.Book.__fetchAllByTag, athrid, titid, nof, page);
   const { books, users } = MapperBooksAndUsers(result);
   yield all([
     put({

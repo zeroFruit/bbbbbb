@@ -62,7 +62,15 @@ class NewPostWrite extends PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.isBookAdd_) {
-      navigateToNested(this.props, 'tabs', {}, 'MyPage', {});
+      const params = {
+        vm: new ViewManager(
+          selectType.SELECT_FROM_MYPAGE_COMPLETE_ADD_POST,
+          selectType.SELECT_FROM_MYPAGE_COMPLETE_ADD_POST,
+          undefined,
+          undefined
+        )
+      };
+      navigateToNested(this.props, 'tabs', params, 'MyPage', params);
     }
   }
 

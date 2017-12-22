@@ -8,8 +8,7 @@ export function* fetchBookTagByBidApi(bid) {
 }
 
 export function* fetchBookTagByTidApi(athrid, titid) {
-  return {
-    bookTitle: 'bookTitle',
-    bookAuthor: 'authorTitle'
-  };
+  const result = yield call(agent.Tag.__fetch, athrid, titid);
+  console.log('result', result);
+  return MapperTag(result);
 }

@@ -10,6 +10,7 @@ export const selectType = {
   SELECT_FROM_MYPAGE_CLICKED_IMAGE: 'selectType/select_from_mypage_clicked_image',
   SELECT_FROM_MYPAGE_CLICKED_NICKNAME: 'selectType/select_from_mypage_clicked_nickname',
   SELECT_FROM_MYPAGE_NEWPOST: 'selectType/select_from_mypage_newpost',
+  SELECT_FROM_MYPAGE_COMPLETE_ADD_POST: 'selectType/select_from_mypage_newpost_complete_add_post',
   /* 유저페이지 */
   SELECT_FROM_OTHERPAGE_CLICKED_IMAGE: 'selectType/select_from_otherpage_clicked_image',
   SELECT_FROM_OTHERPAGE_CLICKED_COLLECTION_BOOK: 'selectType/select_from_otherpage_clicked_collection_book',

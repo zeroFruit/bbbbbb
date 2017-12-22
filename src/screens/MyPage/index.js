@@ -13,7 +13,6 @@ import {
 import MyPageBookGallery from '../../components/MyPageBookGallery/container';
 import Header from '../../components/Header';
 import PostAddingPanel from '../../components/PostAddingPanel';
-import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
 import agent from '../../Agent';
 import { selectType, USER_ID } from '../../config';

@@ -51,11 +51,19 @@ const Book = {
     const filteredBooks = await new BookData().getByTagId(titleTagId, authorTagId, numOfFeeds, page);
     return filteredBooks;
   },
-  __fetchByAllTag: (athrid, titid, nof, page) => {
-    return [];
+  __fetchAllByTag: async (athrid, titid, nof, page) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, '/books/tag', {
+      params: {
+        athrid,
+        titid,
+        nof,
+        page
+      }
+    });
+    return data;
   },
   __fetchAllById: async (bid, nof, page) => {
-    const { data, status } = await requests.get(LOCAL_SERVER, '/books/tag', {
+    const { data, status } = await requests.get(LOCAL_SERVER, '/books/book', {
       params: {
         nof,
         page,
@@ -63,11 +71,6 @@ const Book = {
       }
     });
     return data;
-  },
-  // o
-  fetchByAuthorTag: async (authorTagId, numOfFeeds, page) => {
-    const filteredBooks = await new BookData().getByAuthorTagId(authorTagId, numOfFeeds, page);
-    return filteredBooks;
   },
   __fetchByAuthorTag: async (bid, nof, page) => {
     const { data, status } = await requests.get(LOCAL_SERVER, '/books/author_tag', {
@@ -194,12 +197,7 @@ const Bookmark = {
 
 const Tag = {
   __fetch: async (athrid, titid) => {
-    const { data, status } = requests.get(LOCAL_SERVER, '/tag', {
-      params: {
-        athrid,
-        titid
-      }
-    });
+    const { data, status } = await requests.get(LOCAL_SERVER, `/tag/${athrid}/${titid}`);
     return data;
   }
 };
