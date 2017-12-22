@@ -11,6 +11,7 @@ export const fetchCollectionsForOtherUserHOC = (WrappedComponent) => {
 
     render() {
       const { otherUserCollections_ } = this.props;
+      console.log('otherUserCollections_', otherUserCollections_);
       return (
         <WrappedComponent
           { ...this.props }

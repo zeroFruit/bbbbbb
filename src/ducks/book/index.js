@@ -32,6 +32,7 @@ export const types = {
   _FETCH_BOOK: createType(['common', '_FETCH_SELECTED_BOOK']),
   _FETCH_BOOKS_BY_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_TAG']),
   _FETCH_BOOKS_BY_ATHR_TAG: createType(['common', '_FETCH_SELECTED_BOOKS_BY_ATHR_TAG']),
+  _FETCH_BOOKS_FOR_USER: createType(['book', '_FETCH_BOOKS_FOR_USER'])
 };
 
 export const initialState = {
@@ -220,6 +221,15 @@ const fetchBooksByUser = {
       ...state,
       selectedBooksForUser_: setStatePayload(
         setStateFlag(state.selectedBooksForUser_, true),
+        action.payload
+      )
+    };
+  },
+  [types._FETCH_BOOKS_FOR_USER]: (state, action) => {
+    return {
+      ...state,
+      selectedBooksForUser_: setStatePayload(
+        state.selectedBooksForUser_,
         action.payload
       )
     };

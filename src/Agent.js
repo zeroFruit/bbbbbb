@@ -108,6 +108,10 @@ const Book = {
   updateTagIds: async (bookId, titleTagId, authorTagId) => {
     const updatedBook = await new BookData().updateTagIds(bookId, { titleTagId, authorTagId });
     return updatedBook;
+  },
+  __fetchTag: async (bid) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, `/tag/book/${bid}`);
+    return data;
   }
 };
 
@@ -154,6 +158,10 @@ const User = {
   __fetchCollections: async (uid) => {
     const { data, status } = await requests.get(LOCAL_SERVER, `/user/${uid}/collections`);
     return data;
+  },
+  __fetchBooks: async (uid) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, `/user/${uid}/books`);
+    return data;
   }
 };
 
@@ -182,15 +190,14 @@ const Bookmark = {
 };
 
 const Tag = {
-  // BookDao => getAuthorTag, getTitleTag
-  fetchByAuthorTagIdAndBookTagId: async (authorTagId, bookTagId) => {
-    const { book_title_tags, book_author_tags } = await new TagData().get();
-    const { book_title } = book_title_tags.byId[bookTagId];
-    const { book_author } = book_author_tags.byId[authorTagId];
-    return {
-      bookTitle: book_title,
-      bookAuthor: book_author
-    };
+  __fetch: async (athrid, titid) => {
+    const { data, status } = requests.get(LOCAL_SERVER, '/tag', {
+      params: {
+        athrid,
+        titid
+      }
+    });
+    return data;
   }
 };
 

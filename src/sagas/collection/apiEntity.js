@@ -26,7 +26,6 @@ export function* removeBooksInCollectionApi(cid, bid) {
 }
 
 export function* fetchOtherUserCollectionApi(uid) {
-  const user = yield call(agent.User.fetchByUserId, uid);
-  const result = yield call(agent.Collection.fetchByIds, user.collections);
+  const result = yield call(agent.User.__fetchCollections, uid);
   return result;
 }

@@ -39,13 +39,15 @@ const me = {
     ...state,
     me_: setStateFlag(state.me_, true)
   }),
-  [types.FETCH_ME.SUCCESS]: (state, action) => ({
-    ...state,
-    me_: setStatePayload(
-      setStateFlag(state.me_, false),
-      action.payload
-    )
-  })
+  [types.FETCH_ME.SUCCESS]: (state, action) => {
+    return ({
+      ...state,
+      me_: setStatePayload(
+        setStateFlag(state.me_, false),
+        action.payload
+      )
+    });
+  }
 };
 
 const fetchUser = {

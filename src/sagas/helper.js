@@ -66,4 +66,18 @@ export const MapperBook = (r) => {
     img_src: r.imgSrc,
     user_id: r.user.id
   };
-}
+};
+
+export const MapperUser = (r) => {
+  return {
+    id: r.id,
+    display_name: r.displayName
+  };
+};
+
+export const MapperTag = (r) => {
+  return {
+    bookTitle: r.titleTag.title,
+    bookAuthor: r.authorTag.author
+  };
+};

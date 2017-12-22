@@ -80,6 +80,11 @@ export function* fetchBooksByCollectionApi(cid) {
 }
 
 export function* fetchBooksByUserApi(uid) {
-  const user = yield call(ure.selectedUser, uid);
-  yield call(bre.selectedBooksForUser, user.books);
+  // const user = yield call(ure.selectedUser, uid);
+  // yield call(bre.selectedBooksForUser, user.books);
+  const result = yield call(agent.User.__fetchBooks, uid);
+  yield put({
+    type: bookTypes._FETCH_BOOKS_FOR_USER,
+    payload: MapperBooks(result)
+  });
 }
