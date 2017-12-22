@@ -20,6 +20,7 @@ const defaultProps = {};
 class NewsFeedList extends PureComponent {
   render() {
     const { booksInfo, myBookmarksAndBooks_ } = this.props;
+    console.log('myBookmarks_', this.props.myBookmarks_);
     return (
       <View style={ { flex: 1 } } >
         <FlatList

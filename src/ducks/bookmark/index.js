@@ -54,7 +54,7 @@ const remove = {
   [types.REMOVE_BOOKMARK.SUCCESS]: (state, action) => {
     const myBookmarksList = getStatePayload(state.myBookmarks_);
     const index = List(myBookmarksList).indexOf(action.payload);
-    const _payload = List(myBookmarksList).delete(index).toJS();
+    const _payload = List(myBookmarksList).delete(index).sort().toJS();
     return {
       ...state,
       isBookmarkRemoved_: setStateFlag(state.isBookmarkRemoved_, false),

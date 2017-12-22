@@ -48,12 +48,8 @@ class PostButtonGroups extends PureComponent {
   }
 
   _onClickBookmarkRemove = async () => {
-    if (this.props.isMyBook) {
-      return Alert.alert('내가 등록한 책입니다.');
-    } else {
-      const { bookId } = this.props;
-      await this.props.AsyncRemoveBookmarkRequestAction(bookId);
-    }
+    const { bookId } = this.props;
+    await this.props.AsyncRemoveBookmarkRequestAction(bookId);
   }
 }
 

@@ -172,26 +172,15 @@ const User = {
 };
 
 const Bookmark = {
-  // UserDao getBookmarks
-  fetchByUserId: async (userId) => {
-    const bookmarks = await new BookmarkData().get().bookmarks.byId;
-    return _.filter(bookmarks, (bookmark) => {
-      return bookmark.user_id === userId;
-    })[0];
-  },
   __fetchByUserId: async (uid) => {
     const { data, status } = await requests.get(LOCAL_SERVER, `/bookmarks/user/${uid}`);
     return data;
   },
-  // BookDao => insert
-  addByBookId: async (bookId, bmId) => {
-    const bookmarks = await new BookmarkData().setToById(bmId, bookId);
-    return bookmarks;
+  __add: async (bid, uid) => {
+    const { status } = await requests.put(LOCAL_SERVER, `/user/${uid}/bookmark/${bid}`);
   },
-  // BookDao => remove
-  removeByBookId: async (bookId, userId) => {
-    const bookmarks = await new BookmarkData().removeToById(userId, bookId);
-    return bookmarks;
+  __remove: async (bid, uid) => {
+    const { status } = await requests.delete(LOCAL_SERVER, `/user/${uid}/bookmark/${bid}`);
   }
 };
 

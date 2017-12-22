@@ -61,7 +61,7 @@ export const setStatePayload = (_state, value) => ({
 
 export const concatStatePayload = (_state, value) => ({
   ..._state,
-  [getStatePayloadName(_state)]: List(getStatePayload(_state)).concat(value).toJS()
+  [getStatePayloadName(_state)]: List(getStatePayload(_state)).concat(value).sort().toJS()
 });
 
 export const getStateFlag = _state => (
