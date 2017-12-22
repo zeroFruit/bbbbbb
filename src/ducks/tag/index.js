@@ -1,7 +1,9 @@
 import {
+  action,
   stateType,
   createReducer,
   createRequestTypes,
+  createType,
   createInitState,
   setStateFlag,
   setStatePayload,
@@ -10,19 +12,21 @@ import {
 } from '../helper';
 
 export const types = {
-  FETCH_BOOK_TAG: createRequestTypes(['tag', 'FETCH_BOOK_TAG'])
+  FETCH_TAG_BY_BID: createRequestTypes(['tag', 'FETCH_TAG_BY_BID']),
+  FETCH_TAG_BY_TID: createRequestTypes(['tag', 'FETCH_TAG_BY_TID']),
+  UNMOUNT_TAG: createType(['tag', 'UNMOUNT_TAG'])
 };
 
 export const initialState = {
   selectedTag_: createInitState('SelectedTag', 'Fetch', stateType.OBJ)
 };
 
-const fetchSelectedBook = {
-  [types.FETCH_BOOK_TAG.READY]: (state, action) => ({
+const fetchTagByBid = {
+  [types.FETCH_TAG_BY_BID.READY]: (state, action) => ({
     ...state,
     selectedTag_: setStateFlag(state.selectedTag_, false)
   }),
-  [types.FETCH_BOOK_TAG.SUCCESS]: (state, action) => {
+  [types.FETCH_TAG_BY_BID.SUCCESS]: (state, action) => {
     return ({
       ...state,
       selectedTag_: setStatePayload(
@@ -34,12 +38,38 @@ const fetchSelectedBook = {
   }
 };
 
+const fetchTagByTid = {
+  [types.FETCH_TAG_BY_TID.READY]: (state, action) => ({
+    ...state,
+    selectedTag_: setStateFlag(state.selectedTag_, false)
+  }),
+  [types.FETCH_TAG_BY_TID.SUCCESS]: (state, action) => {
+    return ({
+      ...state,
+      selectedTag_: setStatePayload(
+        setStateFlag(state.selectedTag_, true), {
+          title: action.payload.bookTitle,
+          author: action.payload.bookAuthor
+        })
+    });
+  }
+};
+
+const unmountTag = {
+  [types.UNMOUNT_TAG]: (state, action) => ({
+    ...state,
+    selectedTag_: initialState.selectedTag_
+  })
+};
+
 export default tag = createReducer(initialState, {
-  ...fetchSelectedBook
+  ...fetchTagByBid,
+  ...fetchTagByTid,
+  ...unmountTag
 });
 
 export const actions = {
-
+  UnmountTag: () => action(types.UNMOUNT_TAG)
 };
 
 export const selectors = {

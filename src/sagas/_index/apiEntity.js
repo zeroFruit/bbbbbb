@@ -26,7 +26,7 @@ export function* fetchBookAndUserApi(bid) {
 }
 
 export function* fetchBooksAndUsersApi(nof, page) {
-  const result = yield call(agent.Book.__fetch, nof, page);
+  const result = yield call(agent.Book.__fetchAll, nof, page);
   const { books, users } = MapperBooksAndUsers(result);
   yield all([
     put({
@@ -40,8 +40,23 @@ export function* fetchBooksAndUsersApi(nof, page) {
   ]);
 }
 
-export function* fetchBooksAndUsersByTagApi(bid, nof, page) {
-  const result = yield call(agent.Book.__fetchByTag, bid, nof, page);
+export function* fetchBooksAndUsersByBidApi(bid, nof, page) {
+  const result = yield call(agent.Book.__fetchAllById, bid, nof, page);
+  const { books, users } = MapperBooksAndUsers(result);
+  yield all([
+    put({
+      type: bookTypes._FETCH_BOOKS_BY_TAG,
+      payload: books
+    }),
+    put({
+      type: userTypes._FETCH_POST_LIST_USERS,
+      payload: users
+    })
+  ]);
+}
+
+export function* fetchBooksAndUsersByTagApi(athrid, titid, nof, page) {
+  const result = yield call(agent.Book.__fetchByAllTag, athrid, titid, nof, page);
   const { books, users } = MapperBooksAndUsers(result);
   yield all([
     put({

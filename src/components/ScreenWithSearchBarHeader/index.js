@@ -12,7 +12,7 @@ export default class ScreenWithSearchBarHeader extends PureComponent {
     });
   }
 
-  _onClickSearchListItem = (id) => {
+  _onClickSearchListItem = (athrid, titid) => {
     const key = 'PostList';
     const vm = new ViewManager(
       selectType.SELECT_FROM_SEARCH_LIST,
@@ -21,7 +21,8 @@ export default class ScreenWithSearchBarHeader extends PureComponent {
       _t._getTextTitleProps
     );
     const params = {
-      id,
+      athrid,
+      titid,
       vm,
       selectType: selectType.SELECT_FROM_SEARCH_LIST
     };

@@ -81,3 +81,20 @@ export const MapperTag = (r) => {
     bookAuthor: r.authorTag.author
   };
 };
+
+export const MapperTags = (result) => {
+  const tags = [];
+  result.forEach(({ authorTag, titleTag }) => {
+    tags.push({
+      author: {
+        id: authorTag.id,
+        book_author: authorTag.author
+      },
+      title: {
+        id: titleTag.id,
+        book_title: titleTag.title
+      }
+    });
+  });
+  return tags;
+};

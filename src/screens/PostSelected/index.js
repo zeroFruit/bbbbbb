@@ -6,7 +6,9 @@ import { compose } from 'recompose';
 import Header from '../../components/Header';
 import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import Post from '../../components/Post';
-import { fetchTagHOC } from '../../hocs/fetchTagHOC';
+
+import { enhance as selectTagFetchHOC } from '../../hocs/selectTagFetchHOC';
+import { fetchTagByBidHOC } from '../../hocs/fetchTagByBidHOC';
 import { fetchBookAndUserHOC } from '../../hocs/fetchBookAndUserHOC';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
 
@@ -128,5 +130,5 @@ PostSelected.defaultProps = defaultProps;
 
 export default compose(
   fetchBookAndUserHOC, // bookId
-  fetchTagHOC
+  selectTagFetchHOC // bid or athrid && titid
 )(PostSelected);

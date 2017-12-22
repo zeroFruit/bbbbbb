@@ -3,7 +3,7 @@ import { TouchableHighlight, Text, StyleSheet } from 'react-native';
 
 class SearchListItem extends PureComponent {
   render() {
-    const { author, bookTitle, bookIds } = this.props;
+    const { author, bookTitle } = this.props;
     return (
       <TouchableHighlight
         style={ styles.container }
@@ -16,8 +16,8 @@ class SearchListItem extends PureComponent {
   }
 
   _onClickItem = () => {
-    const { bookIds } = this.props;
-    this.props.onClickItem(bookIds[0]);
+    const { athrid, titid } = this.props;
+    this.props.onClickItem(athrid, titid);
   }
 }
 

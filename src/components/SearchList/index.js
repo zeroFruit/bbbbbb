@@ -20,15 +20,17 @@ class SearchList extends PureComponent {
     const { author, title } = item;
     return (
       <SearchListItem
+        athrid={ author.id }
         author={ author.book_author }
+        titid={ title.id }
         bookTitle={ title.book_title }
         bookIds={ title.book_ids }
         onClickItem={ this._onClickItem } />
     );
   }
 
-  _onClickItem = (bookId) => {
-    this.props.onClickSearchListItem(bookId);
+  _onClickItem = (athrid, titid) => {
+    this.props.onClickSearchListItem(athrid, titid);
   }
 }
 

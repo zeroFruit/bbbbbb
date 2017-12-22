@@ -5,13 +5,19 @@ import * as api from './apiEntity';
 import * as cmn from '../_common';
 
 export const requestData = {
-  selectedTag: {
-    ready: () => patch(types.FETCH_BOOK_TAG.READY),
-    success: pl => patch(types.FETCH_BOOK_TAG.SUCCESS, pl),
-    api: bid => api.fetchBookTagApi(bid)
+  selectedTagByBid: {
+    ready: () => patch(types.FETCH_TAG_BY_BID.READY),
+    success: pl => patch(types.FETCH_TAG_BY_BID.SUCCESS, pl),
+    api: bid => api.fetchBookTagByBidApi(bid)
+  },
+  selectedTagByTid: {
+    ready: () => patch(types.FETCH_TAG_BY_TID.READY),
+    success: pl => patch(types.FETCH_TAG_BY_TID.SUCCESS, pl),
+    api: (athrid, titid) => api.fetchBookTagByTidApi(athrid, titid)
   }
 };
 
 export const requestEntity = {
-  selectedTag: fetchEntity.bind(null, requestData.selectedTag)
+  selectedTagByBid: fetchEntity.bind(null, requestData.selectedTagByBid),
+  selectedTagByTid: fetchEntity.bind(null, requestData.selectedTagByTid)
 };

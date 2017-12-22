@@ -61,15 +61,17 @@ class HeaderBarBasic extends PureComponent {
 
   _onChangeSearchText = (searchText) => {
     this.setState({ searchText });
-    this.props.requestSearch(searchText);
+    if (searchText !== '') {
+      this.props.requestSearch(searchText);
+    }
   }
 
   _onBlurSearchbar = () => {
     // this.setState({ isFocus: false });
   }
 
-  _onClickSearchListItem = (bookId) => {
-    this.props.onClickSearchListItem(bookId);
+  _onClickSearchListItem = (athrid, titid) => {
+    this.props.onClickSearchListItem(athrid, titid);
   }
 }
 

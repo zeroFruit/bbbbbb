@@ -39,13 +39,14 @@ export const selectors = {
     }))
   ),
   GetIsBooksAndUsersFetched: state => getStateFlag(state.index.isBooksAndUsersFetched_),
-  GetIsBooksAndUsersFetchedByTag: state => getStateFlag(state.index.isBooksAndUsersFetchedByTag_),
+  GetIsBooksAndUsersFetchedByTag: state => getStateFlag(state.index.isBooksAndUsersFetchedByBid_),
   GetIsBooksAndUsersFetchedByAuthorTag: state => getStateFlag(state.index.isBooksAndUsersFetchedByAuthorTag_)
 };
 
 export const types = {
   FETCH_BOOK_AND_USER: createRequestTypes(['book', 'FETCH_BOOK_AND_USER']),
   FETCH_BOOKS_AND_USERS: createRequestTypes(['book', 'FETCH_BOOKS_AND_USERS']),
+  FETCH_BOOKS_AND_USERS_BY_BID: createRequestTypes(['book', 'FETCH_BOOKS_AND_USERS_BY_BID']),
   FETCH_BOOKS_AND_USERS_BY_TAG: createRequestTypes(['book', 'FETCH_BOOKS_AND_USERS_BY_TAG']),
   FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG: createRequestTypes(['book', 'FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG']),
   FETCH_BOOKS_BY_COLLECTION: createRequestTypes(['book', 'FETCH_BOOKS_BY_COLLECTION']),
@@ -55,7 +56,7 @@ export const types = {
 export const initialState = {
   isBookAndUserFetched_: createInitState('BookAndUser', 'Fetch', stateType.NONE),
   isBooksAndUsersFetched_: createInitState('BooksAndUsers', 'Fetch', stateType.NONE),
-  isBooksAndUsersFetchedByTag_: createInitState('BooksAndUsers', 'FetchByTag', stateType.NONE),
+  isBooksAndUsersFetchedByBid_: createInitState('BooksAndUsers', 'FetchByBid', stateType.NONE),
   isBooksAndUsersFetchedByAuthorTag_: createInitState('BooksAndUsers', 'FetchByAuthorTag', stateType.NONE),
   isBooksFetchedByCollection_: createInitState('Books', 'FetchByCollection', stateType.NONE),
   isBooksFetchedByUser_: createInitState('Books', 'FetchByUser', stateType.NONE)
@@ -83,14 +84,25 @@ export const fetchBooksAndUsers = {
   })
 };
 
+export const fetchBooksAndUsersByBid = {
+  [types.FETCH_BOOKS_AND_USERS_BY_BID.READY]: (state, action) => ({
+    ...state,
+    isBooksAndUsersFetchedByBid_: setStateFlag(state.isBooksAndUsersFetchedByBid_, false)
+  }),
+  [types.FETCH_BOOKS_AND_USERS_BY_BID.SUCCESS]: (state, action) => ({
+    ...state,
+    isBooksAndUsersFetchedByBid_: setStateFlag(state.isBooksAndUsersFetchedByBid_, true)
+  })
+};
+
 export const fetchBooksAndUsersByTag = {
   [types.FETCH_BOOKS_AND_USERS_BY_TAG.READY]: (state, action) => ({
     ...state,
-    isBooksAndUsersFetchedByTag_: setStateFlag(state.isBooksAndUsersFetchedByTag_, false)
+    isBooksAndUsersFetchedByBid_: setStateFlag(state.isBooksAndUsersFetchedByBid_, false)
   }),
   [types.FETCH_BOOKS_AND_USERS_BY_TAG.SUCCESS]: (state, action) => ({
     ...state,
-    isBooksAndUsersFetchedByTag_: setStateFlag(state.isBooksAndUsersFetchedByTag_, true)
+    isBooksAndUsersFetchedByBid_: setStateFlag(state.isBooksAndUsersFetchedByBid_, true)
   })
 };
 
@@ -130,6 +142,7 @@ export const fetchBooksByUser = {
 export const reducer = createReducer(initialState, {
   ...fetchBookAndUser,
   ...fetchBooksAndUsers,
+  ...fetchBooksAndUsersByBid,
   ...fetchBooksAndUsersByTag,
   ...fetchBooksAndUsersByAuthorTag,
   ...fetchBooksByCollection,

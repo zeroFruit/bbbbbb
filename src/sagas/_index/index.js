@@ -12,9 +12,14 @@ export function* AsyncFetchBooksAndUsersRequest(action) {
   yield call(re.fetchBooksAndUsers, numOfFeeds, page);
 }
 
-export function* AsyncFetchBooksAndUsersByTagRequest(action) {
+export function* AsyncFetchBooksAndUsersByBidRequest(action) {
   const { id, numOfFeeds, page } = action.payload;
-  yield call(re.fetchBooksAndUsersByTag, id, numOfFeeds, page);
+  yield call(re.fetchBooksAndUsersByBid, id, numOfFeeds, page);
+}
+
+export function* AsyncFetchBooksAndUsersByTagRequest(action) {
+  const { athrid, titid, numOfFeeds, page } = action.payload;
+  yield call(re.fetchBooksAndUsersByTag, athrid, titid, numOfFeeds, page);
 }
 
 export function* AsyncFetchBooksAndUsersByAuthorTagRequest(action) {
@@ -33,6 +38,7 @@ export function* AsyncFetchBooksByUser(action) {
 export default function* rootSaga() {
   yield takeLatest(types.FETCH_BOOK_AND_USER.REQUEST, AsyncFetchBookAndUserRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS.REQUEST, AsyncFetchBooksAndUsersRequest);
+  yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_BID.REQUEST, AsyncFetchBooksAndUsersByBidRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_TAG.REQUEST, AsyncFetchBooksAndUsersByTagRequest);
   yield takeLatest(types.FETCH_BOOKS_AND_USERS_BY_AUTHOR_TAG.REQUEST, AsyncFetchBooksAndUsersByAuthorTagRequest);
   yield takeLatest(types.FETCH_BOOKS_BY_COLLECTION.REQUEST, AsyncFetchBooksWithCollection);

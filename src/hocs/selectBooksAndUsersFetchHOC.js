@@ -1,4 +1,5 @@
 import { branch, compose, setStatic } from 'recompose';
+import { __fetchBooksAndUsersByTagHOC } from './__fetchBooksAndUsersByTagHOC';
 import { fetchBooksAndUsersByTagHOC } from './fetchBooksAndUsersByTagHOC';
 import { fetchBooksAndUsersByAuthorTagHOC } from './fetchBooksAndUsersByAuthorTagHOC';
 import { selectType } from '../config';
@@ -8,14 +9,21 @@ export const enhance = WrappedComponent => compose(
     'navigationOptions',
     WrappedComponent.navigationOptions
   ),
-  selectFetchHOC(props => isFetchedByAuthor(props)),
+  selectBooksAndUsersFetchHOC(props => isFetchedByAuthor(props))(props => isFetchedFromSearchList(props)),
 )(WrappedComponent);
 
-const selectFetchHOC = isFetchByAuthorTag => branch(
+const selectBooksAndUsersFetchHOC = isFetchByAuthorTag => isFetchedFromSearchList => branch(
   isFetchByAuthorTag,
   fetchBooksAndUsersByAuthorTagHOC,
-  fetchBooksAndUsersByTagHOC
+  branch(
+    isFetchedFromSearchList,
+    __fetchBooksAndUsersByTagHOC,
+    fetchBooksAndUsersByTagHOC
+  )
 );
 
 const isFetchedByAuthor = props =>
   props.selectType === selectType.SELECT_FROM_POST_CLICKED_AUTHOR_TAG;
+
+const isFetchedFromSearchList = props =>
+  props.selectType === selectType.SELECT_FROM_SEARCH_LIST;

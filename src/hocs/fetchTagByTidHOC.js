@@ -2,15 +2,19 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-import { selectors as tagSelectors, types as tagTypes } from '../ducks/tag';
+import {
+  selectors as tagSelectors,
+  types as tagTypes,
+  actions as tagActions
+} from '../ducks/tag';
 
-export const fetchTagHOC = (WrappedComponent) => {
+export const fetchTagByTidHOC = (WrappedComponent) => {
   class WithTag extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
     async componentDidMount() {
-      const { id } = this.props;
-      await this._fetchTags(id);
+      const { athrid, titid } = this.props;
+      await this._fetchTags(athrid, titid);
     }
 
     render() {
@@ -18,17 +22,21 @@ export const fetchTagHOC = (WrappedComponent) => {
         selectedBookTitleTag_,
         selectedBookAuthorTag_
       } = this.props;
-
       return (
         <WrappedComponent
           { ...this.props }
           selectedBookTitleTag={ selectedBookTitleTag_ }
-          selectedBookAuthorTag={ selectedBookAuthorTag_ } />
+          selectedBookAuthorTag={ selectedBookAuthorTag_ }
+          resetTag={ this._resetTag } />
       );
     }
 
-    _fetchTags = async (id) => {
-      await this.props.AsyncFetchTagRequestAction(id);
+    _fetchTags = async (athrid, titid) => {
+      await this.props.AsyncFetchTagRequestAction(athrid, titid);
+    }
+
+    _resetTag = () => {
+      this.props.UnmountTagAction();
     }
   }
 
@@ -41,8 +49,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  AsyncFetchTagRequestAction: id => ({
-    type: tagTypes.FETCH_BOOK_TAG.REQUEST,
-    payload: { id }
-  })
+  AsyncFetchTagRequestAction: (athrid, titid) => ({
+    type: tagTypes.FETCH_TAG_BY_TID.REQUEST,
+    payload: { athrid, titid }
+  }),
+  UnmountTagAction: tagActions.UnmountTag
 }, dispatch);

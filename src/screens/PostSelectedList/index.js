@@ -7,9 +7,10 @@ import Header from '../../components/Header';
 import HeaderBarWithSearchBar from '../../components/HeaderBarWithSearchBar';
 import PostList from '../../components/PostList/container';
 
-import { enhance as selectFetchHOC } from '../../hocs/selectFetchHOC';
+import { enhance as selectTagFetchHOC } from '../../hocs/selectTagFetchHOC';
+import { enhance as selectBooksAndUsersFetchHOC } from '../../hocs/selectBooksAndUsersFetchHOC';
 import { fetchBookmarksHOC } from '../../hocs/fetchBookmarksHOC';
-import { fetchTagHOC } from '../../hocs/fetchTagHOC';
+import { fetchTagByBidHOC } from '../../hocs/fetchTagByBidHOC';
 import { mapSelectedPostFirstHOC } from '../../hocs/mapSelectedPostFirstHOC';
 import { withLoaderHOC } from '../../hocs/withLoaderHOC';
 import { enhancer as defaultViewWhileNoParams } from '../../hocs/withDefaultViewWhileNoHeaderParamsHOC';
@@ -45,6 +46,7 @@ class PostSelectedList extends PureComponent {
   }
   componentWillUnmount() {
     this.props.resetBooksAndPage();
+    this.props.resetTag();
   }
 
   render() {
@@ -103,7 +105,7 @@ const styles = StyleSheet.create({
 
 export default compose(
   fetchBookmarksHOC, // USER_ID
-  selectFetchHOC, // bookId
+  selectBooksAndUsersFetchHOC, // bookId
   mapSelectedPostFirstHOC,
-  fetchTagHOC // bookId
+  selectTagFetchHOC // bookId or athrid && titid
 )(PostSelectedList);

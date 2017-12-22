@@ -9,7 +9,7 @@ export function* fetchBookApi(bid) {
 }
 
 export function* fetchBooksApi(nof, page) {
-  const result = yield call(agent.Book.__fetch, nof, page);
+  const result = yield call(agent.Book.__fetchAll, nof, page);
   return result;
 }
 

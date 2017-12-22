@@ -37,7 +37,7 @@ const HelloWorld = {
   hello: () => requests.get(LOCAL_SERVER, '/hello-world')
 };
 const Book = {
-  __fetch: async(nof, page) => {
+  __fetchAll: async(nof, page) => {
     const { data, response } = await requests.get(LOCAL_SERVER, '/books', {
       params: {
         nof,
@@ -51,7 +51,10 @@ const Book = {
     const filteredBooks = await new BookData().getByTagId(titleTagId, authorTagId, numOfFeeds, page);
     return filteredBooks;
   },
-  __fetchByTag: async (bid, nof, page) => {
+  __fetchByAllTag: (athrid, titid, nof, page) => {
+    return [];
+  },
+  __fetchAllById: async (bid, nof, page) => {
     const { data, status } = await requests.get(LOCAL_SERVER, '/books/tag', {
       params: {
         nof,
@@ -247,11 +250,13 @@ const Collection = {
 };
 
 const Search = {
-  fetchBookLabelByText: async (searchText) => {
-    const tag = new TagData();
-    const results = await Promise.all([tag.findTagsByAuthor(searchText), tag.findTagsByBookTitle(searchText)]);
-
-    return _.union(results[0], results[1]);
+  __search: async (st) => {
+    const { data, status } = await requests.get(LOCAL_SERVER, '/search/tag', {
+      params: {
+        t: st
+      }
+    });
+    return data;
   },
   fetchBookTagIdAndAuthorTagIdByText: async (bookId, titleText, authorText) => {
     const tagIds = await new TagData().insertTag({ bookId, title: titleText, author: authorText });

@@ -8,8 +8,6 @@ import {
   headerTextType as HeaderTextType
 } from '../config';
 
-// _getPropsWhenFetchedFromNewsfeed
-// _getPropsWhenSelectFromPostListClickedNickname
 export const _getTextHeaderProps = props => ({
   type: headerType.TEXT,
   text: textTitlePropFormatter(
@@ -19,7 +17,6 @@ export const _getTextHeaderProps = props => ({
   )
 });
 
-// _getTagsWhenClickedImage
 export const _getTagHeaderProps = (props) => {
   const {
     selectedBookTitleTag_,
@@ -46,7 +43,6 @@ export const _getTagHeaderProps = (props) => {
   return { type: headerType.TAG, text: [] };
 };
 
-// _getPropsWhenClickedImage
 export const _getUserHeaderProps = (props) => {
   const {
     selectedUserDisplayName_,
@@ -62,7 +58,6 @@ export const _getUserHeaderProps = (props) => {
   };
 };
 
-// _getPropsWhenSelectFromCollectionButton
 export const _getHeaderWithLabelsProps = (props) => {
   const { leftLabel, rightLabel, title } = props;
   return {
@@ -79,7 +74,6 @@ export const _getHeaderWithLabelsProps = (props) => {
   };
 };
 
-// _getPropsForHeaderWithIcons
 export const _getHeaderWithIconsProps = (props) => {
   const { leftIconName, rightIconName, title } = props;
   return {

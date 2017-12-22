@@ -7,12 +7,8 @@ import { selectors as bookSelectors, actions as bookActions } from '../ducks/boo
 import { selectors as userSelectors, actions as userActions } from '../ducks/user';
 import { selectors as pageSelectors, actions as pageActions } from '../ducks/page';
 
-/*
-  TODO:
-    fetchBooksAndUsersByBidHOC 으로 이름 바꾸기
-*/
-export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
-  class WithBooksAndUsers extends PureComponent {
+export const __fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
+  class WithBooksAndUsersByTag extends PureComponent {
     static navigationOptions = WrappedComponent.navigationOptions;
 
     async componentDidMount() {
@@ -21,7 +17,6 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
 
     render() {
       const { selectedBooksByTag_, selectedPostListUsers_ } = this.props;
-
       return (
         <WrappedComponent
           { ...this.props }
@@ -37,9 +32,9 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
         bid만 가지고 books and users fetch하는 hoc 분리/삭제
     */
     _requestBooksAndUsers = async () => {
-      const { id, numOfFeedsPerLoad_, selectedListPage_, selectedBooksByTag_ } = this.props;
+      const { athrid, titid, numOfFeedsPerLoad_, selectedListPage_, selectedBooksByTag_ } = this.props;
       if (selectedBooksByTag_.length >= selectedListPage_ * numOfFeedsPerLoad_) {
-        await this.props.AsyncFetchBooksAndUsersByBidAction(id, numOfFeedsPerLoad_, selectedListPage_);
+        await this.props.AsyncFetchBooksAndUsersByTagAction(athrid, titid, numOfFeedsPerLoad_, selectedListPage_);
       }
     }
 
@@ -50,7 +45,7 @@ export const fetchBooksAndUsersByTagHOC = (WrappedComponent) => {
     }
   }
 
-  return connect(mapStateToProps, mapDispatchToProps)(WithBooksAndUsers);
+  return connect(mapStateToProps, mapDispatchToProps)(WithBooksAndUsersByTag);
 };
 
 const mapStateToProps = state => ({
@@ -61,9 +56,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-  AsyncFetchBooksAndUsersByBidAction: (id, numOfFeeds, page) => ({
-    type: types.FETCH_BOOKS_AND_USERS_BY_BID.REQUEST,
-    payload: { id, numOfFeeds, page }
+  AsyncFetchBooksAndUsersByTagAction: (athrid, titid, numOfFeeds, page) => ({
+    type: types.FETCH_BOOKS_AND_USERS_BY_TAG.REQUEST,
+    payload: { athrid, titid, numOfFeeds, page }
   }),
   UnmountFetchedBooksByTagAction: bookActions.UnmountFetchedBooksByTag,
   UnmountSelectedPostListUsersAction: userActions.UnmountSelectedPostListUsers,

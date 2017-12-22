@@ -16,10 +16,16 @@ export const requestData = {
     api: (nof, page) => api.fetchBooksAndUsersApi(nof, page),
     fetch: () => cmn.NextNewsfeedPage()
   },
+  fetchBooksAndUsersByBid: {
+    ready: () => patch(types.FETCH_BOOKS_AND_USERS_BY_BID.READY),
+    success: () => patch(types.FETCH_BOOKS_AND_USERS_BY_BID.SUCCESS),
+    api: (bid, nof, page) => api.fetchBooksAndUsersByBidApi(bid, nof, page),
+    fetch: () => cmn.NextSelectedPage()
+  },
   fetchBooksAndUsersByTag: {
     ready: () => patch(types.FETCH_BOOKS_AND_USERS_BY_TAG.READY),
     success: () => patch(types.FETCH_BOOKS_AND_USERS_BY_TAG.SUCCESS),
-    api: (bid, nof, page) => api.fetchBooksAndUsersByTagApi(bid, nof, page),
+    api: (athrid, titid, nof, page) => api.fetchBooksAndUsersByTagApi(athrid, titid, nof, page),
     fetch: () => cmn.NextSelectedPage()
   },
   fetchBooksAndUsersByAuthorTag: {
@@ -43,6 +49,7 @@ export const requestData = {
 export const requestEntity = {
   fetchBookAndUser: fetchEntity.bind(null, requestData.fetchBookAndUser),
   fetchBooksAndUsers: fetchEntity.bind(null, requestData.fetchBooksAndUsers),
+  fetchBooksAndUsersByBid: fetchEntity.bind(null, requestData.fetchBooksAndUsersByBid),
   fetchBooksAndUsersByTag: fetchEntity.bind(null, requestData.fetchBooksAndUsersByTag),
   fetchBooksAndUsersByAuthorTag: fetchEntity.bind(null, requestData.fetchBooksAndUsersByAuthorTag),
   fetchBooksByCollection: fetchEntity.bind(null, requestData.fetchBooksByCollection),
