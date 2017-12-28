@@ -4,6 +4,7 @@ import { compose } from 'recompose';
 
 import { navigateTo } from '../../Router';
 import Auth from '../../Auth';
+import agent from '../../Agent';
 
 class Splash extends Component {
   state = {
@@ -24,6 +25,11 @@ class Splash extends Component {
           onPress={ this._onClickLoginBtn }>
           로그인
         </Text>
+        <Text
+          style={ btn }
+          onPress={ this._onClickUploadBtn }>
+          업로드
+        </Text>
       </View>
     );
   }
@@ -38,6 +44,16 @@ class Splash extends Component {
     } else {
       Alert.alert('부적합한 uid입니다.');
     }
+  }
+
+  _onClickUploadBtn = async () => {
+    console.log('upload button clicked!');
+    try {
+      await agent.Upload();
+    } catch (e) {
+      console.error(e);
+    }
+
   }
 
   _onChangeText = (uid) => {

@@ -1,17 +1,16 @@
 import axios from 'axios';
 import _ from 'lodash';
 import qs from 'qs';
+import RNFetchBlob from 'react-native-fetch-blob';
+
 import { Bookmark as BookmarkData } from '../json/bookmarks';
 import { Book as BookData } from '../json/books';
 import { User as UserData } from '../json/users';
 import { Tag as TagData } from '../json/tags';
 import { Collection as CollectionData } from '../json/collections';
 
-import { sliceArray } from './utils/ArrayUtils';
-
-const PIXABAY_KEY = '6842683-d26f890a7f99fb95ff9928611';
-const ASSET_SERVER_URL = `https://pixabay.com/api/?key=${PIXABAY_KEY}`;
 const LOCAL_SERVER = 'http://10.0.2.2:8080';
+const IMG_SERVER = 'http://10.0.2.2:3000'
 
 const getResponse = ({ data, status }) => ({ data, status });
 
@@ -33,8 +32,23 @@ const requests = {
     return getResponse(response);
   }
 };
-const HelloWorld = {
-  hello: () => requests.get(LOCAL_SERVER, '/hello-world')
+const Upload = async () => {
+  const imgUrl = 'https://cdn.pixabay.com/photo/2017/12/19/21/16/swans-3028727_150.jpg';
+  // const data = new FD();
+  // data.append('file', {
+  //   uri: imgUrl,
+  //   name: 'swans.jpg',
+  //   type: 'image/jpg'
+  // });
+  const res = await RNFetchBlob.fetch('POST', IMG_SERVER, {
+    'Content-Type': 'multipart/form-data'
+  }, [{
+    name: 'file',
+    filename: 'swans.jpg',
+    type: 'image/jpg',
+    data: RNFetchBlob.wrap(imgUrl)
+  }])
+  console.log('res', res);
 };
 const Book = {
   __fetchAll: async(nof, page) => {
@@ -252,7 +266,7 @@ const Search = {
 };
 
 export default {
-  HelloWorld,
+  Upload,
   Book,
   User,
   Bookmark,
